@@ -66,13 +66,6 @@ const OVERRIDES: Partial<Record<string, Partial<ToolContent>>> = {
     ],
   },
   "split-pdf": {
-    howTo: [
-      { name: "Upload your PDF", text: "Drop the PDF you want to split." },
-      { name: "Enter page ranges", text: "Type ranges like 1-3, 5, 8-10 to define each output file." },
-      { name: "Download the parts", text: "Get a separate PDF for each range, packaged as a ZIP." },
-    ],
-  },
-  "split-pdf": {
     seoTitle: "Split PDF Online Free — Extract Pages or Split by Range | CrispPDF",
     seoDescription:
       "Split a PDF into multiple files free online. Pick page ranges like 1-3, 5, 8-10 and download each part as a separate PDF — runs in your browser, nothing uploaded.",
