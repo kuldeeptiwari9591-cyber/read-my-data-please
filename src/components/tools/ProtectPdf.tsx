@@ -78,9 +78,21 @@ export function ProtectPdf() {
   return (
     <ToolShell
       title="Protect PDF"
-      description="Encrypt your PDF with a password. Pages are rasterized into a new AES-protected document."
+      description="Adds password protection to your PDF. Note: this tool uses a browser-based approach that may affect text selectability in some PDF viewers."
       icon={<Lock className="h-7 w-7 text-primary" />}
     >
+      <div className="mb-5 flex items-start gap-3 rounded-xl border border-warning/40 bg-warning/10 p-4 text-sm text-warning">
+        <span className="text-base leading-none">⚠️</span>
+        <div className="text-warning-foreground/90">
+          <p className="font-semibold text-warning">Browser-based encryption</p>
+          <p className="mt-1 text-xs leading-relaxed">
+            Pages are re-rendered as images during encryption — text inside the PDF becomes non-selectable.
+            For true enterprise-grade encryption that preserves selectable text, use Adobe Acrobat or another
+            desktop tool.
+          </p>
+        </div>
+      </div>
+
       <FileDrop files={files} onFiles={setFiles} />
 
       <div className="mt-6 grid gap-4 sm:grid-cols-2">

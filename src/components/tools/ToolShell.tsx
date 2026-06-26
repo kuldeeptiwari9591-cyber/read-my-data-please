@@ -62,6 +62,27 @@ export function downloadBlob(blob: Blob, filename: string) {
   a.click();
   document.body.removeChild(a);
   setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+  // Best-effort: log a successful operation for the admin dashboard.
+  // Tool slug is derived from /tools/:slug, so it works for every tool route
+  // without requiring each tool component to add its own log call.
+  try {
+    if (typeof window !== "undefined") {
+      const m = window.location.pathname.match(/\/tools\/([^/?#]+)/);
+      if (m) {
+        // Lazy import so the ops module never blocks the download path.
+        void import("@/lib/ops-log").then(({ logOperation }) =>
+          logOperation({
+            toolSlug: m[1],
+            bytesIn: blob.size,
+            success: true,
+          }),
+        );
+      }
+    }
+  } catch {
+    /* never break a download for telemetry */
+  }
 }
 
 export function parseRanges(input: string, max: number): number[] {
