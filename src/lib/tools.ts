@@ -144,6 +144,7 @@ export const TOOLS: Tool[] = [
     icon: Minimize2,
     processing: "server",
     status: "soon",
+    phase: "next",
   },
   {
     slug: "pdf-to-word",
@@ -154,6 +155,7 @@ export const TOOLS: Tool[] = [
     icon: FileText,
     processing: "server",
     status: "soon",
+    phase: "server",
   },
   {
     slug: "pdf-to-excel",
@@ -164,6 +166,7 @@ export const TOOLS: Tool[] = [
     icon: FileSpreadsheet,
     processing: "server",
     status: "soon",
+    phase: "server",
   },
   {
     slug: "pdf-to-ppt",
@@ -174,6 +177,7 @@ export const TOOLS: Tool[] = [
     icon: Presentation,
     processing: "server",
     status: "soon",
+    phase: "server",
   },
   {
     slug: "pdf-to-jpg",
@@ -184,6 +188,7 @@ export const TOOLS: Tool[] = [
     icon: ImageIcon,
     processing: "browser",
     status: "soon",
+    phase: "next",
   },
   {
     slug: "pdf-to-png",
@@ -194,6 +199,7 @@ export const TOOLS: Tool[] = [
     icon: FileImage,
     processing: "browser",
     status: "soon",
+    phase: "next",
   },
   {
     slug: "word-to-pdf",
@@ -204,6 +210,7 @@ export const TOOLS: Tool[] = [
     icon: FileType,
     processing: "server",
     status: "soon",
+    phase: "server",
   },
   {
     slug: "excel-to-pdf",
@@ -214,6 +221,7 @@ export const TOOLS: Tool[] = [
     icon: FileSpreadsheet,
     processing: "server",
     status: "soon",
+    phase: "server",
   },
   {
     slug: "jpg-to-pdf",
@@ -234,6 +242,7 @@ export const TOOLS: Tool[] = [
     icon: Globe,
     processing: "server",
     status: "soon",
+    phase: "server",
   },
   {
     slug: "rotate-pdf",
@@ -284,6 +293,7 @@ export const TOOLS: Tool[] = [
     icon: Crop,
     processing: "browser",
     status: "soon",
+    phase: "next",
   },
   {
     slug: "repair-pdf",
@@ -294,6 +304,7 @@ export const TOOLS: Tool[] = [
     icon: Wrench,
     processing: "browser",
     status: "soon",
+    phase: "next",
   },
   {
     slug: "flatten-pdf",
@@ -304,6 +315,7 @@ export const TOOLS: Tool[] = [
     icon: Layers,
     processing: "browser",
     status: "soon",
+    phase: "next",
   },
   {
     slug: "pdf-to-pdfa",
@@ -314,6 +326,7 @@ export const TOOLS: Tool[] = [
     icon: ShieldCheck,
     processing: "server",
     status: "soon",
+    phase: "server",
   },
   {
     slug: "grayscale-pdf",
@@ -324,6 +337,7 @@ export const TOOLS: Tool[] = [
     icon: Palette,
     processing: "browser",
     status: "soon",
+    phase: "next",
   },
   {
     slug: "protect-pdf",
@@ -334,6 +348,7 @@ export const TOOLS: Tool[] = [
     icon: Lock,
     processing: "browser",
     status: "soon",
+    phase: "next",
   },
   {
     slug: "unlock-pdf",
@@ -344,6 +359,7 @@ export const TOOLS: Tool[] = [
     icon: Unlock,
     processing: "browser",
     status: "soon",
+    phase: "next",
   },
   {
     slug: "redact-pdf",
@@ -354,6 +370,7 @@ export const TOOLS: Tool[] = [
     icon: EyeOff,
     processing: "browser",
     status: "soon",
+    phase: "interactive",
   },
   {
     slug: "esign-pdf",
@@ -364,6 +381,7 @@ export const TOOLS: Tool[] = [
     icon: PenLine,
     processing: "browser",
     status: "soon",
+    phase: "interactive",
   },
   {
     slug: "watermark-pdf",
@@ -374,6 +392,7 @@ export const TOOLS: Tool[] = [
     icon: Stamp,
     processing: "browser",
     status: "soon",
+    phase: "next",
   },
   {
     slug: "ocr-pdf",
@@ -384,6 +403,7 @@ export const TOOLS: Tool[] = [
     icon: ScanText,
     processing: "server",
     status: "soon",
+    phase: "server",
   },
   {
     slug: "add-page-numbers-pdf",
@@ -414,6 +434,7 @@ export const TOOLS: Tool[] = [
     icon: Images,
     processing: "browser",
     status: "soon",
+    phase: "next",
   },
 ];
 
