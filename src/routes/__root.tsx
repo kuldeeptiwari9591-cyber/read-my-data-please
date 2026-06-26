@@ -17,7 +17,9 @@ import { CookieBanner } from "../components/CookieBanner";
 import { Logo } from "../components/Logo";
 import logoAsset from "../assets/crisppdf-logo.png.asset.json";
 import "../lib/i18n";
+import { applyClientLocale } from "../lib/i18n";
 import { hreflangLinks } from "../lib/hreflang";
+import { OG_DEFAULT } from "../lib/site-url";
 
 
 function NotFoundComponent() {
