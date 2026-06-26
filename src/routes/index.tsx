@@ -107,7 +107,7 @@ function Index() {
     return [...byCat].sort((a, b) => scoreTool(b, query) - scoreTool(a, query));
   }, [query, activeCat]);
   const isSearching = query.trim().length > 0 || activeCat !== "all";
-  const readyCount = useMemo(() => TOOLS.filter((t) => t.status === "ready").length, []);
+  
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-background text-foreground">
