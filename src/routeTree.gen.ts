@@ -41,6 +41,7 @@ import { Route as DeletePdfPagesRouteImport } from './routes/delete-pdf-pages'
 import { Route as CropPdfRouteImport } from './routes/crop-pdf'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CompressPdfRouteImport } from './routes/compress-pdf'
+import { Route as ChangelogRouteImport } from './routes/changelog'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AddWatermarkTextPdfRouteImport } from './routes/add-watermark-text-pdf'
@@ -212,6 +213,11 @@ const CompressPdfRoute = CompressPdfRouteImport.update({
   path: '/compress-pdf',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ChangelogRoute = ChangelogRouteImport.update({
+  id: '/changelog',
+  path: '/changelog',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BlogRoute = BlogRouteImport.update({
   id: '/blog',
   path: '/blog',
@@ -270,6 +276,7 @@ export interface FileRoutesByFullPath {
   '/add-watermark-text-pdf': typeof AddWatermarkTextPdfRoute
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
+  '/changelog': typeof ChangelogRoute
   '/compress-pdf': typeof CompressPdfRoute
   '/contact': typeof ContactRoute
   '/crop-pdf': typeof CropPdfRoute
@@ -313,6 +320,7 @@ export interface FileRoutesByTo {
   '/add-watermark-text-pdf': typeof AddWatermarkTextPdfRoute
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
+  '/changelog': typeof ChangelogRoute
   '/compress-pdf': typeof CompressPdfRoute
   '/contact': typeof ContactRoute
   '/crop-pdf': typeof CropPdfRoute
@@ -358,6 +366,7 @@ export interface FileRoutesById {
   '/add-watermark-text-pdf': typeof AddWatermarkTextPdfRoute
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
+  '/changelog': typeof ChangelogRoute
   '/compress-pdf': typeof CompressPdfRoute
   '/contact': typeof ContactRoute
   '/crop-pdf': typeof CropPdfRoute
@@ -403,6 +412,7 @@ export interface FileRouteTypes {
     | '/add-watermark-text-pdf'
     | '/auth'
     | '/blog'
+    | '/changelog'
     | '/compress-pdf'
     | '/contact'
     | '/crop-pdf'
@@ -446,6 +456,7 @@ export interface FileRouteTypes {
     | '/add-watermark-text-pdf'
     | '/auth'
     | '/blog'
+    | '/changelog'
     | '/compress-pdf'
     | '/contact'
     | '/crop-pdf'
@@ -490,6 +501,7 @@ export interface FileRouteTypes {
     | '/add-watermark-text-pdf'
     | '/auth'
     | '/blog'
+    | '/changelog'
     | '/compress-pdf'
     | '/contact'
     | '/crop-pdf'
@@ -535,6 +547,7 @@ export interface RootRouteChildren {
   AddWatermarkTextPdfRoute: typeof AddWatermarkTextPdfRoute
   AuthRoute: typeof AuthRoute
   BlogRoute: typeof BlogRouteWithChildren
+  ChangelogRoute: typeof ChangelogRoute
   CompressPdfRoute: typeof CompressPdfRoute
   ContactRoute: typeof ContactRoute
   CropPdfRoute: typeof CropPdfRoute
@@ -796,6 +809,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CompressPdfRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/changelog': {
+      id: '/changelog'
+      path: '/changelog'
+      fullPath: '/changelog'
+      preLoaderRoute: typeof ChangelogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/blog': {
       id: '/blog'
       path: '/blog'
@@ -898,6 +918,7 @@ const rootRouteChildren: RootRouteChildren = {
   AddWatermarkTextPdfRoute: AddWatermarkTextPdfRoute,
   AuthRoute: AuthRoute,
   BlogRoute: BlogRouteWithChildren,
+  ChangelogRoute: ChangelogRoute,
   CompressPdfRoute: CompressPdfRoute,
   ContactRoute: ContactRoute,
   CropPdfRoute: CropPdfRoute,
