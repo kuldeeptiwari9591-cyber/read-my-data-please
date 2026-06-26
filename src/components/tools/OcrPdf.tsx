@@ -53,21 +53,23 @@ export function OcrPdf() {
         const img = await out.embedJpg(jpgBytes);
         newPage.drawImage(img, { x: 0, y: 0, width: orig.width, height: orig.height });
 
-        // Draw invisible text layer so the PDF becomes searchable.
-        const scaleX = orig.width / canvas.width;
-        const scaleY = orig.height / canvas.height;
-        for (const w of data.words ?? []) {
-          if (!w.text?.trim() || !w.bbox) continue;
-          const x = w.bbox.x0 * scaleX;
-          const y = orig.height - w.bbox.y1 * scaleY;
-          const h = (w.bbox.y1 - w.bbox.y0) * scaleY;
-          newPage.drawText(w.text, {
-            x,
-            y,
-            size: Math.max(4, h * 0.85),
-            color: rgb(0, 0, 0),
-            opacity: 0.001,
-          });
+        // Add extracted text as a low-opacity layer so the PDF is searchable.
+        const text = (data.text ?? "").trim();
+        if (text) {
+          const lines = text.split(/\n+/).slice(0, 200);
+          const lineHeight = 10;
+          let y = orig.height - 20;
+          for (const line of lines) {
+            if (y < 20) break;
+            newPage.drawText(line.slice(0, 200), {
+              x: 12,
+              y,
+              size: 8,
+              color: rgb(0, 0, 0),
+              opacity: 0.001,
+            });
+            y -= lineHeight;
+          }
         }
         setProgress(i / src.numPages);
       }
