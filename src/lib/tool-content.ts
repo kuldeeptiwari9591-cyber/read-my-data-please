@@ -50,6 +50,10 @@ const DEFAULT_FAQS = (name: string): FaqItem[] => [
 
 const OVERRIDES: Partial<Record<string, Partial<ToolContent>>> = {
   "merge-pdf": {
+    seoTitle: "Merge PDF Files Free — Combine Multiple PDFs Online | CrispPDF",
+    seoDescription:
+      "Merge PDF files online for free. Combine multiple PDFs into one document in your browser — no upload, no signup, no watermark, no file size limit.",
+    keywords: ["merge pdf", "combine pdf", "join pdf files", "pdf merger online free", "merge multiple pdfs"],
     howTo: [
       { name: "Add your PDFs", text: "Drop two or more PDF files into the upload zone." },
       { name: "Reorder if needed", text: "Use the arrow buttons to set the order of the merged document." },
