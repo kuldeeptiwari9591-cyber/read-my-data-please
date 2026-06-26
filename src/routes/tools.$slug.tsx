@@ -11,6 +11,7 @@ import { ToolShell } from "@/components/tools/ToolShell";
 import { ComingSoonTool } from "@/components/tools/ComingSoonTool";
 import { RateLimitBanner } from "@/components/tools/RateLimitBanner";
 import { getToolContent } from "@/lib/tool-content";
+import { hreflangLinks } from "@/lib/hreflang";
 
 export const Route = createFileRoute("/tools/$slug")({
   head: ({ params }) => {
@@ -77,7 +78,7 @@ export const Route = createFileRoute("/tools/$slug")({
         { name: "twitter:title", content: title },
         { name: "twitter:description", content: description },
       ],
-      links: [{ rel: "canonical", href: path }],
+      links: [{ rel: "canonical", href: path }, ...hreflangLinks(path)],
       scripts: [
         { type: "application/ld+json", children: JSON.stringify(webApp) },
         { type: "application/ld+json", children: JSON.stringify(howTo) },
