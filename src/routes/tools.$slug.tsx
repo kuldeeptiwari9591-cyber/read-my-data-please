@@ -1,12 +1,12 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArrowLeft, Construction, Sparkles } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { GlassCard } from "@/components/GlassCard";
 import { ToolCard } from "@/components/ToolCard";
 import { TOOLS, TOOLS_BY_SLUG } from "@/lib/tools";
 import { TOOL_COMPONENTS } from "@/components/tools";
 import { ToolShell } from "@/components/tools/ToolShell";
+import { ComingSoonTool } from "@/components/tools/ComingSoonTool";
 
 export const Route = createFileRoute("/tools/$slug")({
   head: ({ params }) => {
@@ -83,20 +83,15 @@ function ToolPage() {
               description={tool.description}
               icon={<Icon className="h-7 w-7 text-primary" />}
             >
-              <GlassCard className="p-10 text-center">
-                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 ring-1 ring-primary/30">
-                  <Construction className="h-6 w-6 text-primary" />
-                </div>
-                <h2 className="mt-6 font-display text-2xl font-semibold">Coming soon</h2>
-                <p className="mx-auto mt-3 max-w-md text-sm text-muted-foreground">
-                  This tool needs additional libraries (server-side conversion or OCR). It's on the
-                  build list — shipping in a follow-up phase.
-                </p>
-                <div className="mt-6 inline-flex items-center gap-1.5 rounded-full border border-border bg-surface px-3 py-1 text-xs font-mono text-muted-foreground">
-                  <Sparkles className="h-3 w-3 text-primary" />
-                  Queued
-                </div>
-              </GlassCard>
+              <ComingSoonTool
+                toolName={tool.name}
+                multiple={tool.slug === "merge-pdf" || tool.slug.includes("to-pdf")}
+                accept={
+                  tool.category === "convert-to" && tool.slug !== "html-to-pdf"
+                    ? "image/*,application/pdf,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx"
+                    : "application/pdf,.pdf"
+                }
+              />
             </ToolShell>
           )}
         </div>

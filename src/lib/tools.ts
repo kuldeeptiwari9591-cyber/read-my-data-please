@@ -196,7 +196,7 @@ export const TOOLS: Tool[] = [
     category: "convert-to",
     icon: FileImage,
     processing: "browser",
-    status: "soon",
+    status: "ready",
   },
   {
     slug: "html-to-pdf",
@@ -366,7 +366,7 @@ export const TOOLS: Tool[] = [
     category: "edit",
     icon: Hash,
     processing: "browser",
-    status: "soon",
+    status: "ready",
   },
   {
     slug: "add-watermark-text-pdf",
@@ -376,7 +376,7 @@ export const TOOLS: Tool[] = [
     category: "edit",
     icon: Type,
     processing: "browser",
-    status: "soon",
+    status: "ready",
   },
   {
     slug: "extract-images-pdf",
