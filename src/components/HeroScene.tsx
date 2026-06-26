@@ -1,5 +1,5 @@
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Sparkles, Float } from "@react-three/drei";
+import { Sparkles, Float, Stars, Environment } from "@react-three/drei";
 import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 
@@ -115,12 +115,15 @@ export function HeroScene() {
       <Canvas
         camera={{ position: [0, 0.4, 5.2], fov: 50 }}
         gl={{ antialias: true, alpha: true }}
-        dpr={[1, 1.75]}
+        dpr={[1, 2]}
       >
-        <ambientLight intensity={0.55} />
-        <pointLight position={[4, 4, 4]} intensity={1.4} color="#A5B4FC" />
-        <pointLight position={[-4, -3, -2]} intensity={1} color="#C4B5FD" />
-        <spotLight position={[0, 6, 2]} intensity={0.8} angle={0.5} color="#FFFFFF" />
+        <Environment preset="city" />
+        <ambientLight intensity={0.4} />
+        <pointLight position={[4, 4, 4]} intensity={1.6} color="#A5B4FC" />
+        <pointLight position={[-4, -3, -2]} intensity={1.1} color="#C4B5FD" />
+        <spotLight position={[0, 6, 2]} intensity={0.9} angle={0.5} color="#FFFFFF" />
+
+        <Stars radius={40} depth={30} count={1200} factor={3} fade speed={0.6} />
 
         <MorphingCore />
         <OrbitingNodes />
@@ -129,7 +132,7 @@ export function HeroScene() {
         <Ring radius={2.5} tilt={[Math.PI / 3, Math.PI / 6, 0]} speed={-0.12} color="#6366F1" />
         <Ring radius={2.85} tilt={[Math.PI / 2, Math.PI / 3, 0]} speed={0.08} color="#A5B4FC" />
 
-        <Sparkles count={80} scale={8} size={2.5} speed={0.4} color="#A5B4FC" opacity={0.7} />
+        <Sparkles count={120} scale={9} size={2.8} speed={0.45} color="#A5B4FC" opacity={0.8} />
       </Canvas>
     </div>
   );
