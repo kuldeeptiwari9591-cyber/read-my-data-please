@@ -1,4 +1,9 @@
 User-agent: *
 Allow: /
 
+Disallow: /api/
+Disallow: /admin/
+Disallow: /cp-crisp-7x92k/
+Disallow: /_authenticated/
+
 Sitemap: /sitemap.xml
