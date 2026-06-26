@@ -5,6 +5,8 @@ const lazyDefault = <K extends string>(
   key: K,
 ) => lazy(async () => ({ default: (await loader())[key] }));
 
+const more = () => import("./MoreTools");
+
 export const TOOL_COMPONENTS: Record<string, ComponentType> = {
   "merge-pdf": lazyDefault(() => import("./MergePdf"), "MergePdf"),
   "split-pdf": lazyDefault(() => import("./SplitPdf"), "SplitPdf"),
@@ -36,4 +38,15 @@ export const TOOL_COMPONENTS: Record<string, ComponentType> = {
   "esign-pdf": lazyDefault(() => import("./EsignPdf"), "EsignPdf"),
   "redact-pdf": lazyDefault(() => import("./RedactPdf"), "RedactPdf"),
   "pdf-to-pdfa": lazyDefault(() => import("./PdfToPdfA"), "PdfToPdfA"),
+  // ── New: 10 client-side tools ─────────────────────────────
+  "invert-pdf": lazyDefault(more, "InvertColorsPdf"),
+  "resize-pdf": lazyDefault(more, "ResizePdf"),
+  "n-up-pdf": lazyDefault(more, "NupPdf"),
+  "blank-page-pdf": lazyDefault(more, "BlankPagePdf"),
+  "duplicate-pages-pdf": lazyDefault(more, "DuplicatePagesPdf"),
+  "extract-text-pdf": lazyDefault(more, "ExtractTextPdf"),
+  "edit-metadata-pdf": lazyDefault(more, "EditMetadataPdf"),
+  "compare-pdf": lazyDefault(more, "ComparePdf"),
+  "base64-pdf": lazyDefault(more, "Base64Pdf"),
+  "reverse-pdf": lazyDefault(more, "ReversePdf"),
 };
