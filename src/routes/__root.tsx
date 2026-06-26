@@ -141,7 +141,8 @@ function RootComponent() {
         <Outlet />
         <Toaster />
         <CookieBanner />
-
+      </ThemeProvider>
     </QueryClientProvider>
+
   );
 }
