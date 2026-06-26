@@ -38,6 +38,8 @@ export type ToolCategory =
   | "edit"
   | "secure";
 
+export type ToolPhase = "next" | "interactive" | "server";
+
 export interface Tool {
   slug: string;
   name: string;
@@ -47,7 +49,32 @@ export interface Tool {
   icon: LucideIcon;
   processing: "browser" | "server";
   status: "ready" | "soon";
+  phase?: ToolPhase;
 }
+
+export const PHASE_META: Record<
+  ToolPhase,
+  { label: string; eta: string; blurb: string; tone: string }
+> = {
+  next: {
+    label: "Next up",
+    eta: "Days",
+    blurb: "Pure browser tools — shipping in the next push.",
+    tone: "from-primary/20 to-secondary/20 border-primary/40 text-primary",
+  },
+  interactive: {
+    label: "Interactive editor",
+    eta: "Weeks",
+    blurb: "Needs a custom canvas UI (draw, place, drag).",
+    tone: "from-secondary/20 to-primary/20 border-secondary/40 text-secondary",
+  },
+  server: {
+    label: "Server-powered",
+    eta: "After backend",
+    blurb: "Office conversion or OCR — needs the Cloud worker online.",
+    tone: "from-warning/20 to-primary/20 border-warning/40 text-warning",
+  },
+};
 
 export function toolMatches(t: Tool, query: string): boolean {
   if (!query) return true;
