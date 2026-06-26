@@ -131,10 +131,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 });
 
 function RootShell({ children }: { children: ReactNode }) {
+  // SSR renders light theme; client applies stored preference pre-paint via
+  // the inline script below to prevent a flash.
+  const themeBootstrap = `(function(){try{var t=localStorage.getItem('crisppdf-theme');if(t==='dark'){document.documentElement.classList.add('dark');}}catch(e){}})();`;
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       <head>
         <HeadContent />
+        <script dangerouslySetInnerHTML={{ __html: themeBootstrap }} />
       </head>
       <body className="bg-background text-foreground">
         {children}
@@ -148,14 +152,8 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
   useEffect(() => {
+    // Apply user locale after hydration so SSR/CSR markup matches.
     applyClientLocale();
-    // Hard-lock dark mode site-wide.
-    if (typeof document !== "undefined") {
-      document.documentElement.classList.add("dark");
-      try {
-        localStorage.setItem("crisppdf-theme", "dark");
-      } catch {}
-    }
   }, []);
 
   return (
