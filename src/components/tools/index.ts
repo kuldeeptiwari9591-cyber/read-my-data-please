@@ -24,6 +24,10 @@ import { PdfToPpt } from "./PdfToPpt";
 import { WordToPdf } from "./WordToPdf";
 import { ExcelToPdf } from "./ExcelToPdf";
 import { HtmlToPdfTool } from "./HtmlToPdf";
+import { ProtectPdf } from "./ProtectPdf";
+import { EsignPdf } from "./EsignPdf";
+import { RedactPdf } from "./RedactPdf";
+import { PdfToPdfA } from "./PdfToPdfA";
 
 export const TOOL_COMPONENTS: Record<string, ComponentType> = {
   "merge-pdf": MergePdf,
@@ -52,4 +56,8 @@ export const TOOL_COMPONENTS: Record<string, ComponentType> = {
   "word-to-pdf": WordToPdf,
   "excel-to-pdf": ExcelToPdf,
   "html-to-pdf": HtmlToPdfTool,
+  "protect-pdf": ProtectPdf,
+  "esign-pdf": EsignPdf,
+  "redact-pdf": RedactPdf,
+  "pdf-to-pdfa": PdfToPdfA,
 };

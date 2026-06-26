@@ -363,9 +363,8 @@ export const TOOLS: Tool[] = [
     description: "Convert to PDF/A for long-term archival compliance.",
     category: "secure",
     icon: ShieldCheck,
-    processing: "server",
-    status: "soon",
-    phase: "server",
+    processing: "browser",
+    status: "ready",
   },
   {
     slug: "grayscale-pdf",
@@ -385,8 +384,7 @@ export const TOOLS: Tool[] = [
     category: "secure",
     icon: Lock,
     processing: "browser",
-    status: "soon",
-    phase: "next",
+    status: "ready",
   },
   {
     slug: "unlock-pdf",
@@ -406,8 +404,7 @@ export const TOOLS: Tool[] = [
     category: "secure",
     icon: EyeOff,
     processing: "browser",
-    status: "soon",
-    phase: "interactive",
+    status: "ready",
   },
   {
     slug: "esign-pdf",
@@ -417,8 +414,7 @@ export const TOOLS: Tool[] = [
     category: "edit",
     icon: PenLine,
     processing: "browser",
-    status: "soon",
-    phase: "interactive",
+    status: "ready",
   },
   {
     slug: "watermark-pdf",

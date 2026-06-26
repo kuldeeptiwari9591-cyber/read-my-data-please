@@ -24,18 +24,20 @@ function Core() {
   return (
     <Float speed={1} rotationIntensity={0.3} floatIntensity={0.6}>
       <mesh ref={meshRef}>
-        <icosahedronGeometry args={[1.35, 1]} />
+        <icosahedronGeometry args={[0.85, 1]} />
         <meshStandardMaterial
           color="#6366F1"
-          metalness={0.6}
-          roughness={0.25}
+          metalness={0.4}
+          roughness={0.3}
           emissive="#4338CA"
-          emissiveIntensity={0.4}
+          emissiveIntensity={0.25}
+          transparent
+          opacity={0.55}
         />
       </mesh>
       <mesh ref={wireRef}>
-        <icosahedronGeometry args={[1.55, 1]} />
-        <meshBasicMaterial color="#A5B4FC" wireframe transparent opacity={0.4} />
+        <icosahedronGeometry args={[1.05, 1]} />
+        <meshBasicMaterial color="#A5B4FC" wireframe transparent opacity={0.5} />
       </mesh>
     </Float>
   );
@@ -124,7 +126,6 @@ export function HeroScene() {
 
   useEffect(() => {
     setMounted(true);
-    // Detect WebGL support — graceful fallback for low-power devices.
     try {
       const c = document.createElement("canvas");
       const gl = c.getContext("webgl2") || c.getContext("webgl");
@@ -135,31 +136,33 @@ export function HeroScene() {
   }, []);
 
   return (
-    <div className="absolute inset-0 pointer-events-none">
+    <div className="absolute inset-0 pointer-events-none overflow-hidden">
       <HeroBackdrop />
       {mounted && !webglFailed && (
-        <Canvas
-          camera={{ position: [0, 0.4, 5.2], fov: 50 }}
-          gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
-          dpr={[1, 1.5]}
-          onCreated={({ gl }) => {
-            gl.domElement.addEventListener("webglcontextlost", (e) => {
-              e.preventDefault();
-              setWebglFailed(true);
-            });
-          }}
-        >
-          <ambientLight intensity={0.6} />
-          <pointLight position={[4, 4, 4]} intensity={1.4} color="#A5B4FC" />
-          <pointLight position={[-4, -3, -2]} intensity={0.9} color="#C4B5FD" />
+        <div className="absolute inset-0 opacity-60 [mask-image:radial-gradient(circle_at_center,black_15%,transparent_70%)]">
+          <Canvas
+            camera={{ position: [0, 0.3, 18], fov: 35 }}
+            gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
+            dpr={[1, 1.5]}
+            onCreated={({ gl }) => {
+              gl.domElement.addEventListener("webglcontextlost", (e) => {
+                e.preventDefault();
+                setWebglFailed(true);
+              });
+            }}
+          >
+            <ambientLight intensity={0.6} />
+            <pointLight position={[4, 4, 4]} intensity={1.4} color="#A5B4FC" />
+            <pointLight position={[-4, -3, -2]} intensity={0.9} color="#C4B5FD" />
 
-          <Core />
-          <OrbitingNodes />
+            <Core />
+            <OrbitingNodes />
 
-          <Ring radius={2.1} tilt={[Math.PI / 2.4, 0, 0]} speed={0.18} color="#8B5CF6" />
-          <Ring radius={2.5} tilt={[Math.PI / 3, Math.PI / 6, 0]} speed={-0.12} color="#6366F1" />
-          <Ring radius={2.85} tilt={[Math.PI / 2, Math.PI / 3, 0]} speed={0.08} color="#A5B4FC" />
-        </Canvas>
+            <Ring radius={2.1} tilt={[Math.PI / 2.4, 0, 0]} speed={0.18} color="#8B5CF6" />
+            <Ring radius={2.5} tilt={[Math.PI / 3, Math.PI / 6, 0]} speed={-0.12} color="#6366F1" />
+            <Ring radius={2.85} tilt={[Math.PI / 2, Math.PI / 3, 0]} speed={0.08} color="#A5B4FC" />
+          </Canvas>
+        </div>
       )}
     </div>
   );
