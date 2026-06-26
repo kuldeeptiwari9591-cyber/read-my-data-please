@@ -57,7 +57,7 @@ export function PdfThumbnailStrip({ files, highlightPages, maxPerFile = 5 }: Pro
             });
             if (!cancelled) setThumbs([...out]);
           }
-          doc.destroy();
+          void doc.cleanup();
         }
       } catch (e) {
         console.warn("thumbnail render failed", e);
