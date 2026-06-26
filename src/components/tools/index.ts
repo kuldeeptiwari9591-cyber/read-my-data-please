@@ -1,63 +1,39 @@
-import type { ComponentType } from "react";
-import { MergePdf } from "./MergePdf";
-import { SplitPdf } from "./SplitPdf";
-import { RotatePdf } from "./RotatePdf";
-import { DeletePdfPages } from "./DeletePdfPages";
-import { ExtractPdfPages } from "./ExtractPdfPages";
-import { ReorderPdfPages } from "./ReorderPdfPages";
-import { AddPageNumbersPdf } from "./AddPageNumbersPdf";
-import { AddWatermarkTextPdf } from "./AddWatermarkTextPdf";
-import { JpgToPdf } from "./JpgToPdf";
-import { CompressPdf } from "./CompressPdf";
-import { PdfToJpg, PdfToPng } from "./PdfToImage";
-import { CropPdf } from "./CropPdf";
-import { RepairPdf } from "./RepairPdf";
-import { FlattenPdf } from "./FlattenPdf";
-import { GrayscalePdf } from "./GrayscalePdf";
-import { UnlockPdf } from "./UnlockPdf";
-import { WatermarkImagePdf } from "./WatermarkImagePdf";
-import { ExtractImagesPdf } from "./ExtractImagesPdf";
-import { OcrPdf } from "./OcrPdf";
-import { PdfToWord } from "./PdfToWord";
-import { PdfToExcel } from "./PdfToExcel";
-import { PdfToPpt } from "./PdfToPpt";
-import { WordToPdf } from "./WordToPdf";
-import { ExcelToPdf } from "./ExcelToPdf";
-import { HtmlToPdfTool } from "./HtmlToPdf";
-import { ProtectPdf } from "./ProtectPdf";
-import { EsignPdf } from "./EsignPdf";
-import { RedactPdf } from "./RedactPdf";
-import { PdfToPdfA } from "./PdfToPdfA";
+import { lazy, type ComponentType } from "react";
+
+const lazyDefault = <K extends string>(
+  loader: () => Promise<Record<K, ComponentType>>,
+  key: K,
+) => lazy(async () => ({ default: (await loader())[key] }));
 
 export const TOOL_COMPONENTS: Record<string, ComponentType> = {
-  "merge-pdf": MergePdf,
-  "split-pdf": SplitPdf,
-  "rotate-pdf": RotatePdf,
-  "delete-pdf-pages": DeletePdfPages,
-  "extract-pdf-pages": ExtractPdfPages,
-  "reorder-pdf-pages": ReorderPdfPages,
-  "add-page-numbers-pdf": AddPageNumbersPdf,
-  "add-watermark-text-pdf": AddWatermarkTextPdf,
-  "jpg-to-pdf": JpgToPdf,
-  "compress-pdf": CompressPdf,
-  "pdf-to-jpg": PdfToJpg,
-  "pdf-to-png": PdfToPng,
-  "crop-pdf": CropPdf,
-  "repair-pdf": RepairPdf,
-  "flatten-pdf": FlattenPdf,
-  "grayscale-pdf": GrayscalePdf,
-  "unlock-pdf": UnlockPdf,
-  "watermark-pdf": WatermarkImagePdf,
-  "extract-images-pdf": ExtractImagesPdf,
-  "ocr-pdf": OcrPdf,
-  "pdf-to-word": PdfToWord,
-  "pdf-to-excel": PdfToExcel,
-  "pdf-to-ppt": PdfToPpt,
-  "word-to-pdf": WordToPdf,
-  "excel-to-pdf": ExcelToPdf,
-  "html-to-pdf": HtmlToPdfTool,
-  "protect-pdf": ProtectPdf,
-  "esign-pdf": EsignPdf,
-  "redact-pdf": RedactPdf,
-  "pdf-to-pdfa": PdfToPdfA,
+  "merge-pdf": lazyDefault(() => import("./MergePdf"), "MergePdf"),
+  "split-pdf": lazyDefault(() => import("./SplitPdf"), "SplitPdf"),
+  "rotate-pdf": lazyDefault(() => import("./RotatePdf"), "RotatePdf"),
+  "delete-pdf-pages": lazyDefault(() => import("./DeletePdfPages"), "DeletePdfPages"),
+  "extract-pdf-pages": lazyDefault(() => import("./ExtractPdfPages"), "ExtractPdfPages"),
+  "reorder-pdf-pages": lazyDefault(() => import("./ReorderPdfPages"), "ReorderPdfPages"),
+  "add-page-numbers-pdf": lazyDefault(() => import("./AddPageNumbersPdf"), "AddPageNumbersPdf"),
+  "add-watermark-text-pdf": lazyDefault(() => import("./AddWatermarkTextPdf"), "AddWatermarkTextPdf"),
+  "jpg-to-pdf": lazyDefault(() => import("./JpgToPdf"), "JpgToPdf"),
+  "compress-pdf": lazyDefault(() => import("./CompressPdf"), "CompressPdf"),
+  "pdf-to-jpg": lazyDefault(() => import("./PdfToImage"), "PdfToJpg"),
+  "pdf-to-png": lazyDefault(() => import("./PdfToImage"), "PdfToPng"),
+  "crop-pdf": lazyDefault(() => import("./CropPdf"), "CropPdf"),
+  "repair-pdf": lazyDefault(() => import("./RepairPdf"), "RepairPdf"),
+  "flatten-pdf": lazyDefault(() => import("./FlattenPdf"), "FlattenPdf"),
+  "grayscale-pdf": lazyDefault(() => import("./GrayscalePdf"), "GrayscalePdf"),
+  "unlock-pdf": lazyDefault(() => import("./UnlockPdf"), "UnlockPdf"),
+  "watermark-pdf": lazyDefault(() => import("./WatermarkImagePdf"), "WatermarkImagePdf"),
+  "extract-images-pdf": lazyDefault(() => import("./ExtractImagesPdf"), "ExtractImagesPdf"),
+  "ocr-pdf": lazyDefault(() => import("./OcrPdf"), "OcrPdf"),
+  "pdf-to-word": lazyDefault(() => import("./PdfToWord"), "PdfToWord"),
+  "pdf-to-excel": lazyDefault(() => import("./PdfToExcel"), "PdfToExcel"),
+  "pdf-to-ppt": lazyDefault(() => import("./PdfToPpt"), "PdfToPpt"),
+  "word-to-pdf": lazyDefault(() => import("./WordToPdf"), "WordToPdf"),
+  "excel-to-pdf": lazyDefault(() => import("./ExcelToPdf"), "ExcelToPdf"),
+  "html-to-pdf": lazyDefault(() => import("./HtmlToPdf"), "HtmlToPdfTool"),
+  "protect-pdf": lazyDefault(() => import("./ProtectPdf"), "ProtectPdf"),
+  "esign-pdf": lazyDefault(() => import("./EsignPdf"), "EsignPdf"),
+  "redact-pdf": lazyDefault(() => import("./RedactPdf"), "RedactPdf"),
+  "pdf-to-pdfa": lazyDefault(() => import("./PdfToPdfA"), "PdfToPdfA"),
 };
