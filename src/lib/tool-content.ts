@@ -34,7 +34,16 @@ const DEFAULT_FAQS = (name: string): FaqItem[] => [
   { q: "Do you keep my files?", a: "No. We never store, log, or share your documents. Output is generated, downloaded, and forgotten." },
   { q: "Do I need to install anything?", a: "No. CrispPDF works in any modern browser — Chrome, Safari, Firefox, Edge — on desktop and mobile." },
   { q: "Will there be a watermark on the output?", a: "Never. Your output is clean, ready to sign, share, or print." },
+  { q: "Does it work on mobile?", a: "Yes. CrispPDF is fully responsive and works on iOS Safari, Android Chrome, and every modern mobile browser." },
+  { q: "Do I need to create an account?", a: "No. There's no signup, no email gate, no login wall. Open the tool and use it instantly." },
+  { q: "Is it safe for confidential documents?", a: "Yes. Because processing happens in your browser, confidential files like contracts, medical records, and tax returns never leave your device." },
+  { q: "What happens if I close the tab mid-processing?", a: "Nothing is saved server-side, so closing the tab simply cancels the operation. Just reopen the tool and try again." },
+  { q: "Can I use this offline?", a: "After the page loads once, most tools continue to work even with a flaky connection since processing is local." },
+  { q: "Will this work on a slow computer?", a: "Yes. We've optimized for low-end devices — phones, Chromebooks, and older laptops all handle typical documents fine." },
+  { q: "Does CrispPDF show ads?", a: "No. CrispPDF is ad-free, tracker-free, and popup-free. The tools load fast because nothing else is competing for your attention." },
+  { q: `Can I use ${name} commercially?`, a: "Yes. CrispPDF is free for personal and commercial use. No license required, no attribution needed." },
 ];
+
 
 const OVERRIDES: Partial<Record<string, Partial<ToolContent>>> = {
   "merge-pdf": {
@@ -121,9 +130,18 @@ const OVERRIDES: Partial<Record<string, Partial<ToolContent>>> = {
 
 export function getToolContent(slug: string, name: string): ToolContent {
   const o = OVERRIDES[slug] ?? {};
+  const defaults = DEFAULT_FAQS(name);
+  const overrideFaqs = o.faqs ?? [];
+  // Pad up to 14 FAQs with defaults the override didn't already cover.
+  const merged = [...overrideFaqs];
+  for (const d of defaults) {
+    if (merged.length >= 14) break;
+    if (!merged.some((f) => f.q.toLowerCase() === d.q.toLowerCase())) merged.push(d);
+  }
   return {
     howTo: o.howTo ?? DEFAULT_HOWTO(name),
-    faqs: o.faqs ?? DEFAULT_FAQS(name),
+    faqs: merged.slice(0, 14),
     why: o.why ?? DEFAULT_WHY,
   };
 }
+

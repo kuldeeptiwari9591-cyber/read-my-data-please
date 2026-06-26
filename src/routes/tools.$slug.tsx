@@ -1,5 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArrowLeft, CheckCircle2 } from "lucide-react";
+import { Suspense } from "react";
+import { ArrowLeft, CheckCircle2, Loader2 } from "lucide-react";
+
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ToolCard } from "@/components/ToolCard";
@@ -174,7 +176,18 @@ function ToolPage() {
             </div>
 
             {Component ? (
-              <Component />
+              <Suspense
+                fallback={
+                  <div className="flex min-h-[20rem] flex-col items-center justify-center gap-3 rounded-2xl border border-border/60 bg-surface/40 p-12 text-center">
+                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                    <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
+                      Loading {tool.name}…
+                    </p>
+                  </div>
+                }
+              >
+                <Component />
+              </Suspense>
             ) : (
               <ToolShell
                 title={tool.name}
@@ -192,6 +205,7 @@ function ToolPage() {
                 />
               </ToolShell>
             )}
+
           </div>
         </div>
 
@@ -247,20 +261,21 @@ function ToolPage() {
           <h2 className="mt-2 font-display text-2xl font-semibold md:text-3xl">
             {tool.name} — frequently asked questions
           </h2>
-          <div className="mt-6 space-y-3">
+          <div className="mt-6 grid gap-3 sm:grid-cols-2">
             {content.faqs.map((f) => (
               <details
                 key={f.q}
                 className="group rounded-xl border border-border bg-surface/60 px-5 py-4 backdrop-blur-sm transition-colors hover:border-primary/60"
               >
-                <summary className="cursor-pointer list-none font-display text-base font-medium">
-                  <span className="mr-3 text-primary">+</span>
+                <summary className="cursor-pointer list-none font-display text-sm font-medium leading-snug">
+                  <span className="mr-2 text-primary">+</span>
                   {f.q}
                 </summary>
-                <p className="mt-3 pl-6 text-sm leading-relaxed text-muted-foreground">{f.a}</p>
+                <p className="mt-3 pl-5 text-sm leading-relaxed text-muted-foreground">{f.a}</p>
               </details>
             ))}
           </div>
+
         </div>
 
         {related.length > 0 && (
