@@ -20,6 +20,7 @@ import {
   CATEGORY_META,
   PHASE_META,
   TOOLS,
+  scoreTool,
   toolMatches,
   toolsByCategory,
   type ToolCategory,
@@ -97,9 +98,16 @@ const FEATURES = [
 
 function Index() {
   const [query, setQuery] = useState("");
+  const [activeCat, setActiveCat] = useState<ToolCategory | "all">("all");
 
-  const filtered = useMemo(() => TOOLS.filter((t) => toolMatches(t, query)), [query]);
-  const isSearching = query.trim().length > 0;
+  const filtered = useMemo(() => {
+    const list = TOOLS.filter((t) => toolMatches(t, query));
+    const byCat = activeCat === "all" ? list : list.filter((t) => t.category === activeCat);
+    if (!query) return byCat;
+    return [...byCat].sort((a, b) => scoreTool(b, query) - scoreTool(a, query));
+  }, [query, activeCat]);
+  const isSearching = query.trim().length > 0 || activeCat !== "all";
+  const readyCount = useMemo(() => TOOLS.filter((t) => t.status === "ready").length, []);
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-background text-foreground">
@@ -210,15 +218,52 @@ function Index() {
           </p>
         </div>
 
-        <div className="mx-auto mt-10 max-w-xl">
+        <div className="mx-auto mt-10 max-w-2xl">
           <SearchBar value={query} onChange={setQuery} />
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+            <button
+              onClick={() => setActiveCat("all")}
+              className={`rounded-full border px-3.5 py-1.5 text-xs font-medium transition-colors ${
+                activeCat === "all"
+                  ? "border-primary bg-primary/15 text-foreground"
+                  : "border-border bg-surface/60 text-muted-foreground hover:border-primary/60"
+              }`}
+            >
+              All · {TOOLS.length}
+            </button>
+            {CATEGORY_ORDER.map((c) => {
+              const n = toolsByCategory(c).length;
+              return (
+                <button
+                  key={c}
+                  onClick={() => setActiveCat(c)}
+                  className={`rounded-full border px-3.5 py-1.5 text-xs font-medium transition-colors ${
+                    activeCat === c
+                      ? "border-primary bg-primary/15 text-foreground"
+                      : "border-border bg-surface/60 text-muted-foreground hover:border-primary/60"
+                  }`}
+                >
+                  {CATEGORY_META[c].label} · {n}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         {isSearching ? (
           <div className="mt-12">
             <p className="mb-6 text-sm text-muted-foreground">
-              {filtered.length} {filtered.length === 1 ? "result" : "results"} for
-              <span className="ml-1 font-mono text-foreground">"{query}"</span>
+              {filtered.length} {filtered.length === 1 ? "result" : "results"}
+              {query && (
+                <>
+                  {" "}for <span className="font-mono text-foreground">"{query}"</span>
+                </>
+              )}
+              {activeCat !== "all" && (
+                <>
+                  {" "}in <span className="text-foreground">{CATEGORY_META[activeCat].label}</span>
+                </>
+              )}
             </p>
             {filtered.length === 0 ? (
               <GlassCard className="p-10 text-center">
@@ -226,6 +271,15 @@ function Index() {
                 <p className="mt-2 text-sm text-muted-foreground">
                   Try a different keyword like "convert", "sign", or "compress".
                 </p>
+                <button
+                  onClick={() => {
+                    setQuery("");
+                    setActiveCat("all");
+                  }}
+                  className="mt-4 inline-flex items-center gap-2 rounded-md border border-border bg-surface px-4 py-2 text-sm font-medium hover:border-primary"
+                >
+                  Reset filters
+                </button>
               </GlassCard>
             ) : (
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
