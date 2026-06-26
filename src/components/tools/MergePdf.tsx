@@ -3,10 +3,13 @@ import { PDFDocument } from "pdf-lib";
 import { Combine, Loader2, ArrowUp, ArrowDown } from "lucide-react";
 import { FileDrop, ToolShell, downloadBlob } from "./ToolShell";
 import { toast } from "sonner";
+import { useRateLimit } from "@/lib/rate-limit";
+import { logOperation } from "@/lib/ops-log";
 
 export function MergePdf() {
   const [files, setFiles] = useState<File[]>([]);
   const [busy, setBusy] = useState(false);
+  const rl = useRateLimit("merge-pdf");
 
   const move = (i: number, dir: -1 | 1) => {
     const j = i + dir;
@@ -21,7 +24,14 @@ export function MergePdf() {
       toast.error("Add at least 2 PDFs to merge");
       return;
     }
+    const gate = rl.consume();
+    if (gate.blocked) {
+      toast.error(`Slow down — try again in ${Math.ceil(gate.retryInMs / 1000)}s`);
+      return;
+    }
     setBusy(true);
+    const started = performance.now();
+    const bytesIn = files.reduce((s, f) => s + f.size, 0);
     try {
       const out = await PDFDocument.create();
       for (const f of files) {
@@ -32,13 +42,29 @@ export function MergePdf() {
       const bytes = await out.save();
       downloadBlob(new Blob([bytes as BlobPart], { type: "application/pdf" }), "merged.pdf");
       toast.success("Merged PDF downloaded");
+      logOperation({
+        toolSlug: "merge-pdf",
+        fileCount: files.length,
+        bytesIn,
+        durationMs: Math.round(performance.now() - started),
+        success: true,
+      });
     } catch (e) {
       console.error(e);
       toast.error("Failed to merge PDFs");
+      logOperation({
+        toolSlug: "merge-pdf",
+        fileCount: files.length,
+        bytesIn,
+        durationMs: Math.round(performance.now() - started),
+        success: false,
+        error: e instanceof Error ? e.message : String(e),
+      });
     } finally {
       setBusy(false);
     }
   };
+
 
   return (
     <ToolShell

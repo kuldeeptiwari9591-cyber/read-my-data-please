@@ -9,6 +9,7 @@ import { TOOLS, TOOLS_BY_SLUG } from "@/lib/tools";
 import { TOOL_COMPONENTS } from "@/components/tools";
 import { ToolShell } from "@/components/tools/ToolShell";
 import { ComingSoonTool } from "@/components/tools/ComingSoonTool";
+import { RateLimitBanner } from "@/components/tools/RateLimitBanner";
 import { getToolContent } from "@/lib/tool-content";
 
 export const Route = createFileRoute("/tools/$slug")({
@@ -19,8 +20,8 @@ export const Route = createFileRoute("/tools/$slug")({
     }
     const content = getToolContent(tool.slug, tool.name);
     const path = `/tools/${tool.slug}`;
-    const title = `${tool.name} — Free Online ${tool.name} Tool · CrispPDF`;
-    const description = tool.description;
+    const title = content.seoTitle ?? `${tool.name} — Free Online ${tool.name} Tool · CrispPDF`;
+    const description = content.seoDescription ?? tool.description;
 
     const webApp = {
       "@context": "https://schema.org",
@@ -65,12 +66,15 @@ export const Route = createFileRoute("/tools/$slug")({
       meta: [
         { title },
         { name: "description", content: description },
-        { property: "og:title", content: `${tool.name} — CrispPDF` },
+        ...(content.keywords && content.keywords.length
+          ? [{ name: "keywords", content: content.keywords.join(", ") }]
+          : []),
+        { property: "og:title", content: title },
         { property: "og:description", content: description },
         { property: "og:url", content: path },
         { property: "og:type", content: "website" },
         { name: "twitter:card", content: "summary_large_image" },
-        { name: "twitter:title", content: `${tool.name} — CrispPDF` },
+        { name: "twitter:title", content: title },
         { name: "twitter:description", content: description },
       ],
       links: [{ rel: "canonical", href: path }],
@@ -174,6 +178,8 @@ function ToolPage() {
                 {tool.processing === "browser" ? "100% browser · private" : "server · privacy-respecting"}
               </span>
             </div>
+
+            <RateLimitBanner slug={tool.slug} />
 
             {Component ? (
               <Suspense
