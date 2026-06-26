@@ -129,9 +129,8 @@ export function HeroScene() {
   useEffect(() => {
     setMounted(true);
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const isMobile = window.matchMedia("(max-width: 768px)").matches;
-    // Skip 3D on mobile / reduced-motion — saves ~1MB JS + GPU.
-    if (reduce || isMobile) {
+    // Respect reduced motion only — render 3D on mobile too.
+    if (reduce) {
       setAllow3d(false);
       return;
     }
