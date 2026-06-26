@@ -1,12 +1,12 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArrowLeft, Construction, Sparkles } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { GlassCard } from "@/components/GlassCard";
 import { ToolCard } from "@/components/ToolCard";
 import { TOOLS, TOOLS_BY_SLUG } from "@/lib/tools";
 import { TOOL_COMPONENTS } from "@/components/tools";
 import { ToolShell } from "@/components/tools/ToolShell";
+import { ComingSoonTool } from "@/components/tools/ComingSoonTool";
 
 export const Route = createFileRoute("/tools/$slug")({
   head: ({ params }) => {
