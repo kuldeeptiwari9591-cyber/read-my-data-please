@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { PDFDocument } from "pdf-lib";
 import { Minimize2, Loader2 } from "lucide-react";
-import { FileDrop, ToolShell, downloadBlob, ProgressBar } from "./ToolShell";
+import { FileDrop, ToolShell, downloadBlob, ProgressBar, ShareCard } from "./ToolShell";
+import { FileSizeResult } from "@/components/visuals/FileSizeResult";
 import { loadPdfjs } from "@/lib/pdfjs";
 import { toast } from "sonner";
 
@@ -98,13 +99,17 @@ export function CompressPdf() {
       {busy && <ProgressBar progress={progress} label="Compressing" status={status} />}
 
       {result && (
-        <div className="mt-6 rounded-xl border border-success/40 bg-success/10 px-4 py-3 text-sm">
-          {(result.before / 1024 / 1024).toFixed(2)} MB →{" "}
-          <span className="font-semibold">{(result.after / 1024 / 1024).toFixed(2)} MB</span>
-          <span className="ml-2 text-success">
-            ({Math.max(0, Math.round((1 - result.after / result.before) * 100))}% smaller)
-          </span>
-        </div>
+        <>
+          <FileSizeResult before={result.before} after={result.after} />
+          <ShareCard
+            toolSlug="compress-pdf"
+            toolName="Compress PDF"
+            context={{
+              originalSize: `${(result.before / 1024 / 1024).toFixed(2)} MB`,
+              newSize: `${(result.after / 1024 / 1024).toFixed(2)} MB`,
+            }}
+          />
+        </>
       )}
 
       <button
