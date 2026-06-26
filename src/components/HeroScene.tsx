@@ -139,9 +139,9 @@ export function HeroScene() {
     <div className="absolute inset-0 pointer-events-none overflow-hidden">
       <HeroBackdrop />
       {mounted && !webglFailed && (
-        <div className="absolute inset-0 opacity-70 [mask-image:radial-gradient(circle_at_center,black_30%,transparent_75%)]">
+        <div className="absolute inset-0 opacity-60 [mask-image:radial-gradient(circle_at_center,black_15%,transparent_70%)]">
           <Canvas
-            camera={{ position: [0, 0.4, 7.5], fov: 45 }}
+            camera={{ position: [0, 0.3, 9], fov: 40 }}
             gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
             dpr={[1, 1.5]}
             onCreated={({ gl }) => {
