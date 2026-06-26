@@ -7,6 +7,7 @@ const COLS: ToolCategory[] = ["organize", "convert-to", "convert-from"];
 const COMPANY = [
   { label: "About", to: "/about" },
   { label: "Blog", to: "/blog" },
+  { label: "Changelog", to: "/changelog" },
   { label: "Contact", to: "/contact" },
   { label: "Privacy", to: "/privacy" },
   { label: "Terms", to: "/terms" },
@@ -24,7 +25,6 @@ export function Footer() {
           </p>
         </div>
 
-
         {COLS.map((cat) => (
           <div key={cat}>
             <h4 className="font-display text-sm font-semibold uppercase tracking-wider text-muted-foreground">
@@ -36,8 +36,7 @@ export function Footer() {
                 .map((t) => (
                   <li key={t.slug}>
                     <Link
-                      to="/tools/$slug"
-                      params={{ slug: t.slug }}
+                      to={("/" + t.slug) as never}
                       className="text-muted-foreground transition-colors hover:text-foreground"
                     >
                       {t.name}
@@ -70,7 +69,7 @@ export function Footer() {
       <div className="border-t border-border/60">
         <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-2 px-6 py-6 text-xs text-muted-foreground md:flex-row md:items-center">
           <p>© {new Date().getFullYear()} CrispPDF. Your files stay yours.</p>
-          <p className="font-mono">v0.1 · built with TanStack Start</p>
+          <p className="font-mono">v1.3 · built with TanStack Start</p>
         </div>
       </div>
     </footer>
