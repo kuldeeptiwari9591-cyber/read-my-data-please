@@ -123,27 +123,54 @@ function HeroBackdrop() {
 export function HeroScene() {
   const [mounted, setMounted] = useState(false);
   const [webglFailed, setWebglFailed] = useState(false);
+  const [allow3d, setAllow3d] = useState(false);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     setMounted(true);
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+    // Skip 3D on mobile / reduced-motion — saves ~1MB JS + GPU.
+    if (reduce || isMobile) {
+      setAllow3d(false);
+      return;
+    }
     try {
       const c = document.createElement("canvas");
       const gl = c.getContext("webgl2") || c.getContext("webgl");
-      if (!gl) setWebglFailed(true);
+      if (!gl) {
+        setWebglFailed(true);
+        return;
+      }
     } catch {
       setWebglFailed(true);
+      return;
     }
+    // Only mount 3D when hero is actually visible.
+    if (!containerRef.current) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) {
+          setAllow3d(true);
+          io.disconnect();
+        }
+      },
+      { threshold: 0.1 },
+    );
+    io.observe(containerRef.current);
+    return () => io.disconnect();
   }, []);
 
   return (
-    <div className="absolute inset-0 pointer-events-none overflow-hidden">
+    <div ref={containerRef} className="absolute inset-0 pointer-events-none overflow-hidden">
       <HeroBackdrop />
-      {mounted && !webglFailed && (
+      {mounted && !webglFailed && allow3d && (
         <div className="absolute inset-0 opacity-60 [mask-image:radial-gradient(circle_at_center,black_15%,transparent_70%)]">
           <Canvas
             camera={{ position: [0, 0.3, 18], fov: 35 }}
-            gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
-            dpr={[1, 1.5]}
+            gl={{ antialias: false, alpha: true, powerPreference: "high-performance" }}
+            dpr={[1, 1.25]}
+            frameloop="always"
             onCreated={({ gl }) => {
               gl.domElement.addEventListener("webglcontextlost", (e) => {
                 e.preventDefault();

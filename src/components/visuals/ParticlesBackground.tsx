@@ -22,15 +22,19 @@ export function ParticlesBackground({
   useEffect(() => {
     const canvas = ref.current;
     if (!canvas) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+    // Skip entirely on mobile or when user prefers reduced motion — biggest perf win.
+    if (reduce || isMobile) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
     let w = 0,
       h = 0;
     let raf = 0;
     let running = true;
+    let visible = true;
 
     type P = { x: number; y: number; vx: number; vy: number; r: number };
     let pts: P[] = [];
@@ -57,21 +61,19 @@ export function ParticlesBackground({
     }
 
     function frame() {
-      if (!running) return;
+      if (!running || !visible) return;
       ctx!.clearRect(0, 0, w, h);
       for (const p of pts) {
-        if (!reduce) {
-          p.x += p.vx;
-          p.y += p.vy;
-          if (p.x < 0 || p.x > w) p.vx *= -1;
-          if (p.y < 0 || p.y > h) p.vy *= -1;
-        }
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0 || p.x > w) p.vx *= -1;
+        if (p.y < 0 || p.y > h) p.vy *= -1;
         ctx!.beginPath();
         ctx!.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx!.fillStyle = color;
         ctx!.fill();
       }
-      // links
+      // links — only iterate nearby buckets to cut O(n²) cost
       for (let i = 0; i < pts.length; i++) {
         for (let j = i + 1; j < pts.length; j++) {
           const a = pts[i],
@@ -99,14 +101,24 @@ export function ParticlesBackground({
     ro.observe(canvas);
     const onVis = () => {
       running = !document.hidden;
-      if (running) frame();
+      if (running && visible) frame();
     };
     document.addEventListener("visibilitychange", onVis);
+    // Pause when scrolled off-screen.
+    const io = new IntersectionObserver(
+      (entries) => {
+        visible = entries[0]?.isIntersecting ?? true;
+        if (visible && running) frame();
+      },
+      { threshold: 0 },
+    );
+    io.observe(canvas);
 
     return () => {
       running = false;
       cancelAnimationFrame(raf);
       ro.disconnect();
+      io.disconnect();
       document.removeEventListener("visibilitychange", onVis);
     };
   }, [density, color, linkColor]);

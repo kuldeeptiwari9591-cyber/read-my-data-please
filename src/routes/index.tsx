@@ -34,13 +34,13 @@ const PHASE_ORDER: ToolPhase[] = ["next", "interactive", "server"];
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "CrispPDF — 30 Free Online PDF Tools · No signup, no watermarks" },
+      { title: "CrispPDF — 40 Free Online PDF Tools · No signup, no watermarks" },
       {
         name: "description",
         content:
-          "Merge, split, compress, convert, sign, and protect PDFs. 30 free tools. No signup. No watermarks. Privacy-first.",
+          "Merge, split, compress, convert, sign, and protect PDFs. 40 free tools. No signup. No watermarks. Privacy-first.",
       },
-      { property: "og:title", content: "CrispPDF — 30 Free Online PDF Tools" },
+      { property: "og:title", content: "CrispPDF — 40 Free Online PDF Tools" },
       {
         property: "og:description",
         content: "Every PDF tool you need. Free, crisp, and fast. No signup, no watermarks.",
@@ -59,7 +59,7 @@ const CATEGORY_ORDER: ToolCategory[] = [
 ];
 
 const STATS = [
-  { value: "30", label: "Free tools" },
+  { value: "40", label: "Free tools" },
   { value: "0", label: "Signups required" },
   { value: "0", label: "Watermarks added" },
   { value: "∞", label: "Daily uses" },
@@ -141,7 +141,7 @@ function Index() {
             className="inline-flex items-center gap-2 rounded-full border border-border bg-surface/60 px-4 py-1.5 text-xs font-medium text-muted-foreground backdrop-blur-md"
           >
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-success animate-pulse" />
-            30 free tools · no signup · no watermarks
+            40 free tools · no signup · no watermarks
           </motion.div>
 
           <motion.h1
@@ -172,7 +172,7 @@ function Index() {
             transition={{ duration: 0.7, delay: 0.25 }}
             className="mt-8 w-full max-w-xl"
           >
-            <SearchBar value={query} onChange={setQuery} placeholder="Search 30 tools — try 'merge' or 'compress'" />
+            <SearchBar value={query} onChange={setQuery} placeholder="Search 40 tools — try 'merge' or 'compress'" />
           </motion.div>
 
           <motion.div
@@ -185,7 +185,7 @@ function Index() {
               href="#tools"
               className="group inline-flex items-center gap-2 rounded-md bg-gradient-to-r from-primary to-secondary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-[0_0_30px_rgba(99,102,241,0.4)] transition-transform hover:scale-[1.03]"
             >
-              View all 30 tools
+              View all 40 tools
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </a>
             <a
@@ -222,7 +222,7 @@ function Index() {
             // The full toolkit
           </p>
           <h2 className="mt-3 font-display text-4xl font-bold tracking-tight md:text-5xl">
-            30 tools. One crisp app.
+            40 tools. One crisp app.
           </h2>
           <p className="mt-4 text-muted-foreground">
             Five categories, every PDF workflow covered.
@@ -293,7 +293,7 @@ function Index() {
                 </button>
               </GlassCard>
             ) : (
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
                 {filtered.map((t) => (
                   <ToolCard key={t.slug} tool={t} />
                 ))}
@@ -316,7 +316,7 @@ function Index() {
                       {tools.length} {tools.length === 1 ? "tool" : "tools"}
                     </span>
                   </div>
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
                     {tools.map((t) => (
                       <ToolCard key={t.slug} tool={t} />
                     ))}
@@ -335,7 +335,7 @@ function Index() {
             // Status
           </p>
           <h2 className="mt-3 font-display text-4xl font-bold tracking-tight md:text-5xl">
-            All <span className="text-gradient">30 tools</span> are live.
+            All <span className="text-gradient">40 tools</span> are live.
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
             Every tool runs end-to-end today — no waitlists, no "coming soon" stubs. Most run
@@ -377,7 +377,7 @@ function Index() {
 
         <div className="mt-16 grid gap-6 md:grid-cols-3">
           {[
-            { n: "01", title: "Pick a tool", body: "Choose from 30 PDF tools, organized by what you need to do." },
+            { n: "01", title: "Pick a tool", body: "Choose from 40 PDF tools, organized by what you need to do." },
             { n: "02", title: "Drop your file", body: "Drag and drop. Everything runs the moment your file is ready." },
             { n: "03", title: "Download crisp output", body: "Get your result in seconds. No watermarks, no email gates, no upsells." },
           ].map((s, i) => (
@@ -449,7 +449,7 @@ function Index() {
           {[
             {
               q: "Is CrispPDF really free?",
-              a: "Yes — all 30 tools, no daily limits, no signup, no watermarks. Forever.",
+              a: "Yes — all 40 tools, no daily limits, no signup, no watermarks. Forever.",
             },
             {
               q: "Are my files private?",
