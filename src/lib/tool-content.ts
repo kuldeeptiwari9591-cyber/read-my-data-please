@@ -15,6 +15,9 @@ export interface ToolContent {
   howTo: HowToStep[];
   faqs: FaqItem[];
   why: string;
+  seoTitle?: string;
+  seoDescription?: string;
+  keywords?: string[];
 }
 
 const DEFAULT_WHY =
@@ -142,6 +145,10 @@ export function getToolContent(slug: string, name: string): ToolContent {
     howTo: o.howTo ?? DEFAULT_HOWTO(name),
     faqs: merged.slice(0, 14),
     why: o.why ?? DEFAULT_WHY,
+    seoTitle: o.seoTitle,
+    seoDescription: o.seoDescription,
+    keywords: o.keywords,
   };
 }
+
 
