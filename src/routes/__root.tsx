@@ -132,11 +132,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <head>
         <HeadContent />
       </head>
-      <body>
+      <body className="bg-background text-foreground">
         {children}
         <Scripts />
       </body>
@@ -147,19 +147,22 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
-  // Apply real user locale (querystring/localStorage/navigator) AFTER hydration
-  // so SSR HTML (always English) matches the first client render exactly.
   useEffect(() => {
     applyClientLocale();
+    // Hard-lock dark mode site-wide.
+    if (typeof document !== "undefined") {
+      document.documentElement.classList.add("dark");
+      try {
+        localStorage.setItem("crisppdf-theme", "dark");
+      } catch {}
+    }
   }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider>
-        <Outlet />
-        <Toaster />
-        <CookieBanner />
-      </ThemeProvider>
+      <Outlet />
+      <Toaster />
+      <CookieBanner />
     </QueryClientProvider>
   );
 }
