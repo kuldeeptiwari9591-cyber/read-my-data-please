@@ -143,8 +143,7 @@ export const TOOLS: Tool[] = [
     category: "organize",
     icon: Minimize2,
     processing: "server",
-    status: "soon",
-    phase: "next",
+    status: "ready",
   },
   {
     slug: "pdf-to-word",
@@ -187,8 +186,7 @@ export const TOOLS: Tool[] = [
     category: "convert-from",
     icon: ImageIcon,
     processing: "browser",
-    status: "soon",
-    phase: "next",
+    status: "ready",
   },
   {
     slug: "pdf-to-png",
@@ -198,8 +196,7 @@ export const TOOLS: Tool[] = [
     category: "convert-from",
     icon: FileImage,
     processing: "browser",
-    status: "soon",
-    phase: "next",
+    status: "ready",
   },
   {
     slug: "word-to-pdf",
@@ -292,8 +289,7 @@ export const TOOLS: Tool[] = [
     category: "edit",
     icon: Crop,
     processing: "browser",
-    status: "soon",
-    phase: "next",
+    status: "ready",
   },
   {
     slug: "repair-pdf",
@@ -303,8 +299,7 @@ export const TOOLS: Tool[] = [
     category: "edit",
     icon: Wrench,
     processing: "browser",
-    status: "soon",
-    phase: "next",
+    status: "ready",
   },
   {
     slug: "flatten-pdf",
@@ -314,8 +309,7 @@ export const TOOLS: Tool[] = [
     category: "secure",
     icon: Layers,
     processing: "browser",
-    status: "soon",
-    phase: "next",
+    status: "ready",
   },
   {
     slug: "pdf-to-pdfa",
@@ -336,8 +330,7 @@ export const TOOLS: Tool[] = [
     category: "edit",
     icon: Palette,
     processing: "browser",
-    status: "soon",
-    phase: "next",
+    status: "ready",
   },
   {
     slug: "protect-pdf",
@@ -358,8 +351,7 @@ export const TOOLS: Tool[] = [
     category: "secure",
     icon: Unlock,
     processing: "browser",
-    status: "soon",
-    phase: "next",
+    status: "ready",
   },
   {
     slug: "redact-pdf",
@@ -391,8 +383,7 @@ export const TOOLS: Tool[] = [
     category: "edit",
     icon: Stamp,
     processing: "browser",
-    status: "soon",
-    phase: "next",
+    status: "ready",
   },
   {
     slug: "ocr-pdf",
@@ -433,8 +424,7 @@ export const TOOLS: Tool[] = [
     category: "edit",
     icon: Images,
     processing: "browser",
-    status: "soon",
-    phase: "next",
+    status: "ready",
   },
 ];
 
