@@ -124,7 +124,6 @@ export function HeroScene() {
 
   useEffect(() => {
     setMounted(true);
-    // Detect WebGL support — graceful fallback for low-power devices.
     try {
       const c = document.createElement("canvas");
       const gl = c.getContext("webgl2") || c.getContext("webgl");
@@ -135,31 +134,33 @@ export function HeroScene() {
   }, []);
 
   return (
-    <div className="absolute inset-0 pointer-events-none">
+    <div className="absolute inset-0 pointer-events-none overflow-hidden">
       <HeroBackdrop />
       {mounted && !webglFailed && (
-        <Canvas
-          camera={{ position: [0, 0.4, 5.2], fov: 50 }}
-          gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
-          dpr={[1, 1.5]}
-          onCreated={({ gl }) => {
-            gl.domElement.addEventListener("webglcontextlost", (e) => {
-              e.preventDefault();
-              setWebglFailed(true);
-            });
-          }}
-        >
-          <ambientLight intensity={0.6} />
-          <pointLight position={[4, 4, 4]} intensity={1.4} color="#A5B4FC" />
-          <pointLight position={[-4, -3, -2]} intensity={0.9} color="#C4B5FD" />
+        <div className="absolute inset-0 opacity-70 [mask-image:radial-gradient(circle_at_center,black_30%,transparent_75%)]">
+          <Canvas
+            camera={{ position: [0, 0.4, 7.5], fov: 45 }}
+            gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
+            dpr={[1, 1.5]}
+            onCreated={({ gl }) => {
+              gl.domElement.addEventListener("webglcontextlost", (e) => {
+                e.preventDefault();
+                setWebglFailed(true);
+              });
+            }}
+          >
+            <ambientLight intensity={0.6} />
+            <pointLight position={[4, 4, 4]} intensity={1.4} color="#A5B4FC" />
+            <pointLight position={[-4, -3, -2]} intensity={0.9} color="#C4B5FD" />
 
-          <Core />
-          <OrbitingNodes />
+            <Core />
+            <OrbitingNodes />
 
-          <Ring radius={2.1} tilt={[Math.PI / 2.4, 0, 0]} speed={0.18} color="#8B5CF6" />
-          <Ring radius={2.5} tilt={[Math.PI / 3, Math.PI / 6, 0]} speed={-0.12} color="#6366F1" />
-          <Ring radius={2.85} tilt={[Math.PI / 2, Math.PI / 3, 0]} speed={0.08} color="#A5B4FC" />
-        </Canvas>
+            <Ring radius={2.1} tilt={[Math.PI / 2.4, 0, 0]} speed={0.18} color="#8B5CF6" />
+            <Ring radius={2.5} tilt={[Math.PI / 3, Math.PI / 6, 0]} speed={-0.12} color="#6366F1" />
+            <Ring radius={2.85} tilt={[Math.PI / 2, Math.PI / 3, 0]} speed={0.08} color="#A5B4FC" />
+          </Canvas>
+        </div>
       )}
     </div>
   );
