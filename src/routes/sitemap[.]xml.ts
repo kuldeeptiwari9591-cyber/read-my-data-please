@@ -2,8 +2,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { TOOLS } from "@/lib/tools";
 
-// TODO: replace with your project URL once a project name or custom domain is set.
-const BASE_URL = "";
+// Prefer VITE_SITE_URL; fall back to the production domain so search engines
+// always receive absolute URLs from the sitemap.
+const BASE_URL = (
+  (import.meta.env.VITE_SITE_URL as string | undefined) ?? "https://crisppdf.com"
+).replace(/\/$/, "");
 
 interface SitemapEntry {
   path: string;
