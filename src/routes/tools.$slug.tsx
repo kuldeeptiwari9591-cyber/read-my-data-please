@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, CheckCircle2 } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ToolCard } from "@/components/ToolCard";
@@ -7,6 +7,7 @@ import { TOOLS, TOOLS_BY_SLUG } from "@/lib/tools";
 import { TOOL_COMPONENTS } from "@/components/tools";
 import { ToolShell } from "@/components/tools/ToolShell";
 import { ComingSoonTool } from "@/components/tools/ComingSoonTool";
+import { getToolContent } from "@/lib/tool-content";
 
 export const Route = createFileRoute("/tools/$slug")({
   head: ({ params }) => {
@@ -14,12 +15,68 @@ export const Route = createFileRoute("/tools/$slug")({
     if (!tool) {
       return { meta: [{ title: "Tool not found — CrispPDF" }] };
     }
+    const content = getToolContent(tool.slug, tool.name);
+    const path = `/tools/${tool.slug}`;
+    const title = `${tool.name} — Free Online ${tool.name} Tool · CrispPDF`;
+    const description = tool.description;
+
+    const webApp = {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      name: `${tool.name} — CrispPDF`,
+      url: path,
+      applicationCategory: "UtilitiesApplication",
+      operatingSystem: "Any (web browser)",
+      offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+      description,
+    };
+    const howTo = {
+      "@context": "https://schema.org",
+      "@type": "HowTo",
+      name: `How to use ${tool.name}`,
+      step: content.howTo.map((s, i) => ({
+        "@type": "HowToStep",
+        position: i + 1,
+        name: s.name,
+        text: s.text,
+      })),
+    };
+    const faqLd = {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: content.faqs.map((f) => ({
+        "@type": "Question",
+        name: f.q,
+        acceptedAnswer: { "@type": "Answer", text: f.a },
+      })),
+    };
+    const breadcrumb = {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "CrispPDF", item: "/" },
+        { "@type": "ListItem", position: 2, name: tool.name, item: path },
+      ],
+    };
+
     return {
       meta: [
-        { title: `${tool.name} — Free Online ${tool.name} Tool · CrispPDF` },
-        { name: "description", content: tool.description },
+        { title },
+        { name: "description", content: description },
         { property: "og:title", content: `${tool.name} — CrispPDF` },
-        { property: "og:description", content: tool.description },
+        { property: "og:description", content: description },
+        { property: "og:url", content: path },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: `${tool.name} — CrispPDF` },
+        { name: "twitter:description", content: description },
+      ],
+      links: [{ rel: "canonical", href: path }],
+      scripts: [
+        { type: "application/ld+json", children: JSON.stringify(webApp) },
+        { type: "application/ld+json", children: JSON.stringify(howTo) },
+        { type: "application/ld+json", children: JSON.stringify(faqLd) },
+        { type: "application/ld+json", children: JSON.stringify(breadcrumb) },
       ],
     };
   },
@@ -53,6 +110,7 @@ function ToolPage() {
   const Icon = tool.icon;
   const Component = TOOL_COMPONENTS[tool.slug];
   const isReady = tool.status === "ready";
+  const content = getToolContent(tool.slug, tool.name);
 
   const related = TOOLS.filter(
     (t) => t.category === tool.category && t.slug !== tool.slug,
@@ -68,7 +126,7 @@ function ToolPage() {
       <Header />
 
       <section className="mx-auto max-w-4xl px-6 py-12">
-        <nav className="flex items-center gap-2 text-xs text-muted-foreground">
+        <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-muted-foreground">
           <Link to="/" className="transition-colors hover:text-foreground">
             CrispPDF
           </Link>
@@ -92,7 +150,7 @@ function ToolPage() {
           <div className="pointer-events-none absolute -bottom-24 -left-16 h-72 w-72 rounded-full bg-secondary/15 blur-3xl" />
 
           <div className="relative p-7 md:p-10">
-            <div className="mb-6 flex items-center gap-2">
+            <div className="mb-6 flex flex-wrap items-center gap-2">
               <span
                 className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-wider ${
                   isReady
@@ -111,7 +169,7 @@ function ToolPage() {
                 {tool.category.replace("-", " ")}
               </span>
               <span className="rounded-full border border-primary/30 bg-primary/10 px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-wider text-primary">
-                100% browser · private
+                {tool.processing === "browser" ? "100% browser · private" : "server · privacy-respecting"}
               </span>
             </div>
 
@@ -137,9 +195,77 @@ function ToolPage() {
           </div>
         </div>
 
+        {/* HOW TO USE */}
+        <div className="mt-16">
+          <p className="font-mono text-xs uppercase tracking-[0.2em] text-primary">// How to use</p>
+          <h2 className="mt-2 font-display text-2xl font-semibold md:text-3xl">
+            How to use {tool.name}
+          </h2>
+          <ol className="mt-6 space-y-3">
+            {content.howTo.map((s, i) => (
+              <li
+                key={s.name}
+                className="flex gap-4 rounded-xl border border-border/60 bg-surface/40 p-5"
+              >
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary to-secondary font-mono text-sm font-semibold text-primary-foreground">
+                  {i + 1}
+                </div>
+                <div>
+                  <h3 className="font-display text-base font-semibold">{s.name}</h3>
+                  <p className="mt-1 text-sm text-muted-foreground">{s.text}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+
+        {/* WHY CRISPPDF */}
+        <div className="mt-16 rounded-2xl border border-border/60 bg-surface/40 p-7 md:p-10">
+          <p className="font-mono text-xs uppercase tracking-[0.2em] text-primary">// Why CrispPDF</p>
+          <h2 className="mt-2 font-display text-2xl font-semibold md:text-3xl">
+            Why use CrispPDF for {tool.name.toLowerCase()}?
+          </h2>
+          <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{content.why}</p>
+          <ul className="mt-6 grid gap-2 text-sm sm:grid-cols-2">
+            {[
+              "No signup, no email gate",
+              "No watermarks on output",
+              "Files never stored on a server",
+              "Works on phone, tablet, and desktop",
+            ].map((p) => (
+              <li key={p} className="flex items-center gap-2 text-muted-foreground">
+                <CheckCircle2 className="h-4 w-4 text-success" />
+                {p}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* FAQ */}
+        <div className="mt-16">
+          <p className="font-mono text-xs uppercase tracking-[0.2em] text-primary">// FAQ</p>
+          <h2 className="mt-2 font-display text-2xl font-semibold md:text-3xl">
+            {tool.name} — frequently asked questions
+          </h2>
+          <div className="mt-6 space-y-3">
+            {content.faqs.map((f) => (
+              <details
+                key={f.q}
+                className="group rounded-xl border border-border bg-surface/60 px-5 py-4 backdrop-blur-sm transition-colors hover:border-primary/60"
+              >
+                <summary className="cursor-pointer list-none font-display text-base font-medium">
+                  <span className="mr-3 text-primary">+</span>
+                  {f.q}
+                </summary>
+                <p className="mt-3 pl-6 text-sm leading-relaxed text-muted-foreground">{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+
         {related.length > 0 && (
           <div className="mt-20">
-            <h3 className="font-display text-xl font-semibold">You might also need</h3>
+            <h2 className="font-display text-xl font-semibold">You might also need</h2>
             <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {related.map((t) => (
                 <ToolCard key={t.slug} tool={t} />
