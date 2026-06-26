@@ -16,6 +16,8 @@ import { Footer } from "@/components/Footer";
 import { GlassCard } from "@/components/GlassCard";
 import { ToolCard } from "@/components/ToolCard";
 import { SearchBar } from "@/components/SearchBar";
+import { ParticlesBackground } from "@/components/visuals/ParticlesBackground";
+import { GradientBlob } from "@/components/visuals/GradientBlob";
 import {
   CATEGORY_META,
   PHASE_META,
@@ -122,6 +124,15 @@ function Index() {
       {/* HERO */}
       <section className="relative min-h-[88vh] overflow-hidden">
         <HeroScene />
+        <ParticlesBackground className="opacity-70" />
+        <GradientBlob className="-top-24 -left-24" size={520} />
+        <GradientBlob
+          className="top-1/3 -right-32"
+          size={620}
+          from="rgba(139,92,246,0.4)"
+          to="rgba(6,182,212,0.25)"
+          duration={18}
+        />
         <div className="relative z-10 mx-auto flex min-h-[88vh] max-w-6xl flex-col items-center justify-center px-6 py-24 text-center">
           <motion.div
             initial={{ opacity: 0, y: 12 }}
