@@ -247,7 +247,7 @@ function ToolPage() {
             Why use CrispPDF for {tool.name.toLowerCase()}?
           </h2>
           <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{content.why}</p>
-          <ul className="mt-6 grid gap-2 text-sm sm:grid-cols-2">
+          <ul className="mt-6 grid gap-2 text-sm sm:grid-cols-2 lg:grid-cols-3">
             {[
               "No signup, no email gate",
               "No watermarks on output",
@@ -268,7 +268,7 @@ function ToolPage() {
           <h2 className="mt-2 font-display text-2xl font-semibold md:text-3xl">
             {tool.name} — frequently asked questions
           </h2>
-          <div className="mt-6 grid gap-3 sm:grid-cols-2">
+          <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {content.faqs.map((f) => (
               <details
                 key={f.q}
