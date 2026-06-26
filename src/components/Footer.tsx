@@ -47,7 +47,7 @@ export function Footer() {
 
       <div className="border-t border-border/60">
         <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-2 px-6 py-6 text-xs text-muted-foreground md:flex-row md:items-center">
-          <p>© {new Date().getFullYear()} CrispPDF. All files processed in your browser when possible.</p>
+          <p>© {new Date().getFullYear()} CrispPDF. Your files stay yours.</p>
           <p className="font-mono">v0.1 · built with TanStack Start</p>
         </div>
       </div>

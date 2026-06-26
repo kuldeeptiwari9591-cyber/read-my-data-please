@@ -1,12 +1,28 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Sparkles, Shield, Zap, Globe2, FileLock2, Infinity as InfinityIcon } from "lucide-react";
+import {
+  ArrowRight,
+  Sparkles,
+  Shield,
+  Zap,
+  Globe2,
+  FileLock2,
+  Infinity as InfinityIcon,
+} from "lucide-react";
 import { HeroScene } from "@/components/HeroScene";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { GlassCard } from "@/components/GlassCard";
 import { ToolCard } from "@/components/ToolCard";
-import { CATEGORY_META, TOOLS, toolsByCategory, type ToolCategory } from "@/lib/tools";
+import { SearchBar } from "@/components/SearchBar";
+import {
+  CATEGORY_META,
+  TOOLS,
+  toolMatches,
+  toolsByCategory,
+  type ToolCategory,
+} from "@/lib/tools";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -15,13 +31,12 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Merge, split, compress, convert, sign, and protect PDFs in your browser. 30 free tools. No signup. No watermarks. Privacy-first.",
+          "Merge, split, compress, convert, sign, and protect PDFs. 30 free tools. No signup. No watermarks. Privacy-first.",
       },
       { property: "og:title", content: "CrispPDF — 30 Free Online PDF Tools" },
       {
         property: "og:description",
-        content:
-          "Every PDF tool you need. Free, crisp, and fast. No signup, no watermarks.",
+        content: "Every PDF tool you need. Free, crisp, and fast. No signup, no watermarks.",
       },
     ],
   }),
@@ -40,14 +55,14 @@ const STATS = [
   { value: "30", label: "Free tools" },
   { value: "0", label: "Signups required" },
   { value: "0", label: "Watermarks added" },
-  { value: "100%", label: "In your browser*" },
+  { value: "∞", label: "Daily uses" },
 ];
 
 const FEATURES = [
   {
     icon: Shield,
     title: "Privacy-first",
-    body: "Most tools process your files entirely in your browser. Nothing uploaded, nothing stored.",
+    body: "Your files are processed for you and never stored. No accounts, no logs of your documents.",
   },
   {
     icon: Zap,
@@ -77,6 +92,11 @@ const FEATURES = [
 ];
 
 function Index() {
+  const [query, setQuery] = useState("");
+
+  const filtered = useMemo(() => TOOLS.filter((t) => toolMatches(t, query)), [query]);
+  const isSearching = query.trim().length > 0;
+
   return (
     <div className="relative min-h-screen overflow-hidden bg-background text-foreground">
       {/* Ambient glow blobs */}
@@ -118,15 +138,25 @@ function Index() {
             transition={{ duration: 0.7, delay: 0.2 }}
             className="mt-6 max-w-2xl text-base text-muted-foreground md:text-lg"
           >
-            Merge, split, compress, convert, sign, and protect PDFs in seconds.
-            Free forever. Crisp output. Privacy by default.
+            Merge, split, compress, convert, sign, and protect PDFs in seconds. Free forever. Crisp
+            output. Privacy by default.
           </motion.p>
+
+          {/* Search bar */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.25 }}
+            className="mt-8 w-full max-w-xl"
+          >
+            <SearchBar value={query} onChange={setQuery} placeholder="Search 30 tools — try 'merge' or 'compress'" />
+          </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            className="mt-10 flex flex-wrap items-center justify-center gap-3"
+            className="mt-8 flex flex-wrap items-center justify-center gap-3"
           >
             <a
               href="#tools"
@@ -152,9 +182,7 @@ function Index() {
           >
             {STATS.map((s) => (
               <GlassCard key={s.label} className="px-4 py-5 text-center">
-                <div className="font-display text-3xl font-bold text-gradient">
-                  {s.value}
-                </div>
+                <div className="font-display text-3xl font-bold text-gradient">{s.value}</div>
                 <div className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">
                   {s.label}
                 </div>
@@ -174,38 +202,61 @@ function Index() {
             30 tools. One crisp app.
           </h2>
           <p className="mt-4 text-muted-foreground">
-            Five categories, every PDF workflow covered. Hover for the tilt.
+            Five categories, every PDF workflow covered.
           </p>
         </div>
 
-        <div className="mt-16 space-y-20">
-          {CATEGORY_ORDER.map((cat) => {
-            const tools = toolsByCategory(cat);
-            const meta = CATEGORY_META[cat];
-            return (
-              <div key={cat}>
-                <div className="mb-8 flex items-end justify-between gap-4 border-b border-border/60 pb-4">
-                  <div>
-                    <h3 className="font-display text-2xl font-semibold">
-                      {meta.label}
-                    </h3>
-                    <p className="mt-1 text-sm text-muted-foreground">
-                      {meta.blurb}
-                    </p>
-                  </div>
-                  <span className="font-mono text-xs text-muted-foreground">
-                    {tools.length} {tools.length === 1 ? "tool" : "tools"}
-                  </span>
-                </div>
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                  {tools.map((t) => (
-                    <ToolCard key={t.slug} tool={t} />
-                  ))}
-                </div>
-              </div>
-            );
-          })}
+        <div className="mx-auto mt-10 max-w-xl">
+          <SearchBar value={query} onChange={setQuery} />
         </div>
+
+        {isSearching ? (
+          <div className="mt-12">
+            <p className="mb-6 text-sm text-muted-foreground">
+              {filtered.length} {filtered.length === 1 ? "result" : "results"} for
+              <span className="ml-1 font-mono text-foreground">"{query}"</span>
+            </p>
+            {filtered.length === 0 ? (
+              <GlassCard className="p-10 text-center">
+                <p className="font-display text-lg font-semibold">No tools matched</p>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Try a different keyword like "convert", "sign", or "compress".
+                </p>
+              </GlassCard>
+            ) : (
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {filtered.map((t) => (
+                  <ToolCard key={t.slug} tool={t} />
+                ))}
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="mt-16 space-y-20">
+            {CATEGORY_ORDER.map((cat) => {
+              const tools = toolsByCategory(cat);
+              const meta = CATEGORY_META[cat];
+              return (
+                <div key={cat}>
+                  <div className="mb-8 flex items-end justify-between gap-4 border-b border-border/60 pb-4">
+                    <div>
+                      <h3 className="font-display text-2xl font-semibold">{meta.label}</h3>
+                      <p className="mt-1 text-sm text-muted-foreground">{meta.blurb}</p>
+                    </div>
+                    <span className="font-mono text-xs text-muted-foreground">
+                      {tools.length} {tools.length === 1 ? "tool" : "tools"}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                    {tools.map((t) => (
+                      <ToolCard key={t.slug} tool={t} />
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </section>
 
       {/* HOW IT WORKS */}
@@ -222,7 +273,7 @@ function Index() {
         <div className="mt-16 grid gap-6 md:grid-cols-3">
           {[
             { n: "01", title: "Pick a tool", body: "Choose from 30 PDF tools, organized by what you need to do." },
-            { n: "02", title: "Drop your file", body: "Drag and drop. Most tools run entirely in your browser — no upload required." },
+            { n: "02", title: "Drop your file", body: "Drag and drop. Everything runs the moment your file is ready." },
             { n: "03", title: "Download crisp output", body: "Get your result in seconds. No watermarks, no email gates, no upsells." },
           ].map((s, i) => (
             <motion.div
@@ -278,17 +329,12 @@ function Index() {
             );
           })}
         </div>
-        <p className="mt-8 text-center font-mono text-xs text-muted-foreground/70">
-          * Server-side processing is used for complex conversions (Word, Excel, OCR). Files are deleted after processing.
-        </p>
       </section>
 
       {/* FAQ */}
       <section id="faq" className="relative mx-auto max-w-3xl px-6 py-24">
         <div className="text-center">
-          <p className="font-mono text-xs uppercase tracking-[0.2em] text-primary">
-            // FAQ
-          </p>
+          <p className="font-mono text-xs uppercase tracking-[0.2em] text-primary">// FAQ</p>
           <h2 className="mt-3 font-display text-4xl font-bold tracking-tight md:text-5xl">
             Quick answers.
           </h2>
@@ -302,7 +348,7 @@ function Index() {
             },
             {
               q: "Are my files private?",
-              a: "Most tools (Merge, Split, Rotate, JPG→PDF, etc.) run entirely in your browser. Nothing leaves your device. Server-side tools delete files immediately after processing.",
+              a: "Your files aren't stored. They're processed only to produce your output and then dropped immediately.",
             },
             {
               q: "Why no signup?",
@@ -310,7 +356,7 @@ function Index() {
             },
             {
               q: "Is there a file size limit?",
-              a: "Browser tools are limited only by your device's memory. Server tools cap at 100 MB per file.",
+              a: "Most tools handle PDFs up to ~100 MB comfortably. Very large files may take a few extra seconds.",
             },
             {
               q: "Do you have an API?",
