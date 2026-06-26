@@ -14,6 +14,8 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { ThemeProvider } from "../components/ThemeProvider";
 import { Toaster } from "../components/ui/sonner";
 import { CookieBanner } from "../components/CookieBanner";
+import "../lib/i18n";
+import { hreflangLinks } from "../lib/hreflang";
 
 
 function NotFoundComponent() {
@@ -110,6 +112,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap",
       },
+      ...hreflangLinks("/"),
     ],
   }),
   shellComponent: RootShell,
