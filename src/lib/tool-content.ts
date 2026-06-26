@@ -72,7 +72,22 @@ const OVERRIDES: Partial<Record<string, Partial<ToolContent>>> = {
       { name: "Download the parts", text: "Get a separate PDF for each range, packaged as a ZIP." },
     ],
   },
+  "split-pdf": {
+    seoTitle: "Split PDF Online Free — Extract Pages or Split by Range | CrispPDF",
+    seoDescription:
+      "Split a PDF into multiple files free online. Pick page ranges like 1-3, 5, 8-10 and download each part as a separate PDF — runs in your browser, nothing uploaded.",
+    keywords: ["split pdf", "split pdf online", "extract pages from pdf", "pdf splitter free", "separate pdf pages"],
+    howTo: [
+      { name: "Upload your PDF", text: "Drop the PDF you want to split." },
+      { name: "Enter page ranges", text: "Type ranges like 1-3, 5, 8-10 to define each output file." },
+      { name: "Download the parts", text: "Get a separate PDF for each range, packaged as a ZIP." },
+    ],
+  },
   "compress-pdf": {
+    seoTitle: "Compress PDF Online Free — Reduce PDF File Size | CrispPDF",
+    seoDescription:
+      "Compress PDF files online for free without losing quality. Reduce PDF size for email, upload, or storage — three quality presets, runs entirely in your browser.",
+    keywords: ["compress pdf", "reduce pdf size", "pdf compressor", "shrink pdf online free", "make pdf smaller"],
     howTo: [
       { name: "Upload your PDF", text: "Drop the file you want to shrink." },
       { name: "Pick a quality preset", text: "High keeps maximum sharpness; Medium and Low trade quality for smaller size." },
@@ -84,6 +99,10 @@ const OVERRIDES: Partial<Record<string, Partial<ToolContent>>> = {
     ],
   },
   "pdf-to-word": {
+    seoTitle: "PDF to Word Converter Free — Convert PDF to DOCX Online | CrispPDF",
+    seoDescription:
+      "Convert PDF to Word (.docx) online free. Editable Word output you can open in Microsoft Word, Google Docs, or LibreOffice — no email, no signup, no watermark.",
+    keywords: ["pdf to word", "pdf to docx", "convert pdf to word free", "pdf to word converter online", "editable word from pdf"],
     howTo: [
       { name: "Upload your PDF", text: "Drop the PDF you want to convert." },
       { name: "Wait for extraction", text: "We pull text page-by-page with layout-aware grouping." },
@@ -93,6 +112,12 @@ const OVERRIDES: Partial<Record<string, Partial<ToolContent>>> = {
       { q: "Will the layout look identical?", a: "Text and paragraph structure are preserved. Complex multi-column layouts and embedded images are simplified for editability." },
       { q: "Can I convert scanned PDFs?", a: "Scanned PDFs are images of text. Run OCR PDF first to make them searchable, then convert to Word." },
     ],
+  },
+  "pdf-to-jpg": {
+    seoTitle: "PDF to JPG Free — Convert PDF Pages to JPG Images Online | CrispPDF",
+    seoDescription:
+      "Convert PDF to JPG online free. Turn each PDF page into a high-quality JPG image right in your browser — bulk download as a ZIP, no signup or upload required.",
+    keywords: ["pdf to jpg", "convert pdf to jpg", "pdf to image", "pdf to jpg converter free", "extract images from pdf"],
   },
   "pdf-to-excel": {
     howTo: [
