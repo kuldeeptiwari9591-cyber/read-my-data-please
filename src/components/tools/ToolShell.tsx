@@ -1,6 +1,5 @@
 import { useCallback, useRef, useState, type ReactNode } from "react";
 import { Upload, FileText, X } from "lucide-react";
-import { RateLimitBanner } from "./RateLimitBanner";
 
 interface FileDropProps {
   multiple?: boolean;
@@ -110,10 +109,9 @@ interface ToolShellProps {
   description: string;
   icon: ReactNode;
   children: ReactNode;
-  slug?: string;
 }
 
-export function ToolShell({ title, description, icon, children, slug }: ToolShellProps) {
+export function ToolShell({ title, description, icon, children }: ToolShellProps) {
   return (
     <div>
       <div className="flex items-start gap-5">
@@ -125,11 +123,11 @@ export function ToolShell({ title, description, icon, children, slug }: ToolShel
           <p className="mt-3 text-lg text-muted-foreground">{description}</p>
         </div>
       </div>
-      {slug && <RateLimitBanner slug={slug} />}
       <div className="mt-10">{children}</div>
     </div>
   );
 }
+
 
 
 export function downloadBlob(blob: Blob, filename: string) {
