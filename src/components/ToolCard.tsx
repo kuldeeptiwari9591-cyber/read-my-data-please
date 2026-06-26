@@ -6,7 +6,7 @@ import type { Tool } from "@/lib/tools";
 export function ToolCard({ tool }: { tool: Tool }) {
   const Icon = tool.icon;
   return (
-    <Link to="/tools/$slug" params={{ slug: tool.slug }} className="block">
+    <Link to="/tools/$slug" params={{ slug: tool.slug }} className="group block">
       <GlassCard tilt glow className="h-full">
         <div className="flex h-full flex-col p-5">
           <div className="flex items-start justify-between">
@@ -21,20 +21,6 @@ export function ToolCard({ tool }: { tool: Tool }) {
           <p className="mt-1.5 text-sm leading-snug text-muted-foreground">
             {tool.short}
           </p>
-          <div className="mt-auto flex items-center gap-2 pt-4 text-[10px] uppercase tracking-wider text-muted-foreground/80">
-            <span
-              className={`rounded px-1.5 py-0.5 font-mono ${
-                tool.processing === "browser"
-                  ? "bg-success/15 text-success"
-                  : "bg-warning/15 text-warning"
-              }`}
-            >
-              {tool.processing}
-            </span>
-            {tool.status === "soon" && (
-              <span className="rounded bg-muted px-1.5 py-0.5 font-mono">soon</span>
-            )}
-          </div>
         </div>
       </GlassCard>
     </Link>

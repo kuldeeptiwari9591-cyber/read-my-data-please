@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { FileText } from "lucide-react";
+import { ThemeToggle } from "./ThemeToggle";
 
 export function Header() {
   return (
@@ -15,18 +16,15 @@ export function Header() {
         </Link>
 
         <nav className="hidden items-center gap-7 text-sm text-muted-foreground md:flex">
-          <a href="#tools" className="transition-colors hover:text-foreground">All tools</a>
-          <a href="#how" className="transition-colors hover:text-foreground">How it works</a>
-          <a href="#why" className="transition-colors hover:text-foreground">Why CrispPDF</a>
-          <a href="#faq" className="transition-colors hover:text-foreground">FAQ</a>
+          <Link to="/" hash="tools" className="transition-colors hover:text-foreground">All tools</Link>
+          <Link to="/" hash="how" className="transition-colors hover:text-foreground">How it works</Link>
+          <Link to="/" hash="why" className="transition-colors hover:text-foreground">Why CrispPDF</Link>
+          <Link to="/" hash="faq" className="transition-colors hover:text-foreground">FAQ</Link>
         </nav>
 
-        <a
-          href="#tools"
-          className="hidden rounded-md border border-border bg-surface px-4 py-2 text-sm font-medium transition-colors hover:border-primary hover:text-foreground md:inline-flex"
-        >
-          Browse 30 tools
-        </a>
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+        </div>
       </div>
     </header>
   );

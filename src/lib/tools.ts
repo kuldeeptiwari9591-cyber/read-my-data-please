@@ -49,6 +49,18 @@ export interface Tool {
   status: "ready" | "soon";
 }
 
+export function toolMatches(t: Tool, query: string): boolean {
+  if (!query) return true;
+  const q = query.toLowerCase().trim();
+  return (
+    t.name.toLowerCase().includes(q) ||
+    t.short.toLowerCase().includes(q) ||
+    t.description.toLowerCase().includes(q) ||
+    t.slug.includes(q) ||
+    t.category.includes(q)
+  );
+}
+
 export const CATEGORY_META: Record<
   ToolCategory,
   { label: string; blurb: string }
