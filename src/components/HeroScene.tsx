@@ -105,7 +105,13 @@ function OrbitingNodes() {
 function HeroBackdrop() {
   return (
     <div className="absolute inset-0 -z-10 overflow-hidden">
-      <div className="absolute left-1/2 top-1/2 h-[60vmin] w-[60vmin] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-radial from-primary/40 via-secondary/20 to-transparent blur-3xl" />
+      <div
+        className="absolute left-1/2 top-1/2 h-[60vmin] w-[60vmin] -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(99,102,241,0.45) 0%, rgba(139,92,246,0.2) 45%, transparent 75%)",
+        }}
+      />
       <div className="absolute left-1/2 top-1/2 h-[40vmin] w-[40vmin] -translate-x-1/2 -translate-y-1/2 rounded-full border border-primary/30" />
       <div className="absolute left-1/2 top-1/2 h-[55vmin] w-[55vmin] -translate-x-1/2 -translate-y-1/2 rounded-full border border-secondary/20" />
     </div>
