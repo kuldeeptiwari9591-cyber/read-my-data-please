@@ -1,5 +1,7 @@
 import { type ReactNode } from "react";
 import { HoloUploadZone } from "@/components/visuals/HoloUploadZone";
+import { PdfThumbnailStrip } from "@/components/visuals/PdfThumbnailStrip";
+import { celebrate } from "@/lib/celebrate";
 
 interface FileDropProps {
   multiple?: boolean;
@@ -7,6 +9,10 @@ interface FileDropProps {
   files: File[];
   onFiles: (files: File[]) => void;
   label?: string;
+  /** Pass to show live thumbnails of uploaded PDFs. Default true. */
+  preview?: boolean;
+  /** 1-indexed page numbers to highlight in the preview strip. */
+  highlightPages?: number[];
 }
 
 export function FileDrop({
@@ -15,15 +21,22 @@ export function FileDrop({
   files,
   onFiles,
   label = "Drop your PDF here, or click to browse",
+  preview = true,
+  highlightPages,
 }: FileDropProps) {
   return (
-    <HoloUploadZone
-      multiple={multiple}
-      accept={accept}
-      files={files}
-      onFiles={onFiles}
-      label={label}
-    />
+    <div>
+      <HoloUploadZone
+        multiple={multiple}
+        accept={accept}
+        files={files}
+        onFiles={onFiles}
+        label={label}
+      />
+      {preview && files.length > 0 && (
+        <PdfThumbnailStrip files={files} highlightPages={highlightPages} />
+      )}
+    </div>
   );
 }
 
@@ -51,8 +64,6 @@ export function ToolShell({ title, description, icon, children }: ToolShellProps
   );
 }
 
-
-
 export function downloadBlob(blob: Blob, filename: string) {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
@@ -63,14 +74,14 @@ export function downloadBlob(blob: Blob, filename: string) {
   document.body.removeChild(a);
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 
-  // Best-effort: log a successful operation for the admin dashboard.
-  // Tool slug is derived from /tools/:slug, so it works for every tool route
-  // without requiring each tool component to add its own log call.
+  // Confetti celebration (Animation 6)
+  celebrate(0.75);
+
+  // Ops log (best-effort)
   try {
     if (typeof window !== "undefined") {
-      const m = window.location.pathname.match(/\/tools\/([^/?#]+)/);
+      const m = window.location.pathname.match(/^\/([a-z0-9-]+)/i);
       if (m) {
-        // Lazy import so the ops module never blocks the download path.
         void import("@/lib/ops-log").then(({ logOperation }) =>
           logOperation({
             toolSlug: m[1],
@@ -86,7 +97,6 @@ export function downloadBlob(blob: Blob, filename: string) {
 }
 
 export function parseRanges(input: string, max: number): number[] {
-  // "1-3,5,7-9" -> [1,2,3,5,7,8,9] (1-indexed), clamped to [1,max], deduped, sorted
   const out = new Set<number>();
   for (const part of input.split(",")) {
     const p = part.trim();
@@ -107,18 +117,34 @@ export function parseRanges(input: string, max: number): number[] {
 }
 
 interface ProgressBarProps {
-  progress: number; // 0..1
+  progress: number;
   label?: string;
   status?: string;
   stage?: string;
   done?: boolean;
+  /** Tool family — picks the matching ProcessingAnimation variant. */
+  variant?: "default" | "compress" | "merge" | "split" | "convert" | "rotate";
 }
 
 export { RichProgressBar } from "@/components/visuals/RichProgressBar";
 
-import { RichProgressBar as _RichProgressBar } from "@/components/visuals/RichProgressBar";
+import { ProcessingAnimation } from "@/components/visuals/ProcessingAnimation";
 
-/** Back-compat wrapper — all 30 tools call `<ProgressBar />`. */
-export function ProgressBar(props: ProgressBarProps) {
-  return <_RichProgressBar {...props} />;
+/** Back-compat: every tool calls `<ProgressBar />`. Now renders rich animation. */
+export function ProgressBar({
+  progress,
+  label,
+  status,
+  stage,
+  variant = "default",
+}: ProgressBarProps) {
+  return (
+    <ProcessingAnimation
+      progress={progress}
+      variant={variant}
+      label={label ?? "Processing your PDF…"}
+      status={status}
+      stage={stage}
+    />
+  );
 }
