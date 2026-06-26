@@ -293,7 +293,7 @@ function Index() {
                 </button>
               </GlassCard>
             ) : (
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
                 {filtered.map((t) => (
                   <ToolCard key={t.slug} tool={t} />
                 ))}
@@ -316,7 +316,7 @@ function Index() {
                       {tools.length} {tools.length === 1 ? "tool" : "tools"}
                     </span>
                   </div>
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
                     {tools.map((t) => (
                       <ToolCard key={t.slug} tool={t} />
                     ))}
