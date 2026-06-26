@@ -24,18 +24,20 @@ function Core() {
   return (
     <Float speed={1} rotationIntensity={0.3} floatIntensity={0.6}>
       <mesh ref={meshRef}>
-        <icosahedronGeometry args={[1.35, 1]} />
+        <icosahedronGeometry args={[0.85, 1]} />
         <meshStandardMaterial
           color="#6366F1"
-          metalness={0.6}
-          roughness={0.25}
+          metalness={0.4}
+          roughness={0.3}
           emissive="#4338CA"
-          emissiveIntensity={0.4}
+          emissiveIntensity={0.25}
+          transparent
+          opacity={0.55}
         />
       </mesh>
       <mesh ref={wireRef}>
-        <icosahedronGeometry args={[1.55, 1]} />
-        <meshBasicMaterial color="#A5B4FC" wireframe transparent opacity={0.4} />
+        <icosahedronGeometry args={[1.05, 1]} />
+        <meshBasicMaterial color="#A5B4FC" wireframe transparent opacity={0.5} />
       </mesh>
     </Float>
   );
