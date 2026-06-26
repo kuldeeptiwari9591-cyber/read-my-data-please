@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { FileText, Github, Twitter } from "lucide-react";
+import { FileText } from "lucide-react";
 import { CATEGORY_META, TOOLS, type ToolCategory } from "@/lib/tools";
 
 const COLS: ToolCategory[] = ["organize", "convert-to", "convert-from"];
