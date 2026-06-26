@@ -196,7 +196,7 @@ export const TOOLS: Tool[] = [
     category: "convert-to",
     icon: FileImage,
     processing: "browser",
-    status: "soon",
+    status: "ready",
   },
   {
     slug: "html-to-pdf",
