@@ -28,15 +28,8 @@ export function Footer() {
           <p className="mt-4 max-w-xs text-sm text-muted-foreground">
             Every PDF tool you need. Free. Crisp. Fast. No signup, no watermarks, no nonsense.
           </p>
-          <div className="mt-5 flex gap-3">
-            <a aria-label="GitHub" href="#" className="rounded-md border border-border bg-surface p-2 text-muted-foreground transition-colors hover:border-primary hover:text-foreground">
-              <Github className="h-4 w-4" />
-            </a>
-            <a aria-label="Twitter" href="#" className="rounded-md border border-border bg-surface p-2 text-muted-foreground transition-colors hover:border-primary hover:text-foreground">
-              <Twitter className="h-4 w-4" />
-            </a>
-          </div>
         </div>
+
 
         {COLS.map((cat) => (
           <div key={cat}>
