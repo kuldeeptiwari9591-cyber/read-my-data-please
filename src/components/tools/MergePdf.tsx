@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { PDFDocument } from "pdf-lib";
 import { Combine, Loader2, ArrowUp, ArrowDown } from "lucide-react";
-import { FileDrop, ToolShell, downloadBlob } from "./ToolShell";
+import { FileDrop, ToolShell, downloadBlob, ShareCard } from "./ToolShell";
 import { toast } from "sonner";
 import { useRateLimit } from "@/lib/rate-limit";
 import { logOperation } from "@/lib/ops-log";
@@ -9,6 +9,7 @@ import { logOperation } from "@/lib/ops-log";
 export function MergePdf() {
   const [files, setFiles] = useState<File[]>([]);
   const [busy, setBusy] = useState(false);
+  const [done, setDone] = useState(false);
   const rl = useRateLimit("merge-pdf");
 
   const move = (i: number, dir: -1 | 1) => {
@@ -41,6 +42,7 @@ export function MergePdf() {
       }
       const bytes = await out.save();
       downloadBlob(new Blob([bytes as BlobPart], { type: "application/pdf" }), "merged.pdf");
+      setDone(true);
       toast.success("Merged PDF downloaded");
       logOperation({
         toolSlug: "merge-pdf",
@@ -114,6 +116,14 @@ export function MergePdf() {
         {busy && <Loader2 className="h-4 w-4 animate-spin" />}
         Merge & download
       </button>
+
+      {done && (
+        <ShareCard
+          toolSlug="merge-pdf"
+          toolName="Merge PDF"
+          context={{ count: String(files.length) }}
+        />
+      )}
     </ToolShell>
   );
 }
