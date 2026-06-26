@@ -83,14 +83,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "CrispPDF — 30 Free Online PDF Tools" },
+      { title: "CrispPDF — 40 Free Online PDF Tools" },
       {
         name: "description",
         content:
           "Every PDF tool you need. Free, crisp, and fast. Merge, split, compress, convert, sign, and protect PDFs — no signup, no watermarks.",
       },
       { name: "author", content: "CrispPDF" },
-      { property: "og:title", content: "CrispPDF — 30 Free Online PDF Tools" },
+      { property: "og:title", content: "CrispPDF — 40 Free Online PDF Tools" },
       {
         property: "og:description",
         content:

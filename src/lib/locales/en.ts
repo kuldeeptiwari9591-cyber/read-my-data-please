@@ -7,7 +7,7 @@ const en = {
     blog: "Blog",
   },
   hero: {
-    eyebrow: "30 tools · 0 signups · 0 watermarks",
+    eyebrow: "40 tools · 0 signups · 0 watermarks",
     title: "Every PDF tool you need.",
     titleAccent: "Free, crisp, and fast.",
     subtitle:
@@ -16,7 +16,7 @@ const en = {
     secondaryCta: "How it works",
   },
   search: {
-    placeholder: "Search 30 tools — merge, compress, PDF to Word…",
+    placeholder: "Search 40 tools — merge, compress, PDF to Word…",
     noResults: "No tools match your search.",
   },
   categories: {
