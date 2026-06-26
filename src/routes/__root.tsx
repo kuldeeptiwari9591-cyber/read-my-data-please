@@ -103,8 +103,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { property: "og:image", content: logoAsset.url },
-      { name: "twitter:image", content: logoAsset.url },
+      { property: "og:image", content: OG_DEFAULT },
+      { name: "twitter:image", content: OG_DEFAULT },
       { name: "theme-color", content: "#0A0A0F" },
     ],
     links: [
@@ -147,6 +147,12 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
+  // Apply real user locale (querystring/localStorage/navigator) AFTER hydration
+  // so SSR HTML (always English) matches the first client render exactly.
+  useEffect(() => {
+    applyClientLocale();
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
@@ -155,6 +161,5 @@ function RootComponent() {
         <CookieBanner />
       </ThemeProvider>
     </QueryClientProvider>
-
   );
 }
