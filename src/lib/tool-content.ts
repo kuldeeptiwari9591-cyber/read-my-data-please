@@ -130,9 +130,18 @@ const OVERRIDES: Partial<Record<string, Partial<ToolContent>>> = {
 
 export function getToolContent(slug: string, name: string): ToolContent {
   const o = OVERRIDES[slug] ?? {};
+  const defaults = DEFAULT_FAQS(name);
+  const overrideFaqs = o.faqs ?? [];
+  // Pad up to 14 FAQs with defaults the override didn't already cover.
+  const merged = [...overrideFaqs];
+  for (const d of defaults) {
+    if (merged.length >= 14) break;
+    if (!merged.some((f) => f.q.toLowerCase() === d.q.toLowerCase())) merged.push(d);
+  }
   return {
     howTo: o.howTo ?? DEFAULT_HOWTO(name),
-    faqs: o.faqs ?? DEFAULT_FAQS(name),
+    faqs: merged.slice(0, 14),
     why: o.why ?? DEFAULT_WHY,
   };
 }
+
