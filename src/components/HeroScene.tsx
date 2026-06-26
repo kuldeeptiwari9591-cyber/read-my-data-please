@@ -107,6 +107,9 @@ function OrbitingNodes() {
 }
 
 export function HeroScene() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
   return (
     <div className="absolute inset-0 pointer-events-none">
       <Canvas
