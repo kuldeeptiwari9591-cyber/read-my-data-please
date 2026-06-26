@@ -1,5 +1,5 @@
-import { useCallback, useRef, useState, type ReactNode } from "react";
-import { Upload, FileText, X } from "lucide-react";
+import { type ReactNode } from "react";
+import { HoloUploadZone } from "@/components/visuals/HoloUploadZone";
 
 interface FileDropProps {
   multiple?: boolean;
@@ -16,91 +16,14 @@ export function FileDrop({
   onFiles,
   label = "Drop your PDF here, or click to browse",
 }: FileDropProps) {
-  const [drag, setDrag] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  const handleFiles = useCallback(
-    (list: FileList | null) => {
-      if (!list) return;
-      const arr = Array.from(list).filter((f) =>
-        accept.split(",").some((a) => {
-          const ax = a.trim().toLowerCase();
-          if (ax.startsWith(".")) return f.name.toLowerCase().endsWith(ax);
-          return f.type === ax || (ax.endsWith("/*") && f.type.startsWith(ax.slice(0, -1)));
-        }),
-      );
-      if (arr.length === 0) return;
-      onFiles(multiple ? [...files, ...arr] : arr.slice(0, 1));
-    },
-    [accept, files, multiple, onFiles],
-  );
-
   return (
-    <div>
-      <div
-        onDragOver={(e) => {
-          e.preventDefault();
-          setDrag(true);
-        }}
-        onDragLeave={() => setDrag(false)}
-        onDrop={(e) => {
-          e.preventDefault();
-          setDrag(false);
-          handleFiles(e.dataTransfer.files);
-        }}
-        onClick={() => inputRef.current?.click()}
-        className={`flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed px-8 py-14 text-center transition-colors ${
-          drag
-            ? "border-primary bg-primary/5"
-            : "border-border bg-surface/40 hover:border-primary/60 hover:bg-surface/70"
-        }`}
-      >
-        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 ring-1 ring-primary/30">
-          <Upload className="h-6 w-6 text-primary" />
-        </div>
-        <p className="mt-4 font-display text-lg font-semibold">{label}</p>
-        <p className="mt-1 text-sm text-muted-foreground">
-          {multiple ? "Add multiple PDFs" : "PDF up to ~100 MB"}
-        </p>
-        <input
-          ref={inputRef}
-          type="file"
-          accept={accept}
-          multiple={multiple}
-          className="hidden"
-          onChange={(e) => handleFiles(e.target.files)}
-        />
-      </div>
-
-      {files.length > 0 && (
-        <ul className="mt-4 space-y-2">
-          {files.map((f, i) => (
-            <li
-              key={i}
-              className="flex items-center justify-between rounded-lg border border-border bg-surface/60 px-3 py-2 text-sm"
-            >
-              <span className="flex items-center gap-2 truncate">
-                <FileText className="h-4 w-4 shrink-0 text-primary" />
-                <span className="truncate">{f.name}</span>
-                <span className="shrink-0 text-xs text-muted-foreground">
-                  {(f.size / 1024 / 1024).toFixed(2)} MB
-                </span>
-              </span>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onFiles(files.filter((_, j) => j !== i));
-                }}
-                className="rounded p-1 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
-                aria-label="Remove"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
+    <HoloUploadZone
+      multiple={multiple}
+      accept={accept}
+      files={files}
+      onFiles={onFiles}
+      label={label}
+    />
   );
 }
 
@@ -166,25 +89,15 @@ interface ProgressBarProps {
   progress: number; // 0..1
   label?: string;
   status?: string;
+  stage?: string;
+  done?: boolean;
 }
 
-export function ProgressBar({ progress, label, status }: ProgressBarProps) {
-  const pct = Math.max(0, Math.min(1, progress)) * 100;
-  return (
-    <div className="mt-6 rounded-xl border border-border bg-surface/60 p-4">
-      <div className="flex items-center justify-between text-xs">
-        <span className="font-medium text-foreground">{label ?? "Processing"}</span>
-        <span className="font-mono text-muted-foreground">{Math.round(pct)}%</span>
-      </div>
-      <div className="mt-2 h-2 overflow-hidden rounded-full bg-border/60">
-        <div
-          className="h-full rounded-full bg-gradient-to-r from-primary to-secondary transition-[width] duration-200 ease-out"
-          style={{ width: `${pct}%` }}
-        />
-      </div>
-      {status && (
-        <p className="mt-2 truncate font-mono text-[11px] text-muted-foreground">{status}</p>
-      )}
-    </div>
-  );
+export { RichProgressBar } from "@/components/visuals/RichProgressBar";
+
+import { RichProgressBar as _RichProgressBar } from "@/components/visuals/RichProgressBar";
+
+/** Back-compat wrapper — all 30 tools call `<ProgressBar />`. */
+export function ProgressBar(props: ProgressBarProps) {
+  return <_RichProgressBar {...props} />;
 }
