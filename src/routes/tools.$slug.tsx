@@ -9,6 +9,7 @@ import { TOOLS, TOOLS_BY_SLUG } from "@/lib/tools";
 import { TOOL_COMPONENTS } from "@/components/tools";
 import { ToolShell } from "@/components/tools/ToolShell";
 import { ComingSoonTool } from "@/components/tools/ComingSoonTool";
+import { RateLimitBanner } from "@/components/tools/RateLimitBanner";
 import { getToolContent } from "@/lib/tool-content";
 
 export const Route = createFileRoute("/tools/$slug")({
@@ -174,6 +175,8 @@ function ToolPage() {
                 {tool.processing === "browser" ? "100% browser · private" : "server · privacy-respecting"}
               </span>
             </div>
+
+            <RateLimitBanner slug={tool.slug} />
 
             {Component ? (
               <Suspense
