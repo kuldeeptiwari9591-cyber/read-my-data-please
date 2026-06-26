@@ -18,11 +18,15 @@ import { ToolCard } from "@/components/ToolCard";
 import { SearchBar } from "@/components/SearchBar";
 import {
   CATEGORY_META,
+  PHASE_META,
   TOOLS,
   toolMatches,
   toolsByCategory,
   type ToolCategory,
+  type ToolPhase,
 } from "@/lib/tools";
+
+const PHASE_ORDER: ToolPhase[] = ["next", "interactive", "server"];
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -257,6 +261,79 @@ function Index() {
             })}
           </div>
         )}
+      </section>
+
+      {/* ROADMAP — 3 buckets of what's still coming */}
+      <section id="roadmap" className="relative mx-auto max-w-7xl px-6 py-24">
+        <div className="mx-auto max-w-2xl text-center">
+          <p className="font-mono text-xs uppercase tracking-[0.2em] text-primary">
+            // Roadmap
+          </p>
+          <h2 className="mt-3 font-display text-4xl font-bold tracking-tight md:text-5xl">
+            What's still cooking.
+          </h2>
+          <p className="mt-4 text-muted-foreground">
+            The {TOOLS.filter((t) => t.status === "ready").length} live tools handle most jobs today.
+            Here's the rest, grouped by what's blocking them.
+          </p>
+        </div>
+
+        <div className="mt-14 grid gap-5 lg:grid-cols-3">
+          {PHASE_ORDER.map((phase, idx) => {
+            const meta = PHASE_META[phase];
+            const items = TOOLS.filter((t) => t.status === "soon" && t.phase === phase);
+            return (
+              <motion.div
+                key={phase}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: idx * 0.08 }}
+              >
+                <GlassCard glow className="flex h-full flex-col p-6">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono text-xs text-primary">
+                        {String(idx + 1).padStart(2, "0")}
+                      </span>
+                      <h3 className="font-display text-xl font-semibold">{meta.label}</h3>
+                    </div>
+                    <span className="rounded-full border border-border bg-surface/60 px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+                      ETA · {meta.eta}
+                    </span>
+                  </div>
+                  <p className="mt-3 text-sm text-muted-foreground">{meta.blurb}</p>
+
+                  <div className="mt-5 flex items-baseline gap-2">
+                    <span className="font-display text-4xl font-bold text-gradient">
+                      {items.length}
+                    </span>
+                    <span className="text-xs uppercase tracking-wider text-muted-foreground">
+                      tools queued
+                    </span>
+                  </div>
+
+                  <ul className="mt-5 space-y-1.5 border-t border-border/60 pt-4">
+                    {items.map((t) => {
+                      const Icon = t.icon;
+                      return (
+                        <li key={t.slug}>
+                          <a
+                            href={`/tools/${t.slug}`}
+                            className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-surface hover:text-foreground"
+                          >
+                            <Icon className="h-4 w-4 shrink-0 text-primary/70" />
+                            <span className="truncate">{t.name}</span>
+                          </a>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </GlassCard>
+              </motion.div>
+            );
+          })}
+        </div>
       </section>
 
       {/* HOW IT WORKS */}
