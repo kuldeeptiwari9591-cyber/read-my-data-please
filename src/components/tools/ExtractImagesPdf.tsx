@@ -64,8 +64,7 @@ export function ExtractImagesPdf() {
           const fn = ops.fnArray[k];
           if (
             fn === pdfjs.OPS.paintImageXObject ||
-            fn === pdfjs.OPS.paintInlineImageXObject ||
-            fn === pdfjs.OPS.paintJpegXObject
+            fn === pdfjs.OPS.paintInlineImageXObject
           ) {
             const name = ops.argsArray[k][0];
             const key = `${i}:${name}`;
