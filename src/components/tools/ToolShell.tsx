@@ -159,3 +159,30 @@ export function parseRanges(input: string, max: number): number[] {
   }
   return [...out].sort((a, b) => a - b);
 }
+
+interface ProgressBarProps {
+  progress: number; // 0..1
+  label?: string;
+  status?: string;
+}
+
+export function ProgressBar({ progress, label, status }: ProgressBarProps) {
+  const pct = Math.max(0, Math.min(1, progress)) * 100;
+  return (
+    <div className="mt-6 rounded-xl border border-border bg-surface/60 p-4">
+      <div className="flex items-center justify-between text-xs">
+        <span className="font-medium text-foreground">{label ?? "Processing"}</span>
+        <span className="font-mono text-muted-foreground">{Math.round(pct)}%</span>
+      </div>
+      <div className="mt-2 h-2 overflow-hidden rounded-full bg-border/60">
+        <div
+          className="h-full rounded-full bg-gradient-to-r from-primary to-secondary transition-[width] duration-200 ease-out"
+          style={{ width: `${pct}%` }}
+        />
+      </div>
+      {status && (
+        <p className="mt-2 truncate font-mono text-[11px] text-muted-foreground">{status}</p>
+      )}
+    </div>
+  );
+}

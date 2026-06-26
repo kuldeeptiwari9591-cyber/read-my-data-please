@@ -1,42 +1,41 @@
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Sparkles, Float, Stars, Environment } from "@react-three/drei";
+import { Float } from "@react-three/drei";
 import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 
-function MorphingCore() {
+function Core() {
   const meshRef = useRef<THREE.Mesh>(null);
-  const matRef = useRef<THREE.MeshPhysicalMaterial>(null);
+  const wireRef = useRef<THREE.Mesh>(null);
 
   useFrame((state) => {
-    if (!meshRef.current) return;
     const t = state.clock.elapsedTime;
-    meshRef.current.rotation.x = t * 0.18;
-    meshRef.current.rotation.y = t * 0.24;
-    const s = 1 + Math.sin(t * 1.2) * 0.04;
-    meshRef.current.scale.setScalar(s);
+    if (meshRef.current) {
+      meshRef.current.rotation.x = t * 0.18;
+      meshRef.current.rotation.y = t * 0.24;
+      const s = 1 + Math.sin(t * 1.2) * 0.04;
+      meshRef.current.scale.setScalar(s);
+    }
+    if (wireRef.current) {
+      wireRef.current.rotation.x = -t * 0.12;
+      wireRef.current.rotation.y = t * 0.16;
+    }
   });
 
   return (
     <Float speed={1} rotationIntensity={0.3} floatIntensity={0.6}>
       <mesh ref={meshRef}>
         <icosahedronGeometry args={[1.35, 1]} />
-        <meshPhysicalMaterial
-          ref={matRef}
+        <meshStandardMaterial
           color="#6366F1"
-          metalness={0.4}
-          roughness={0.15}
-          clearcoat={1}
-          clearcoatRoughness={0.1}
-          transmission={0.35}
-          thickness={1.2}
-          ior={1.4}
+          metalness={0.6}
+          roughness={0.25}
           emissive="#4338CA"
-          emissiveIntensity={0.25}
+          emissiveIntensity={0.4}
         />
       </mesh>
-      <mesh>
-        <icosahedronGeometry args={[1.36, 1]} />
-        <meshBasicMaterial color="#A5B4FC" wireframe transparent opacity={0.35} />
+      <mesh ref={wireRef}>
+        <icosahedronGeometry args={[1.55, 1]} />
+        <meshBasicMaterial color="#A5B4FC" wireframe transparent opacity={0.4} />
       </mesh>
     </Float>
   );
@@ -59,7 +58,7 @@ function Ring({
   });
   return (
     <mesh ref={ref} rotation={tilt}>
-      <torusGeometry args={[radius, 0.015, 16, 160]} />
+      <torusGeometry args={[radius, 0.018, 12, 100]} />
       <meshBasicMaterial color={color} transparent opacity={0.55} />
     </mesh>
   );
@@ -73,14 +72,14 @@ function OrbitingNodes() {
 
   const nodes = useMemo(() => {
     const arr: { pos: [number, number, number]; color: string; size: number }[] = [];
-    const count = 8;
+    const count = 6;
     for (let i = 0; i < count; i++) {
       const a = (i / count) * Math.PI * 2;
-      const r = 2.4 + (i % 2) * 0.4;
+      const r = 2.4;
       arr.push({
         pos: [Math.cos(a) * r, Math.sin(a * 1.3) * 0.5, Math.sin(a) * r],
         color: i % 2 === 0 ? "#8B5CF6" : "#6366F1",
-        size: 0.08 + (i % 3) * 0.025,
+        size: 0.1,
       });
     }
     return arr;
@@ -89,51 +88,73 @@ function OrbitingNodes() {
   return (
     <group ref={groupRef}>
       {nodes.map((n, i) => (
-        <Float key={i} speed={1.2 + i * 0.1} floatIntensity={0.4}>
-          <mesh position={n.pos}>
-            <sphereGeometry args={[n.size, 24, 24]} />
-            <meshStandardMaterial
-              color={n.color}
-              emissive={n.color}
-              emissiveIntensity={0.8}
-              roughness={0.25}
-              metalness={0.6}
-            />
-          </mesh>
-        </Float>
+        <mesh key={i} position={n.pos}>
+          <sphereGeometry args={[n.size, 16, 16]} />
+          <meshStandardMaterial
+            color={n.color}
+            emissive={n.color}
+            emissiveIntensity={1.2}
+          />
+        </mesh>
       ))}
     </group>
   );
 }
 
+// CSS-only fallback gradient that ALWAYS shows so the hero never looks empty.
+function HeroBackdrop() {
+  return (
+    <div className="absolute inset-0 -z-10 overflow-hidden">
+      <div className="absolute left-1/2 top-1/2 h-[60vmin] w-[60vmin] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-radial from-primary/40 via-secondary/20 to-transparent blur-3xl" />
+      <div className="absolute left-1/2 top-1/2 h-[40vmin] w-[40vmin] -translate-x-1/2 -translate-y-1/2 rounded-full border border-primary/30" />
+      <div className="absolute left-1/2 top-1/2 h-[55vmin] w-[55vmin] -translate-x-1/2 -translate-y-1/2 rounded-full border border-secondary/20" />
+    </div>
+  );
+}
+
 export function HeroScene() {
   const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-  if (!mounted) return null;
+  const [webglFailed, setWebglFailed] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    // Detect WebGL support — graceful fallback for low-power devices.
+    try {
+      const c = document.createElement("canvas");
+      const gl = c.getContext("webgl2") || c.getContext("webgl");
+      if (!gl) setWebglFailed(true);
+    } catch {
+      setWebglFailed(true);
+    }
+  }, []);
+
   return (
     <div className="absolute inset-0 pointer-events-none">
-      <Canvas
-        camera={{ position: [0, 0.4, 5.2], fov: 50 }}
-        gl={{ antialias: true, alpha: true }}
-        dpr={[1, 2]}
-      >
-        <Environment preset="city" />
-        <ambientLight intensity={0.4} />
-        <pointLight position={[4, 4, 4]} intensity={1.6} color="#A5B4FC" />
-        <pointLight position={[-4, -3, -2]} intensity={1.1} color="#C4B5FD" />
-        <spotLight position={[0, 6, 2]} intensity={0.9} angle={0.5} color="#FFFFFF" />
+      <HeroBackdrop />
+      {mounted && !webglFailed && (
+        <Canvas
+          camera={{ position: [0, 0.4, 5.2], fov: 50 }}
+          gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
+          dpr={[1, 1.5]}
+          onCreated={({ gl }) => {
+            gl.domElement.addEventListener("webglcontextlost", (e) => {
+              e.preventDefault();
+              setWebglFailed(true);
+            });
+          }}
+        >
+          <ambientLight intensity={0.6} />
+          <pointLight position={[4, 4, 4]} intensity={1.4} color="#A5B4FC" />
+          <pointLight position={[-4, -3, -2]} intensity={0.9} color="#C4B5FD" />
 
-        <Stars radius={40} depth={30} count={1200} factor={3} fade speed={0.6} />
+          <Core />
+          <OrbitingNodes />
 
-        <MorphingCore />
-        <OrbitingNodes />
-
-        <Ring radius={2.1} tilt={[Math.PI / 2.4, 0, 0]} speed={0.18} color="#8B5CF6" />
-        <Ring radius={2.5} tilt={[Math.PI / 3, Math.PI / 6, 0]} speed={-0.12} color="#6366F1" />
-        <Ring radius={2.85} tilt={[Math.PI / 2, Math.PI / 3, 0]} speed={0.08} color="#A5B4FC" />
-
-        <Sparkles count={120} scale={9} size={2.8} speed={0.45} color="#A5B4FC" opacity={0.8} />
-      </Canvas>
+          <Ring radius={2.1} tilt={[Math.PI / 2.4, 0, 0]} speed={0.18} color="#8B5CF6" />
+          <Ring radius={2.5} tilt={[Math.PI / 3, Math.PI / 6, 0]} speed={-0.12} color="#6366F1" />
+          <Ring radius={2.85} tilt={[Math.PI / 2, Math.PI / 3, 0]} speed={0.08} color="#A5B4FC" />
+        </Canvas>
+      )}
     </div>
   );
 }
