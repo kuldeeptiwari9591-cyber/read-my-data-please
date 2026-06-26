@@ -76,17 +76,68 @@ export const PHASE_META: Record<
   },
 };
 
+// Synonyms / aliases so users find tools even with different vocabulary.
+const SYNONYMS: Record<string, string[]> = {
+  "merge-pdf": ["combine", "join", "concat", "stitch"],
+  "split-pdf": ["divide", "separate", "break apart"],
+  "compress-pdf": ["reduce", "shrink", "smaller", "optimize", "size"],
+  "rotate-pdf": ["turn", "flip", "orientation", "landscape", "portrait"],
+  "delete-pdf-pages": ["remove", "trash", "trim pages"],
+  "extract-pdf-pages": ["copy", "pull", "save pages"],
+  "reorder-pdf-pages": ["rearrange", "drag", "sort"],
+  "pdf-to-jpg": ["images", "jpeg", "picture", "export"],
+  "pdf-to-png": ["images", "transparent", "lossless"],
+  "jpg-to-pdf": ["images to pdf", "photos", "scan"],
+  "crop-pdf": ["trim", "cut", "margins"],
+  "repair-pdf": ["fix", "recover", "broken", "corrupt"],
+  "flatten-pdf": ["lock", "bake", "fields", "annotations"],
+  "grayscale-pdf": ["black white", "bw", "monochrome", "print"],
+  "protect-pdf": ["password", "encrypt", "secure", "lock"],
+  "unlock-pdf": ["decrypt", "remove password", "open"],
+  "watermark-pdf": ["logo", "stamp", "branding"],
+  "add-watermark-text-pdf": ["confidential", "draft", "text overlay"],
+  "add-page-numbers-pdf": ["numbering", "pagination"],
+  "extract-images-pdf": ["save images", "pictures", "photos"],
+  "esign-pdf": ["signature", "sign", "initial"],
+  "redact-pdf": ["censor", "black out", "hide"],
+  "ocr-pdf": ["scan", "searchable", "recognize text"],
+  "pdf-to-word": ["docx", "editable", "microsoft"],
+  "pdf-to-excel": ["xlsx", "spreadsheet", "tables"],
+  "pdf-to-ppt": ["pptx", "slides", "powerpoint"],
+  "word-to-pdf": ["docx to pdf"],
+  "excel-to-pdf": ["xlsx to pdf"],
+  "html-to-pdf": ["webpage", "url", "website"],
+  "pdf-to-pdfa": ["archive", "compliance", "iso"],
+};
+
 export function toolMatches(t: Tool, query: string): boolean {
   if (!query) return true;
   const q = query.toLowerCase().trim();
+  const aliases = SYNONYMS[t.slug] ?? [];
   return (
     t.name.toLowerCase().includes(q) ||
     t.short.toLowerCase().includes(q) ||
     t.description.toLowerCase().includes(q) ||
     t.slug.includes(q) ||
-    t.category.includes(q)
+    t.category.includes(q) ||
+    aliases.some((a) => a.includes(q) || q.includes(a))
   );
 }
+
+export function scoreTool(t: Tool, query: string): number {
+  if (!query) return 0;
+  const q = query.toLowerCase().trim();
+  if (t.name.toLowerCase() === q) return 100;
+  if (t.slug === q) return 95;
+  if (t.name.toLowerCase().startsWith(q)) return 80;
+  if (t.name.toLowerCase().includes(q)) return 60;
+  if ((SYNONYMS[t.slug] ?? []).some((a) => a.includes(q))) return 50;
+  if (t.short.toLowerCase().includes(q)) return 40;
+  if (t.category.includes(q)) return 30;
+  if (t.description.toLowerCase().includes(q)) return 20;
+  return 0;
+}
+
 
 export const CATEGORY_META: Record<
   ToolCategory,
@@ -143,8 +194,7 @@ export const TOOLS: Tool[] = [
     category: "organize",
     icon: Minimize2,
     processing: "server",
-    status: "soon",
-    phase: "next",
+    status: "ready",
   },
   {
     slug: "pdf-to-word",
@@ -187,8 +237,7 @@ export const TOOLS: Tool[] = [
     category: "convert-from",
     icon: ImageIcon,
     processing: "browser",
-    status: "soon",
-    phase: "next",
+    status: "ready",
   },
   {
     slug: "pdf-to-png",
@@ -198,8 +247,7 @@ export const TOOLS: Tool[] = [
     category: "convert-from",
     icon: FileImage,
     processing: "browser",
-    status: "soon",
-    phase: "next",
+    status: "ready",
   },
   {
     slug: "word-to-pdf",
@@ -292,8 +340,7 @@ export const TOOLS: Tool[] = [
     category: "edit",
     icon: Crop,
     processing: "browser",
-    status: "soon",
-    phase: "next",
+    status: "ready",
   },
   {
     slug: "repair-pdf",
@@ -303,8 +350,7 @@ export const TOOLS: Tool[] = [
     category: "edit",
     icon: Wrench,
     processing: "browser",
-    status: "soon",
-    phase: "next",
+    status: "ready",
   },
   {
     slug: "flatten-pdf",
@@ -314,8 +360,7 @@ export const TOOLS: Tool[] = [
     category: "secure",
     icon: Layers,
     processing: "browser",
-    status: "soon",
-    phase: "next",
+    status: "ready",
   },
   {
     slug: "pdf-to-pdfa",
@@ -336,8 +381,7 @@ export const TOOLS: Tool[] = [
     category: "edit",
     icon: Palette,
     processing: "browser",
-    status: "soon",
-    phase: "next",
+    status: "ready",
   },
   {
     slug: "protect-pdf",
@@ -358,8 +402,7 @@ export const TOOLS: Tool[] = [
     category: "secure",
     icon: Unlock,
     processing: "browser",
-    status: "soon",
-    phase: "next",
+    status: "ready",
   },
   {
     slug: "redact-pdf",
@@ -391,8 +434,7 @@ export const TOOLS: Tool[] = [
     category: "edit",
     icon: Stamp,
     processing: "browser",
-    status: "soon",
-    phase: "next",
+    status: "ready",
   },
   {
     slug: "ocr-pdf",
@@ -433,8 +475,7 @@ export const TOOLS: Tool[] = [
     category: "edit",
     icon: Images,
     processing: "browser",
-    status: "soon",
-    phase: "next",
+    status: "ready",
   },
 ];
 
