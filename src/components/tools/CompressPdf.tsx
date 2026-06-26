@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { PDFDocument } from "pdf-lib";
 import { Minimize2, Loader2 } from "lucide-react";
-import { FileDrop, ToolShell, downloadBlob } from "./ToolShell";
+import { FileDrop, ToolShell, downloadBlob, ProgressBar } from "./ToolShell";
 import { loadPdfjs } from "@/lib/pdfjs";
 import { toast } from "sonner";
 
@@ -18,6 +18,8 @@ export function CompressPdf() {
   const [level, setLevel] = useState<Level>("medium");
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<{ before: number; after: number } | null>(null);
+  const [progress, setProgress] = useState(0);
+  const [status, setStatus] = useState("");
 
   const run = async () => {
     if (files.length === 0) return toast.error("Add a PDF first");
@@ -32,6 +34,8 @@ export function CompressPdf() {
       const { scale, quality } = LEVELS[level];
 
       for (let i = 1; i <= src.numPages; i++) {
+        setStatus(`Rendering page ${i} of ${src.numPages}`);
+        setProgress((i - 1) / src.numPages);
         const page = await src.getPage(i);
         const viewport = page.getViewport({ scale });
         const canvas = document.createElement("canvas");
@@ -90,6 +94,8 @@ export function CompressPdf() {
           ))}
         </div>
       )}
+
+      {busy && <ProgressBar progress={progress} label="Compressing" status={status} />}
 
       {result && (
         <div className="mt-6 rounded-xl border border-success/40 bg-success/10 px-4 py-3 text-sm">
