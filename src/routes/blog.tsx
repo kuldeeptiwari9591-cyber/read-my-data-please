@@ -2,24 +2,31 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { listPublishedPosts, type BlogListItem } from "@/lib/blog.functions";
+import { abs, OG_DEFAULT } from "@/lib/site-url";
 
 export const Route = createFileRoute("/blog")({
   loader: () => listPublishedPosts(),
-  head: () => ({
-    meta: [
-      { title: "Blog — CrispPDF" },
-      {
-        name: "description",
-        content:
-          "Plain-English guides on working with PDFs: compression, conversion, OCR, privacy, and what actually works in the browser.",
-      },
-      { property: "og:title", content: "CrispPDF Blog" },
-      { property: "og:description", content: "Honest guides on PDFs — privacy, compression, conversion." },
-      { property: "og:url", content: "/blog" },
-      { property: "og:type", content: "website" },
-    ],
-    links: [{ rel: "canonical", href: "/blog" }],
-  }),
+  head: () => {
+    const canonical = abs("/blog");
+    return {
+      meta: [
+        { title: "Blog — CrispPDF" },
+        {
+          name: "description",
+          content:
+            "Plain-English guides on working with PDFs: compression, conversion, OCR, privacy, and what actually works in the browser.",
+        },
+        { property: "og:title", content: "CrispPDF Blog" },
+        { property: "og:description", content: "Honest guides on PDFs — privacy, compression, conversion." },
+        { property: "og:url", content: canonical },
+        { property: "og:type", content: "website" },
+        { property: "og:image", content: OG_DEFAULT },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:image", content: OG_DEFAULT },
+      ],
+      links: [{ rel: "canonical", href: canonical }],
+    };
+  },
   component: BlogIndex,
   errorComponent: ({ error }) => (
     <div className="p-10 text-sm text-muted-foreground">Couldn't load posts: {error.message}</div>

@@ -1,18 +1,26 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { abs, OG_DEFAULT } from "@/lib/site-url";
 
 export const Route = createFileRoute("/about")({
-  head: () => ({
-    meta: [
-      { title: "About — CrispPDF" },
-      { name: "description", content: "Why CrispPDF exists, what it stands for, and how it stays free." },
-      { property: "og:title", content: "About — CrispPDF" },
-      { property: "og:description", content: "30 free PDF tools, privacy-first, no signup, no watermarks." },
-      { property: "og:url", content: "/about" },
-    ],
-    links: [{ rel: "canonical", href: "/about" }],
-  }),
+  head: () => {
+    const canonical = abs("/about");
+    return {
+      meta: [
+        { title: "About — CrispPDF" },
+        { name: "description", content: "Why CrispPDF exists, what it stands for, and how it stays free." },
+        { property: "og:title", content: "About — CrispPDF" },
+        { property: "og:description", content: "30 free PDF tools, privacy-first, no signup, no watermarks." },
+        { property: "og:url", content: canonical },
+        { property: "og:type", content: "website" },
+        { property: "og:image", content: OG_DEFAULT },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:image", content: OG_DEFAULT },
+      ],
+      links: [{ rel: "canonical", href: canonical }],
+    };
+  },
   component: About,
 });
 

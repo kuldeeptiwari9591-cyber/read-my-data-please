@@ -1,18 +1,26 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { abs, OG_DEFAULT } from "@/lib/site-url";
 
 export const Route = createFileRoute("/terms")({
-  head: () => ({
-    meta: [
-      { title: "Terms of Service — CrispPDF" },
-      { name: "description", content: "The rules for using CrispPDF. Short, plain-English, no surprises." },
-      { property: "og:title", content: "Terms of Service — CrispPDF" },
-      { property: "og:description", content: "The rules for using CrispPDF." },
-      { property: "og:url", content: "/terms" },
-    ],
-    links: [{ rel: "canonical", href: "/terms" }],
-  }),
+  head: () => {
+    const canonical = abs("/terms");
+    return {
+      meta: [
+        { title: "Terms of Service — CrispPDF" },
+        { name: "description", content: "The rules for using CrispPDF. Short, plain-English, no surprises." },
+        { property: "og:title", content: "Terms of Service — CrispPDF" },
+        { property: "og:description", content: "The rules for using CrispPDF." },
+        { property: "og:url", content: canonical },
+        { property: "og:type", content: "website" },
+        { property: "og:image", content: OG_DEFAULT },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:image", content: OG_DEFAULT },
+      ],
+      links: [{ rel: "canonical", href: canonical }],
+    };
+  },
   component: Terms,
 });
 
