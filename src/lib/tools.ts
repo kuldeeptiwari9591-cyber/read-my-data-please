@@ -96,7 +96,7 @@ export const TOOLS: Tool[] = [
     category: "organize",
     icon: Combine,
     processing: "browser",
-    status: "soon",
+    status: "ready",
   },
   {
     slug: "split-pdf",
@@ -106,7 +106,7 @@ export const TOOLS: Tool[] = [
     category: "organize",
     icon: Scissors,
     processing: "browser",
-    status: "soon",
+    status: "ready",
   },
   {
     slug: "compress-pdf",
@@ -216,7 +216,7 @@ export const TOOLS: Tool[] = [
     category: "organize",
     icon: RotateCw,
     processing: "browser",
-    status: "soon",
+    status: "ready",
   },
   {
     slug: "reorder-pdf-pages",
@@ -226,7 +226,7 @@ export const TOOLS: Tool[] = [
     category: "organize",
     icon: ArrowUpDown,
     processing: "browser",
-    status: "soon",
+    status: "ready",
   },
   {
     slug: "delete-pdf-pages",
@@ -236,7 +236,7 @@ export const TOOLS: Tool[] = [
     category: "organize",
     icon: Trash2,
     processing: "browser",
-    status: "soon",
+    status: "ready",
   },
   {
     slug: "extract-pdf-pages",
@@ -246,7 +246,7 @@ export const TOOLS: Tool[] = [
     category: "organize",
     icon: Copy,
     processing: "browser",
-    status: "soon",
+    status: "ready",
   },
   {
     slug: "crop-pdf",
