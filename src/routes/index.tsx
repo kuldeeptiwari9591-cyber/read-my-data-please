@@ -18,11 +18,15 @@ import { ToolCard } from "@/components/ToolCard";
 import { SearchBar } from "@/components/SearchBar";
 import {
   CATEGORY_META,
+  PHASE_META,
   TOOLS,
   toolMatches,
   toolsByCategory,
   type ToolCategory,
+  type ToolPhase,
 } from "@/lib/tools";
+
+const PHASE_ORDER: ToolPhase[] = ["next", "interactive", "server"];
 
 export const Route = createFileRoute("/")({
   head: () => ({
