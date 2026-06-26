@@ -6,6 +6,7 @@ const COLS: ToolCategory[] = ["organize", "convert-to", "convert-from"];
 
 const COMPANY = [
   { label: "About", to: "/about" },
+  { label: "Blog", to: "/blog" },
   { label: "Contact", to: "/contact" },
   { label: "Privacy", to: "/privacy" },
   { label: "Terms", to: "/terms" },
