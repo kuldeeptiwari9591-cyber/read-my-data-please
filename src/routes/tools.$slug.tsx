@@ -84,7 +84,7 @@ function ToolPage() {
               icon={<Icon className="h-7 w-7 text-primary" />}
             >
               <ComingSoonTool
-                toolName={tool.name}
+                tool={tool}
                 multiple={tool.slug === "merge-pdf" || tool.slug.includes("to-pdf")}
                 accept={
                   tool.category === "convert-to" && tool.slug !== "html-to-pdf"
