@@ -17,6 +17,13 @@ import { GrayscalePdf } from "./GrayscalePdf";
 import { UnlockPdf } from "./UnlockPdf";
 import { WatermarkImagePdf } from "./WatermarkImagePdf";
 import { ExtractImagesPdf } from "./ExtractImagesPdf";
+import { OcrPdf } from "./OcrPdf";
+import { PdfToWord } from "./PdfToWord";
+import { PdfToExcel } from "./PdfToExcel";
+import { PdfToPpt } from "./PdfToPpt";
+import { WordToPdf } from "./WordToPdf";
+import { ExcelToPdf } from "./ExcelToPdf";
+import { HtmlToPdfTool } from "./HtmlToPdf";
 
 export const TOOL_COMPONENTS: Record<string, ComponentType> = {
   "merge-pdf": MergePdf,
@@ -38,4 +45,11 @@ export const TOOL_COMPONENTS: Record<string, ComponentType> = {
   "unlock-pdf": UnlockPdf,
   "watermark-pdf": WatermarkImagePdf,
   "extract-images-pdf": ExtractImagesPdf,
+  "ocr-pdf": OcrPdf,
+  "pdf-to-word": PdfToWord,
+  "pdf-to-excel": PdfToExcel,
+  "pdf-to-ppt": PdfToPpt,
+  "word-to-pdf": WordToPdf,
+  "excel-to-pdf": ExcelToPdf,
+  "html-to-pdf": HtmlToPdfTool,
 };

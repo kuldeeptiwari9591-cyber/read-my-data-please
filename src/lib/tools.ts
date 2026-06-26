@@ -204,8 +204,7 @@ export const TOOLS: Tool[] = [
     category: "convert-from",
     icon: FileText,
     processing: "server",
-    status: "soon",
-    phase: "server",
+    status: "ready",
   },
   {
     slug: "pdf-to-excel",
@@ -215,8 +214,7 @@ export const TOOLS: Tool[] = [
     category: "convert-from",
     icon: FileSpreadsheet,
     processing: "server",
-    status: "soon",
-    phase: "server",
+    status: "ready",
   },
   {
     slug: "pdf-to-ppt",
@@ -226,8 +224,7 @@ export const TOOLS: Tool[] = [
     category: "convert-from",
     icon: Presentation,
     processing: "server",
-    status: "soon",
-    phase: "server",
+    status: "ready",
   },
   {
     slug: "pdf-to-jpg",
@@ -257,8 +254,7 @@ export const TOOLS: Tool[] = [
     category: "convert-to",
     icon: FileType,
     processing: "server",
-    status: "soon",
-    phase: "server",
+    status: "ready",
   },
   {
     slug: "excel-to-pdf",
@@ -268,8 +264,7 @@ export const TOOLS: Tool[] = [
     category: "convert-to",
     icon: FileSpreadsheet,
     processing: "server",
-    status: "soon",
-    phase: "server",
+    status: "ready",
   },
   {
     slug: "jpg-to-pdf",
@@ -289,8 +284,7 @@ export const TOOLS: Tool[] = [
     category: "convert-to",
     icon: Globe,
     processing: "server",
-    status: "soon",
-    phase: "server",
+    status: "ready",
   },
   {
     slug: "rotate-pdf",
@@ -444,8 +438,7 @@ export const TOOLS: Tool[] = [
     category: "edit",
     icon: ScanText,
     processing: "server",
-    status: "soon",
-    phase: "server",
+    status: "ready",
   },
   {
     slug: "add-page-numbers-pdf",
