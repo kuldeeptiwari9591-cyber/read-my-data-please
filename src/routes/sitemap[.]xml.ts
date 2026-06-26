@@ -35,6 +35,7 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/privacy", changefreq: "monthly", priority: "0.3" },
           { path: "/terms", changefreq: "monthly", priority: "0.3" },
           { path: "/blog", changefreq: "weekly", priority: "0.7" },
+          { path: "/changelog", changefreq: "monthly", priority: "0.5" },
           ...posts.map((p) => ({
             path: `/blog/${p.slug}`,
             changefreq: "monthly" as const,
@@ -42,7 +43,7 @@ export const Route = createFileRoute("/sitemap.xml")({
             lastmod: p.published_at ?? undefined,
           })),
           ...TOOLS.map((t) => ({
-            path: `/tools/${t.slug}`,
+            path: `/${t.slug}`,
             changefreq: "monthly" as const,
             priority: "0.8",
           })),
