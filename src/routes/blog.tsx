@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { listPublishedPosts } from "@/lib/blog.functions";
+import { listPublishedPosts, type BlogListItem } from "@/lib/blog.functions";
 
 export const Route = createFileRoute("/blog")({
   loader: () => listPublishedPosts(),
@@ -28,7 +28,7 @@ export const Route = createFileRoute("/blog")({
 });
 
 function BlogIndex() {
-  const posts = Route.useLoaderData();
+  const posts = Route.useLoaderData() as BlogListItem[];
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Header />
