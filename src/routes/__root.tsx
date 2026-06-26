@@ -13,6 +13,8 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { ThemeProvider } from "../components/ThemeProvider";
 import { Toaster } from "../components/ui/sonner";
+import { CookieBanner } from "../components/CookieBanner";
+
 
 function NotFoundComponent() {
   return (
@@ -138,7 +140,8 @@ function RootComponent() {
       <ThemeProvider>
         <Outlet />
         <Toaster />
-      </ThemeProvider>
+        <CookieBanner />
+
     </QueryClientProvider>
   );
 }
