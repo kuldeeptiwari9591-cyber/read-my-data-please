@@ -6,13 +6,18 @@ import { SUPPORTED_LOCALES, type LocaleCode, applyClientLocale } from "@/lib/i18
 export function LanguageSwitcher() {
   const { i18n, t } = useTranslation();
   const [open, setOpen] = useState(false);
-  const current = (i18n.resolvedLanguage || "en") as LocaleCode;
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
+
+  // Render English defaults during SSR / pre-mount so hydration markup matches.
+  const current = (mounted ? i18n.resolvedLanguage || "en" : "en") as LocaleCode;
 
   useEffect(() => {
-    if (typeof document !== "undefined") {
+    if (mounted && typeof document !== "undefined") {
       document.documentElement.lang = current;
     }
-  }, [current]);
+  }, [current, mounted]);
 
   const change = (code: LocaleCode) => {
     applyClientLocale(code);
@@ -30,14 +35,14 @@ export function LanguageSwitcher() {
     <div className="relative">
       <button
         onClick={() => setOpen((v) => !v)}
-        aria-label={t("language")}
+        aria-label={mounted ? t("language") : "Language"}
         className="inline-flex items-center gap-1.5 rounded-md border border-border/60 bg-surface/60 px-2.5 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
       >
         <Globe className="h-3.5 w-3.5" />
         <span className="hidden sm:inline">{active.native}</span>
         <span className="sm:hidden uppercase">{active.code}</span>
       </button>
-      {open && (
+      {open && mounted && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
           <div className="absolute right-0 z-50 mt-2 w-44 overflow-hidden rounded-lg border border-border/60 bg-background/95 shadow-xl backdrop-blur-xl">
