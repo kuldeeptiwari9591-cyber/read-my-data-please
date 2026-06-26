@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { FileDrop, ToolShell, downloadBlob, parseRanges } from "./ToolShell";
-import { getPdfjs } from "@/lib/pdfjs";
+import { loadPdfjs } from "@/lib/pdfjs";
 
 /* ============ 1. Invert Colors PDF ============ */
 export function InvertColorsPdf() {
@@ -30,7 +30,7 @@ export function InvertColorsPdf() {
     setBusy(true);
     setProgress(0);
     try {
-      const pdfjsLib = await getPdfjs();
+      const pdfjsLib = await loadPdfjs();
       const buf = await files[0].arrayBuffer();
       const src = await pdfjsLib.getDocument({ data: buf }).promise;
       const out = await PDFDocument.create();
@@ -332,7 +332,7 @@ export function ExtractTextPdf() {
     if (!files[0]) return toast.error("Add a PDF");
     setBusy(true);
     try {
-      const pdfjsLib = await getPdfjs();
+      const pdfjsLib = await loadPdfjs();
       const buf = await files[0].arrayBuffer();
       const doc = await pdfjsLib.getDocument({ data: buf }).promise;
       const parts: string[] = [];
@@ -420,7 +420,7 @@ export function ComparePdf() {
     if (files.length < 2) return toast.error("Add 2 PDFs");
     setBusy(true);
     try {
-      const pdfjsLib = await getPdfjs();
+      const pdfjsLib = await loadPdfjs();
       const extract = async (f: File) => {
         const doc = await pdfjsLib.getDocument({ data: await f.arrayBuffer() }).promise;
         const lines: string[] = [];
