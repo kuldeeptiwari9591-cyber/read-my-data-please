@@ -2,18 +2,26 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Mail, MessageSquare, Bug } from "lucide-react";
+import { abs, OG_DEFAULT } from "@/lib/site-url";
 
 export const Route = createFileRoute("/contact")({
-  head: () => ({
-    meta: [
-      { title: "Contact — CrispPDF" },
-      { name: "description", content: "Get in touch with the CrispPDF team — feedback, bug reports, and feature requests." },
-      { property: "og:title", content: "Contact — CrispPDF" },
-      { property: "og:description", content: "Send feedback, report a bug, or request a feature." },
-      { property: "og:url", content: "/contact" },
-    ],
-    links: [{ rel: "canonical", href: "/contact" }],
-  }),
+  head: () => {
+    const canonical = abs("/contact");
+    return {
+      meta: [
+        { title: "Contact — CrispPDF" },
+        { name: "description", content: "Get in touch with the CrispPDF team — feedback, bug reports, and feature requests." },
+        { property: "og:title", content: "Contact — CrispPDF" },
+        { property: "og:description", content: "Send feedback, report a bug, or request a feature." },
+        { property: "og:url", content: canonical },
+        { property: "og:type", content: "website" },
+        { property: "og:image", content: OG_DEFAULT },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:image", content: OG_DEFAULT },
+      ],
+      links: [{ rel: "canonical", href: canonical }],
+    };
+  },
   component: Contact,
 });
 

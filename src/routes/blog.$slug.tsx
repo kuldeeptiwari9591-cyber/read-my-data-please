@@ -2,6 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { getPostBySlug } from "@/lib/blog.functions";
+import { abs, OG_DEFAULT } from "@/lib/site-url";
 
 export const Route = createFileRoute("/blog/$slug")({
   loader: async ({ params }) => {
@@ -13,7 +14,9 @@ export const Route = createFileRoute("/blog/$slug")({
     const post = loaderData;
     const title = post ? `${post.title} — CrispPDF Blog` : "Post — CrispPDF Blog";
     const description = post?.excerpt ?? "Read this post on the CrispPDF blog.";
-    const url = post ? `/blog/${post.slug}` : "/blog";
+    const path = post ? `/blog/${post.slug}` : "/blog";
+    const canonical = abs(path);
+    const image = post?.cover_image || OG_DEFAULT;
     return {
       meta: [
         { title },
@@ -21,18 +24,14 @@ export const Route = createFileRoute("/blog/$slug")({
         { property: "og:title", content: title },
         { property: "og:description", content: description },
         { property: "og:type", content: "article" },
-        { property: "og:url", content: url },
-        ...(post?.cover_image
-          ? [
-              { property: "og:image", content: post.cover_image },
-              { name: "twitter:image", content: post.cover_image },
-            ]
-          : []),
+        { property: "og:url", content: canonical },
+        { property: "og:image", content: image },
         { name: "twitter:card", content: "summary_large_image" },
         { name: "twitter:title", content: title },
         { name: "twitter:description", content: description },
+        { name: "twitter:image", content: image },
       ],
-      links: [{ rel: "canonical", href: url }],
+      links: [{ rel: "canonical", href: canonical }],
       scripts: post
         ? [
             {
@@ -42,9 +41,10 @@ export const Route = createFileRoute("/blog/$slug")({
                 "@type": "BlogPosting",
                 headline: post.title,
                 description: post.excerpt,
+                image,
                 author: { "@type": "Organization", name: post.author ?? "CrispPDF" },
                 datePublished: post.published_at,
-                mainEntityOfPage: url,
+                mainEntityOfPage: canonical,
               }),
             },
           ]

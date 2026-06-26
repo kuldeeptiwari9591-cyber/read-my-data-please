@@ -1,18 +1,26 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { abs, OG_DEFAULT } from "@/lib/site-url";
 
 export const Route = createFileRoute("/privacy")({
-  head: () => ({
-    meta: [
-      { title: "Privacy Policy — CrispPDF" },
-      { name: "description", content: "How CrispPDF handles your files and personal data. Short version: we don't store them." },
-      { property: "og:title", content: "Privacy Policy — CrispPDF" },
-      { property: "og:description", content: "Privacy-first PDF tools. Your files stay yours." },
-      { property: "og:url", content: "/privacy" },
-    ],
-    links: [{ rel: "canonical", href: "/privacy" }],
-  }),
+  head: () => {
+    const canonical = abs("/privacy");
+    return {
+      meta: [
+        { title: "Privacy Policy — CrispPDF" },
+        { name: "description", content: "How CrispPDF handles your files and personal data. Short version: we don't store them." },
+        { property: "og:title", content: "Privacy Policy — CrispPDF" },
+        { property: "og:description", content: "Privacy-first PDF tools. Your files stay yours." },
+        { property: "og:url", content: canonical },
+        { property: "og:type", content: "website" },
+        { property: "og:image", content: OG_DEFAULT },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:image", content: OG_DEFAULT },
+      ],
+      links: [{ rel: "canonical", href: canonical }],
+    };
+  },
   component: Privacy,
 });
 

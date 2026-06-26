@@ -12,6 +12,7 @@ import { ComingSoonTool } from "@/components/tools/ComingSoonTool";
 import { RateLimitBanner } from "@/components/tools/RateLimitBanner";
 import { getToolContent } from "@/lib/tool-content";
 import { hreflangLinks } from "@/lib/hreflang";
+import { abs, OG_DEFAULT } from "@/lib/site-url";
 
 export const Route = createFileRoute("/tools/$slug")({
   head: ({ params }) => {
@@ -63,6 +64,7 @@ export const Route = createFileRoute("/tools/$slug")({
       ],
     };
 
+    const canonical = abs(path);
     return {
       meta: [
         { title },
@@ -72,13 +74,15 @@ export const Route = createFileRoute("/tools/$slug")({
           : []),
         { property: "og:title", content: title },
         { property: "og:description", content: description },
-        { property: "og:url", content: path },
+        { property: "og:url", content: canonical },
         { property: "og:type", content: "website" },
+        { property: "og:image", content: OG_DEFAULT },
         { name: "twitter:card", content: "summary_large_image" },
         { name: "twitter:title", content: title },
         { name: "twitter:description", content: description },
+        { name: "twitter:image", content: OG_DEFAULT },
       ],
-      links: [{ rel: "canonical", href: path }, ...hreflangLinks(path)],
+      links: [{ rel: "canonical", href: canonical }, ...hreflangLinks(path)],
       scripts: [
         { type: "application/ld+json", children: JSON.stringify(webApp) },
         { type: "application/ld+json", children: JSON.stringify(howTo) },

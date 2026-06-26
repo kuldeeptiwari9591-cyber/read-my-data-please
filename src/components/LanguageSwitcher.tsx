@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Globe, Check } from "lucide-react";
-import { SUPPORTED_LOCALES, type LocaleCode } from "@/lib/i18n";
+import { SUPPORTED_LOCALES, type LocaleCode, applyClientLocale } from "@/lib/i18n";
 
 export function LanguageSwitcher() {
   const { i18n, t } = useTranslation();
@@ -15,7 +15,7 @@ export function LanguageSwitcher() {
   }, [current]);
 
   const change = (code: LocaleCode) => {
-    i18n.changeLanguage(code);
+    applyClientLocale(code);
     setOpen(false);
     if (typeof window !== "undefined") {
       const url = new URL(window.location.href);

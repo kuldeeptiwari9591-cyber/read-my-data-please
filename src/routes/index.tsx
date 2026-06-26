@@ -28,25 +28,35 @@ import {
   type ToolCategory,
   type ToolPhase,
 } from "@/lib/tools";
+import { abs, OG_DEFAULT } from "@/lib/site-url";
 
 const PHASE_ORDER: ToolPhase[] = ["next", "interactive", "server"];
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "CrispPDF — 40 Free Online PDF Tools · No signup, no watermarks" },
-      {
-        name: "description",
-        content:
-          "Merge, split, compress, convert, sign, and protect PDFs. 40 free tools. No signup. No watermarks. Privacy-first.",
-      },
-      { property: "og:title", content: "CrispPDF — 40 Free Online PDF Tools" },
-      {
-        property: "og:description",
-        content: "Every PDF tool you need. Free, crisp, and fast. No signup, no watermarks.",
-      },
-    ],
-  }),
+  head: () => {
+    const canonical = abs("/");
+    return {
+      meta: [
+        { title: "CrispPDF — 40 Free Online PDF Tools · No signup, no watermarks" },
+        {
+          name: "description",
+          content:
+            "Merge, split, compress, convert, sign, and protect PDFs. 40 free tools. No signup. No watermarks. Privacy-first.",
+        },
+        { property: "og:title", content: "CrispPDF — 40 Free Online PDF Tools" },
+        {
+          property: "og:description",
+          content: "Every PDF tool you need. Free, crisp, and fast. No signup, no watermarks.",
+        },
+        { property: "og:url", content: canonical },
+        { property: "og:type", content: "website" },
+        { property: "og:image", content: OG_DEFAULT },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:image", content: OG_DEFAULT },
+      ],
+      links: [{ rel: "canonical", href: canonical }],
+    };
+  },
   component: Index,
 });
 

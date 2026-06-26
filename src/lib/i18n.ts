@@ -1,6 +1,5 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
-import LanguageDetector from "i18next-browser-languagedetector";
 
 import en from "./locales/en";
 import hi from "./locales/hi";
@@ -16,32 +15,61 @@ export const SUPPORTED_LOCALES = [
 
 export type LocaleCode = (typeof SUPPORTED_LOCALES)[number]["code"];
 
-const isBrowser = typeof window !== "undefined";
+export const LOCALE_STORAGE_KEY = "crisppdf-lang";
 
+// Initialise synchronously with English on BOTH server and client so the
+// first hydration render matches the server-rendered HTML exactly. The
+// real user language is applied post-hydration by `applyClientLocale()`.
 if (!i18n.isInitialized) {
-  const base = i18n.use(initReactI18next);
-  // Detector runs only on the client — server always renders English so
-  // hydration matches; the switcher updates the language post-mount.
-  if (isBrowser) base.use(LanguageDetector);
-  base.init({
+  i18n.use(initReactI18next).init({
     resources: {
       en: { translation: en },
       hi: { translation: hi },
       es: { translation: es },
       pt: { translation: pt },
     },
-    lng: isBrowser ? undefined : "en",
+    lng: "en",
     fallbackLng: "en",
     supportedLngs: SUPPORTED_LOCALES.map((l) => l.code),
     interpolation: { escapeValue: false },
-    detection: {
-      order: ["querystring", "localStorage", "navigator"],
-      lookupQuerystring: "lang",
-      lookupLocalStorage: "crisppdf-lang",
-      caches: ["localStorage"],
-    },
     react: { useSuspense: false },
   });
+}
+
+function isSupported(code: string | null | undefined): code is LocaleCode {
+  return !!code && SUPPORTED_LOCALES.some((l) => l.code === code);
+}
+
+/** Detect the user's locale from ?lang, localStorage, or navigator. Browser only. */
+export function detectClientLocale(): LocaleCode {
+  if (typeof window === "undefined") return "en";
+  try {
+    const q = new URLSearchParams(window.location.search).get("lang");
+    if (isSupported(q)) return q;
+    const stored = window.localStorage.getItem(LOCALE_STORAGE_KEY);
+    if (isSupported(stored)) return stored;
+    const nav = (navigator.language || "en").slice(0, 2).toLowerCase();
+    if (isSupported(nav)) return nav;
+  } catch {
+    /* swallow */
+  }
+  return "en";
+}
+
+/** Switch the i18n language post-hydration and persist it. */
+export function applyClientLocale(code?: LocaleCode) {
+  const lang = code ?? detectClientLocale();
+  if (i18n.language !== lang) {
+    void i18n.changeLanguage(lang);
+  }
+  try {
+    window.localStorage.setItem(LOCALE_STORAGE_KEY, lang);
+  } catch {
+    /* swallow */
+  }
+  if (typeof document !== "undefined") {
+    document.documentElement.lang = lang;
+  }
 }
 
 export default i18n;
