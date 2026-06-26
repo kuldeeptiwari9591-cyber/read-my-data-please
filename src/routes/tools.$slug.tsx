@@ -176,7 +176,18 @@ function ToolPage() {
             </div>
 
             {Component ? (
-              <Component />
+              <Suspense
+                fallback={
+                  <div className="flex min-h-[20rem] flex-col items-center justify-center gap-3 rounded-2xl border border-border/60 bg-surface/40 p-12 text-center">
+                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                    <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
+                      Loading {tool.name}…
+                    </p>
+                  </div>
+                }
+              >
+                <Component />
+              </Suspense>
             ) : (
               <ToolShell
                 title={tool.name}
@@ -194,6 +205,7 @@ function ToolPage() {
                 />
               </ToolShell>
             )}
+
           </div>
         </div>
 
