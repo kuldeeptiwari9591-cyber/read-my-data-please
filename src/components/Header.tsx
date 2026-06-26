@@ -1,7 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { Logo } from "./Logo";
-import { ThemeToggle } from "./ThemeToggle";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 
 export function Header() {
@@ -28,7 +27,6 @@ export function Header() {
 
         <div className="flex items-center gap-2">
           <LanguageSwitcher />
-          <ThemeToggle />
         </div>
       </div>
     </header>

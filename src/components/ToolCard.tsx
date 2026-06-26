@@ -6,7 +6,7 @@ import type { Tool } from "@/lib/tools";
 export function ToolCard({ tool }: { tool: Tool }) {
   const Icon = tool.icon;
   return (
-    <Link to="/tools/$slug" params={{ slug: tool.slug }} className="group block">
+    <Link to={("/" + tool.slug) as never} className="group block">
       <GlassCard tilt glow className="h-full">
         <div className="flex h-full flex-col p-5">
           <div className="flex items-start justify-between">
