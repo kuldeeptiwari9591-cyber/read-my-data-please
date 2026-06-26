@@ -5,14 +5,14 @@ import { Footer } from "@/components/Footer";
 import { GlassCard } from "@/components/GlassCard";
 import { ToolCard } from "@/components/ToolCard";
 import { TOOLS, TOOLS_BY_SLUG } from "@/lib/tools";
+import { TOOL_COMPONENTS } from "@/components/tools";
+import { ToolShell } from "@/components/tools/ToolShell";
 
 export const Route = createFileRoute("/tools/$slug")({
   head: ({ params }) => {
     const tool = TOOLS_BY_SLUG[params.slug];
     if (!tool) {
-      return {
-        meta: [{ title: "Tool not found — CrispPDF" }],
-      };
+      return { meta: [{ title: "Tool not found — CrispPDF" }] };
     }
     return {
       meta: [
@@ -51,6 +51,7 @@ export const Route = createFileRoute("/tools/$slug")({
 function ToolPage() {
   const { tool } = Route.useLoaderData();
   const Icon = tool.icon;
+  const Component = TOOL_COMPONENTS[tool.slug];
 
   const related = TOOLS.filter(
     (t) => t.category === tool.category && t.slug !== tool.slug,
@@ -73,48 +74,32 @@ function ToolPage() {
           <ArrowLeft className="h-4 w-4" /> All tools
         </Link>
 
-        <div className="mt-8 flex items-start gap-5">
-          <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/25 to-secondary/25 ring-1 ring-primary/30 shadow-[0_0_30px_rgba(99,102,241,0.3)]">
-            <Icon className="h-7 w-7 text-primary" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2 text-xs">
-              <span className="rounded bg-surface px-2 py-0.5 font-mono uppercase tracking-wider text-muted-foreground">
-                {tool.category.replace("-", " ")}
-              </span>
-              <span
-                className={`rounded px-2 py-0.5 font-mono uppercase tracking-wider ${
-                  tool.processing === "browser"
-                    ? "bg-success/15 text-success"
-                    : "bg-warning/15 text-warning"
-                }`}
-              >
-                {tool.processing}
-              </span>
-            </div>
-            <h1 className="mt-3 font-display text-4xl font-bold tracking-tight md:text-5xl">
-              {tool.name}
-            </h1>
-            <p className="mt-3 text-lg text-muted-foreground">{tool.description}</p>
-          </div>
+        <div className="mt-8">
+          {Component ? (
+            <Component />
+          ) : (
+            <ToolShell
+              title={tool.name}
+              description={tool.description}
+              icon={<Icon className="h-7 w-7 text-primary" />}
+            >
+              <GlassCard className="p-10 text-center">
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 ring-1 ring-primary/30">
+                  <Construction className="h-6 w-6 text-primary" />
+                </div>
+                <h2 className="mt-6 font-display text-2xl font-semibold">Coming soon</h2>
+                <p className="mx-auto mt-3 max-w-md text-sm text-muted-foreground">
+                  This tool needs additional libraries (server-side conversion or OCR). It's on the
+                  build list — shipping in a follow-up phase.
+                </p>
+                <div className="mt-6 inline-flex items-center gap-1.5 rounded-full border border-border bg-surface px-3 py-1 text-xs font-mono text-muted-foreground">
+                  <Sparkles className="h-3 w-3 text-primary" />
+                  Queued
+                </div>
+              </GlassCard>
+            </ToolShell>
+          )}
         </div>
-
-        <GlassCard className="mt-12 p-10 text-center">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 ring-1 ring-primary/30">
-            <Construction className="h-6 w-6 text-primary" />
-          </div>
-          <h2 className="mt-6 font-display text-2xl font-semibold">
-            Coming soon
-          </h2>
-          <p className="mx-auto mt-3 max-w-md text-sm text-muted-foreground">
-            This tool is on the build list. We're shipping the highest-traffic
-            tools first (Merge, Split, Compress, Rotate). Check back shortly.
-          </p>
-          <div className="mt-6 inline-flex items-center gap-1.5 rounded-full border border-border bg-surface px-3 py-1 text-xs font-mono text-muted-foreground">
-            <Sparkles className="h-3 w-3 text-primary" />
-            Phase {tool.processing === "browser" ? "2" : "3"}
-          </div>
-        </GlassCard>
 
         {related.length > 0 && (
           <div className="mt-20">

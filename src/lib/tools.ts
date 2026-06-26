@@ -49,6 +49,18 @@ export interface Tool {
   status: "ready" | "soon";
 }
 
+export function toolMatches(t: Tool, query: string): boolean {
+  if (!query) return true;
+  const q = query.toLowerCase().trim();
+  return (
+    t.name.toLowerCase().includes(q) ||
+    t.short.toLowerCase().includes(q) ||
+    t.description.toLowerCase().includes(q) ||
+    t.slug.includes(q) ||
+    t.category.includes(q)
+  );
+}
+
 export const CATEGORY_META: Record<
   ToolCategory,
   { label: string; blurb: string }
@@ -84,7 +96,7 @@ export const TOOLS: Tool[] = [
     category: "organize",
     icon: Combine,
     processing: "browser",
-    status: "soon",
+    status: "ready",
   },
   {
     slug: "split-pdf",
@@ -94,7 +106,7 @@ export const TOOLS: Tool[] = [
     category: "organize",
     icon: Scissors,
     processing: "browser",
-    status: "soon",
+    status: "ready",
   },
   {
     slug: "compress-pdf",
@@ -204,7 +216,7 @@ export const TOOLS: Tool[] = [
     category: "organize",
     icon: RotateCw,
     processing: "browser",
-    status: "soon",
+    status: "ready",
   },
   {
     slug: "reorder-pdf-pages",
@@ -214,7 +226,7 @@ export const TOOLS: Tool[] = [
     category: "organize",
     icon: ArrowUpDown,
     processing: "browser",
-    status: "soon",
+    status: "ready",
   },
   {
     slug: "delete-pdf-pages",
@@ -224,7 +236,7 @@ export const TOOLS: Tool[] = [
     category: "organize",
     icon: Trash2,
     processing: "browser",
-    status: "soon",
+    status: "ready",
   },
   {
     slug: "extract-pdf-pages",
@@ -234,7 +246,7 @@ export const TOOLS: Tool[] = [
     category: "organize",
     icon: Copy,
     processing: "browser",
-    status: "soon",
+    status: "ready",
   },
   {
     slug: "crop-pdf",
