@@ -1,12 +1,10 @@
-// pSEO: India-and-use-case-specific compress landings.
-// Each maps to the canonical compress-pdf tool but targets a distinct query.
-import { createFileRoute, notFound } from "@tanstack/react-router";
+// Shared view + head builder for /compress-pdf-for-{use} pages.
 import { PseoPageShell } from "@/components/seo/PseoPageShell";
 import { TOOLS_BY_SLUG, TOOLS } from "@/lib/tools";
 import { abs, OG_DEFAULT } from "@/lib/site-url";
 import { hreflangLinks } from "@/lib/hreflang";
 
-interface UsePage {
+export interface UseCasePage {
   slug: string;
   title: string;
   meta: string;
@@ -18,7 +16,7 @@ interface UsePage {
   faqs: { q: string; a: string }[];
 }
 
-const USES: Record<string, UsePage> = {
+export const COMPRESS_USES: Record<string, UseCasePage> = {
   whatsapp: {
     slug: "whatsapp",
     title: "Compress PDF for WhatsApp Free — Under 16 MB in Browser",
@@ -84,49 +82,57 @@ const USES: Record<string, UsePage> = {
   },
 };
 
-export const Route = createFileRoute("/compress-pdf-for-$use")({
-  head: ({ params }) => {
-    const u = USES[params.use];
-    if (!u) return { meta: [{ title: "Not found — CrispPDF" }] };
-    const path = `/compress-pdf-for-${u.slug}`;
-    const canonical = abs(path);
-    const faqLd = {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      mainEntity: u.faqs.map((f) => ({
-        "@type": "Question",
-        name: f.q,
-        acceptedAnswer: { "@type": "Answer", text: f.a },
-      })),
-    };
-    return {
-      meta: [
-        { title: u.title },
-        { name: "description", content: u.meta },
-        { property: "og:title", content: u.title },
-        { property: "og:description", content: u.meta },
-        { property: "og:url", content: canonical },
-        { property: "og:type", content: "website" },
-        { property: "og:image", content: OG_DEFAULT },
-        { name: "twitter:card", content: "summary_large_image" },
-        { name: "twitter:image", content: OG_DEFAULT },
-      ],
-      links: [{ rel: "canonical", href: canonical }, ...hreflangLinks(path)],
-      scripts: [{ type: "application/ld+json", children: JSON.stringify(faqLd) }],
-    };
-  },
-  loader: ({ params }) => {
-    const u = USES[params.use];
-    if (!u) throw notFound();
-    return { u };
-  },
-  component: Page,
-});
+export const COMPRESS_USE_SLUGS = Object.keys(COMPRESS_USES);
 
-export const COMPRESS_USE_SLUGS = Object.keys(USES);
+export function useCaseHead(slug: string) {
+  const u = COMPRESS_USES[slug];
+  if (!u) return { meta: [{ title: "Not found — CrispPDF" }] };
+  const path = `/compress-pdf-for-${u.slug}`;
+  const canonical = abs(path);
+  const faqLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: u.faqs.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
+  };
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "CrispPDF", item: abs("/") },
+      { "@type": "ListItem", position: 2, name: "Compress PDF", item: abs("/compress-pdf") },
+      { "@type": "ListItem", position: 3, name: u.badge.split("·")[1]?.trim() ?? u.slug, item: canonical },
+    ],
+  };
+  return {
+    meta: [
+      { title: u.title },
+      { name: "description", content: u.meta },
+      { name: "keywords", content: `compress pdf for ${u.slug}, pdf compressor ${u.slug}, reduce pdf size for ${u.slug}` },
+      { property: "og:title", content: u.title },
+      { property: "og:description", content: u.meta },
+      { property: "og:url", content: canonical },
+      { property: "og:type", content: "website" },
+      { property: "og:image", content: OG_DEFAULT },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:image", content: OG_DEFAULT },
+    ],
+    links: [{ rel: "canonical", href: canonical }, ...hreflangLinks(path)],
+    scripts: [
+      { type: "application/ld+json", children: JSON.stringify(faqLd) },
+      { type: "application/ld+json", children: JSON.stringify(breadcrumbLd) },
+    ],
+  };
+}
 
-function Page() {
-  const { u } = Route.useLoaderData();
+export function UseCaseView({ slug }: { slug: string }) {
+  const u = COMPRESS_USES[slug];
+  if (!u) {
+    return <div className="p-10 text-sm text-muted-foreground">Use case not configured.</div>;
+  }
   const compress = TOOLS_BY_SLUG["compress-pdf"] ?? null;
   const related = TOOLS.filter((t) => ["merge-pdf", "split-pdf", "jpg-to-pdf"].includes(t.slug)).slice(0, 3);
   return (

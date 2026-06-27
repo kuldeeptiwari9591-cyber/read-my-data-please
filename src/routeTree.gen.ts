@@ -58,8 +58,17 @@ import { Route as CsvToPdfRouteImport } from './routes/csv-to-pdf'
 import { Route as CropPdfRouteImport } from './routes/crop-pdf'
 import { Route as ConvertPdfRouteImport } from './routes/convert-pdf'
 import { Route as ContactRouteImport } from './routes/contact'
-import { Route as CompressPdfToSizeRouteImport } from './routes/compress-pdf-to-$size'
-import { Route as CompressPdfForUseRouteImport } from './routes/compress-pdf-for-$use'
+import { Route as CompressPdfTo5mbRouteImport } from './routes/compress-pdf-to-5mb'
+import { Route as CompressPdfTo500kbRouteImport } from './routes/compress-pdf-to-500kb'
+import { Route as CompressPdfTo300kbRouteImport } from './routes/compress-pdf-to-300kb'
+import { Route as CompressPdfTo2mbRouteImport } from './routes/compress-pdf-to-2mb'
+import { Route as CompressPdfTo200kbRouteImport } from './routes/compress-pdf-to-200kb'
+import { Route as CompressPdfTo1mbRouteImport } from './routes/compress-pdf-to-1mb'
+import { Route as CompressPdfTo10mbRouteImport } from './routes/compress-pdf-to-10mb'
+import { Route as CompressPdfTo100kbRouteImport } from './routes/compress-pdf-to-100kb'
+import { Route as CompressPdfForWhatsappRouteImport } from './routes/compress-pdf-for-whatsapp'
+import { Route as CompressPdfForPassportPhotoRouteImport } from './routes/compress-pdf-for-passport-photo'
+import { Route as CompressPdfForEmailRouteImport } from './routes/compress-pdf-for-email'
 import { Route as CompressPdfRouteImport } from './routes/compress-pdf'
 import { Route as ComparePdfRouteImport } from './routes/compare-pdf'
 import { Route as ChangelogRouteImport } from './routes/changelog'
@@ -325,14 +334,60 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CompressPdfToSizeRoute = CompressPdfToSizeRouteImport.update({
-  id: '/compress-pdf-to-$size',
-  path: '/compress-pdf-to-$size',
+const CompressPdfTo5mbRoute = CompressPdfTo5mbRouteImport.update({
+  id: '/compress-pdf-to-5mb',
+  path: '/compress-pdf-to-5mb',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CompressPdfForUseRoute = CompressPdfForUseRouteImport.update({
-  id: '/compress-pdf-for-$use',
-  path: '/compress-pdf-for-$use',
+const CompressPdfTo500kbRoute = CompressPdfTo500kbRouteImport.update({
+  id: '/compress-pdf-to-500kb',
+  path: '/compress-pdf-to-500kb',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompressPdfTo300kbRoute = CompressPdfTo300kbRouteImport.update({
+  id: '/compress-pdf-to-300kb',
+  path: '/compress-pdf-to-300kb',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompressPdfTo2mbRoute = CompressPdfTo2mbRouteImport.update({
+  id: '/compress-pdf-to-2mb',
+  path: '/compress-pdf-to-2mb',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompressPdfTo200kbRoute = CompressPdfTo200kbRouteImport.update({
+  id: '/compress-pdf-to-200kb',
+  path: '/compress-pdf-to-200kb',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompressPdfTo1mbRoute = CompressPdfTo1mbRouteImport.update({
+  id: '/compress-pdf-to-1mb',
+  path: '/compress-pdf-to-1mb',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompressPdfTo10mbRoute = CompressPdfTo10mbRouteImport.update({
+  id: '/compress-pdf-to-10mb',
+  path: '/compress-pdf-to-10mb',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompressPdfTo100kbRoute = CompressPdfTo100kbRouteImport.update({
+  id: '/compress-pdf-to-100kb',
+  path: '/compress-pdf-to-100kb',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompressPdfForWhatsappRoute = CompressPdfForWhatsappRouteImport.update({
+  id: '/compress-pdf-for-whatsapp',
+  path: '/compress-pdf-for-whatsapp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompressPdfForPassportPhotoRoute =
+  CompressPdfForPassportPhotoRouteImport.update({
+    id: '/compress-pdf-for-passport-photo',
+    path: '/compress-pdf-for-passport-photo',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const CompressPdfForEmailRoute = CompressPdfForEmailRouteImport.update({
+  id: '/compress-pdf-for-email',
+  path: '/compress-pdf-for-email',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CompressPdfRoute = CompressPdfRouteImport.update({
@@ -444,8 +499,17 @@ export interface FileRoutesByFullPath {
   '/changelog': typeof ChangelogRoute
   '/compare-pdf': typeof ComparePdfRoute
   '/compress-pdf': typeof CompressPdfRoute
-  '/compress-pdf-for-$use': typeof CompressPdfForUseRoute
-  '/compress-pdf-to-$size': typeof CompressPdfToSizeRoute
+  '/compress-pdf-for-email': typeof CompressPdfForEmailRoute
+  '/compress-pdf-for-passport-photo': typeof CompressPdfForPassportPhotoRoute
+  '/compress-pdf-for-whatsapp': typeof CompressPdfForWhatsappRoute
+  '/compress-pdf-to-100kb': typeof CompressPdfTo100kbRoute
+  '/compress-pdf-to-10mb': typeof CompressPdfTo10mbRoute
+  '/compress-pdf-to-1mb': typeof CompressPdfTo1mbRoute
+  '/compress-pdf-to-200kb': typeof CompressPdfTo200kbRoute
+  '/compress-pdf-to-2mb': typeof CompressPdfTo2mbRoute
+  '/compress-pdf-to-300kb': typeof CompressPdfTo300kbRoute
+  '/compress-pdf-to-500kb': typeof CompressPdfTo500kbRoute
+  '/compress-pdf-to-5mb': typeof CompressPdfTo5mbRoute
   '/contact': typeof ContactRoute
   '/convert-pdf': typeof ConvertPdfRoute
   '/crop-pdf': typeof CropPdfRoute
@@ -515,8 +579,17 @@ export interface FileRoutesByTo {
   '/changelog': typeof ChangelogRoute
   '/compare-pdf': typeof ComparePdfRoute
   '/compress-pdf': typeof CompressPdfRoute
-  '/compress-pdf-for-$use': typeof CompressPdfForUseRoute
-  '/compress-pdf-to-$size': typeof CompressPdfToSizeRoute
+  '/compress-pdf-for-email': typeof CompressPdfForEmailRoute
+  '/compress-pdf-for-passport-photo': typeof CompressPdfForPassportPhotoRoute
+  '/compress-pdf-for-whatsapp': typeof CompressPdfForWhatsappRoute
+  '/compress-pdf-to-100kb': typeof CompressPdfTo100kbRoute
+  '/compress-pdf-to-10mb': typeof CompressPdfTo10mbRoute
+  '/compress-pdf-to-1mb': typeof CompressPdfTo1mbRoute
+  '/compress-pdf-to-200kb': typeof CompressPdfTo200kbRoute
+  '/compress-pdf-to-2mb': typeof CompressPdfTo2mbRoute
+  '/compress-pdf-to-300kb': typeof CompressPdfTo300kbRoute
+  '/compress-pdf-to-500kb': typeof CompressPdfTo500kbRoute
+  '/compress-pdf-to-5mb': typeof CompressPdfTo5mbRoute
   '/contact': typeof ContactRoute
   '/convert-pdf': typeof ConvertPdfRoute
   '/crop-pdf': typeof CropPdfRoute
@@ -588,8 +661,17 @@ export interface FileRoutesById {
   '/changelog': typeof ChangelogRoute
   '/compare-pdf': typeof ComparePdfRoute
   '/compress-pdf': typeof CompressPdfRoute
-  '/compress-pdf-for-$use': typeof CompressPdfForUseRoute
-  '/compress-pdf-to-$size': typeof CompressPdfToSizeRoute
+  '/compress-pdf-for-email': typeof CompressPdfForEmailRoute
+  '/compress-pdf-for-passport-photo': typeof CompressPdfForPassportPhotoRoute
+  '/compress-pdf-for-whatsapp': typeof CompressPdfForWhatsappRoute
+  '/compress-pdf-to-100kb': typeof CompressPdfTo100kbRoute
+  '/compress-pdf-to-10mb': typeof CompressPdfTo10mbRoute
+  '/compress-pdf-to-1mb': typeof CompressPdfTo1mbRoute
+  '/compress-pdf-to-200kb': typeof CompressPdfTo200kbRoute
+  '/compress-pdf-to-2mb': typeof CompressPdfTo2mbRoute
+  '/compress-pdf-to-300kb': typeof CompressPdfTo300kbRoute
+  '/compress-pdf-to-500kb': typeof CompressPdfTo500kbRoute
+  '/compress-pdf-to-5mb': typeof CompressPdfTo5mbRoute
   '/contact': typeof ContactRoute
   '/convert-pdf': typeof ConvertPdfRoute
   '/crop-pdf': typeof CropPdfRoute
@@ -661,8 +743,17 @@ export interface FileRouteTypes {
     | '/changelog'
     | '/compare-pdf'
     | '/compress-pdf'
-    | '/compress-pdf-for-$use'
-    | '/compress-pdf-to-$size'
+    | '/compress-pdf-for-email'
+    | '/compress-pdf-for-passport-photo'
+    | '/compress-pdf-for-whatsapp'
+    | '/compress-pdf-to-100kb'
+    | '/compress-pdf-to-10mb'
+    | '/compress-pdf-to-1mb'
+    | '/compress-pdf-to-200kb'
+    | '/compress-pdf-to-2mb'
+    | '/compress-pdf-to-300kb'
+    | '/compress-pdf-to-500kb'
+    | '/compress-pdf-to-5mb'
     | '/contact'
     | '/convert-pdf'
     | '/crop-pdf'
@@ -732,8 +823,17 @@ export interface FileRouteTypes {
     | '/changelog'
     | '/compare-pdf'
     | '/compress-pdf'
-    | '/compress-pdf-for-$use'
-    | '/compress-pdf-to-$size'
+    | '/compress-pdf-for-email'
+    | '/compress-pdf-for-passport-photo'
+    | '/compress-pdf-for-whatsapp'
+    | '/compress-pdf-to-100kb'
+    | '/compress-pdf-to-10mb'
+    | '/compress-pdf-to-1mb'
+    | '/compress-pdf-to-200kb'
+    | '/compress-pdf-to-2mb'
+    | '/compress-pdf-to-300kb'
+    | '/compress-pdf-to-500kb'
+    | '/compress-pdf-to-5mb'
     | '/contact'
     | '/convert-pdf'
     | '/crop-pdf'
@@ -804,8 +904,17 @@ export interface FileRouteTypes {
     | '/changelog'
     | '/compare-pdf'
     | '/compress-pdf'
-    | '/compress-pdf-for-$use'
-    | '/compress-pdf-to-$size'
+    | '/compress-pdf-for-email'
+    | '/compress-pdf-for-passport-photo'
+    | '/compress-pdf-for-whatsapp'
+    | '/compress-pdf-to-100kb'
+    | '/compress-pdf-to-10mb'
+    | '/compress-pdf-to-1mb'
+    | '/compress-pdf-to-200kb'
+    | '/compress-pdf-to-2mb'
+    | '/compress-pdf-to-300kb'
+    | '/compress-pdf-to-500kb'
+    | '/compress-pdf-to-5mb'
     | '/contact'
     | '/convert-pdf'
     | '/crop-pdf'
@@ -877,8 +986,17 @@ export interface RootRouteChildren {
   ChangelogRoute: typeof ChangelogRoute
   ComparePdfRoute: typeof ComparePdfRoute
   CompressPdfRoute: typeof CompressPdfRoute
-  CompressPdfForUseRoute: typeof CompressPdfForUseRoute
-  CompressPdfToSizeRoute: typeof CompressPdfToSizeRoute
+  CompressPdfForEmailRoute: typeof CompressPdfForEmailRoute
+  CompressPdfForPassportPhotoRoute: typeof CompressPdfForPassportPhotoRoute
+  CompressPdfForWhatsappRoute: typeof CompressPdfForWhatsappRoute
+  CompressPdfTo100kbRoute: typeof CompressPdfTo100kbRoute
+  CompressPdfTo10mbRoute: typeof CompressPdfTo10mbRoute
+  CompressPdfTo1mbRoute: typeof CompressPdfTo1mbRoute
+  CompressPdfTo200kbRoute: typeof CompressPdfTo200kbRoute
+  CompressPdfTo2mbRoute: typeof CompressPdfTo2mbRoute
+  CompressPdfTo300kbRoute: typeof CompressPdfTo300kbRoute
+  CompressPdfTo500kbRoute: typeof CompressPdfTo500kbRoute
+  CompressPdfTo5mbRoute: typeof CompressPdfTo5mbRoute
   ContactRoute: typeof ContactRoute
   ConvertPdfRoute: typeof ConvertPdfRoute
   CropPdfRoute: typeof CropPdfRoute
@@ -1279,18 +1397,81 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/compress-pdf-to-$size': {
-      id: '/compress-pdf-to-$size'
-      path: '/compress-pdf-to-$size'
-      fullPath: '/compress-pdf-to-$size'
-      preLoaderRoute: typeof CompressPdfToSizeRouteImport
+    '/compress-pdf-to-5mb': {
+      id: '/compress-pdf-to-5mb'
+      path: '/compress-pdf-to-5mb'
+      fullPath: '/compress-pdf-to-5mb'
+      preLoaderRoute: typeof CompressPdfTo5mbRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/compress-pdf-for-$use': {
-      id: '/compress-pdf-for-$use'
-      path: '/compress-pdf-for-$use'
-      fullPath: '/compress-pdf-for-$use'
-      preLoaderRoute: typeof CompressPdfForUseRouteImport
+    '/compress-pdf-to-500kb': {
+      id: '/compress-pdf-to-500kb'
+      path: '/compress-pdf-to-500kb'
+      fullPath: '/compress-pdf-to-500kb'
+      preLoaderRoute: typeof CompressPdfTo500kbRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compress-pdf-to-300kb': {
+      id: '/compress-pdf-to-300kb'
+      path: '/compress-pdf-to-300kb'
+      fullPath: '/compress-pdf-to-300kb'
+      preLoaderRoute: typeof CompressPdfTo300kbRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compress-pdf-to-2mb': {
+      id: '/compress-pdf-to-2mb'
+      path: '/compress-pdf-to-2mb'
+      fullPath: '/compress-pdf-to-2mb'
+      preLoaderRoute: typeof CompressPdfTo2mbRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compress-pdf-to-200kb': {
+      id: '/compress-pdf-to-200kb'
+      path: '/compress-pdf-to-200kb'
+      fullPath: '/compress-pdf-to-200kb'
+      preLoaderRoute: typeof CompressPdfTo200kbRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compress-pdf-to-1mb': {
+      id: '/compress-pdf-to-1mb'
+      path: '/compress-pdf-to-1mb'
+      fullPath: '/compress-pdf-to-1mb'
+      preLoaderRoute: typeof CompressPdfTo1mbRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compress-pdf-to-10mb': {
+      id: '/compress-pdf-to-10mb'
+      path: '/compress-pdf-to-10mb'
+      fullPath: '/compress-pdf-to-10mb'
+      preLoaderRoute: typeof CompressPdfTo10mbRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compress-pdf-to-100kb': {
+      id: '/compress-pdf-to-100kb'
+      path: '/compress-pdf-to-100kb'
+      fullPath: '/compress-pdf-to-100kb'
+      preLoaderRoute: typeof CompressPdfTo100kbRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compress-pdf-for-whatsapp': {
+      id: '/compress-pdf-for-whatsapp'
+      path: '/compress-pdf-for-whatsapp'
+      fullPath: '/compress-pdf-for-whatsapp'
+      preLoaderRoute: typeof CompressPdfForWhatsappRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compress-pdf-for-passport-photo': {
+      id: '/compress-pdf-for-passport-photo'
+      path: '/compress-pdf-for-passport-photo'
+      fullPath: '/compress-pdf-for-passport-photo'
+      preLoaderRoute: typeof CompressPdfForPassportPhotoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compress-pdf-for-email': {
+      id: '/compress-pdf-for-email'
+      path: '/compress-pdf-for-email'
+      fullPath: '/compress-pdf-for-email'
+      preLoaderRoute: typeof CompressPdfForEmailRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/compress-pdf': {
@@ -1464,8 +1645,17 @@ const rootRouteChildren: RootRouteChildren = {
   ChangelogRoute: ChangelogRoute,
   ComparePdfRoute: ComparePdfRoute,
   CompressPdfRoute: CompressPdfRoute,
-  CompressPdfForUseRoute: CompressPdfForUseRoute,
-  CompressPdfToSizeRoute: CompressPdfToSizeRoute,
+  CompressPdfForEmailRoute: CompressPdfForEmailRoute,
+  CompressPdfForPassportPhotoRoute: CompressPdfForPassportPhotoRoute,
+  CompressPdfForWhatsappRoute: CompressPdfForWhatsappRoute,
+  CompressPdfTo100kbRoute: CompressPdfTo100kbRoute,
+  CompressPdfTo10mbRoute: CompressPdfTo10mbRoute,
+  CompressPdfTo1mbRoute: CompressPdfTo1mbRoute,
+  CompressPdfTo200kbRoute: CompressPdfTo200kbRoute,
+  CompressPdfTo2mbRoute: CompressPdfTo2mbRoute,
+  CompressPdfTo300kbRoute: CompressPdfTo300kbRoute,
+  CompressPdfTo500kbRoute: CompressPdfTo500kbRoute,
+  CompressPdfTo5mbRoute: CompressPdfTo5mbRoute,
   ContactRoute: ContactRoute,
   ConvertPdfRoute: ConvertPdfRoute,
   CropPdfRoute: CropPdfRoute,
@@ -1523,13 +1713,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
