@@ -10,8 +10,10 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WordToPdfRouteImport } from './routes/word-to-pdf'
+import { Route as WebpToPdfRouteImport } from './routes/webp-to-pdf'
 import { Route as WatermarkPdfRouteImport } from './routes/watermark-pdf'
 import { Route as UnlockPdfRouteImport } from './routes/unlock-pdf'
+import { Route as TxtToPdfRouteImport } from './routes/txt-to-pdf'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SplitPdfRouteImport } from './routes/split-pdf'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
@@ -24,6 +26,7 @@ import { Route as ReorderPdfPagesRouteImport } from './routes/reorder-pdf-pages'
 import { Route as RedactPdfRouteImport } from './routes/redact-pdf'
 import { Route as ProtectPdfRouteImport } from './routes/protect-pdf'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as PngToPdfRouteImport } from './routes/png-to-pdf'
 import { Route as PdfToWordRouteImport } from './routes/pdf-to-word'
 import { Route as PdfToPptRouteImport } from './routes/pdf-to-ppt'
 import { Route as PdfToPngRouteImport } from './routes/pdf-to-png'
@@ -39,6 +42,7 @@ import { Route as LlmsFullDottxtRouteImport } from './routes/llms-full[.]txt'
 import { Route as JpgToPdfRouteImport } from './routes/jpg-to-pdf'
 import { Route as InvertPdfRouteImport } from './routes/invert-pdf'
 import { Route as HtmlToPdfRouteImport } from './routes/html-to-pdf'
+import { Route as HeicToPdfRouteImport } from './routes/heic-to-pdf'
 import { Route as GrayscalePdfRouteImport } from './routes/grayscale-pdf'
 import { Route as FlattenPdfRouteImport } from './routes/flatten-pdf'
 import { Route as ExtractTextPdfRouteImport } from './routes/extract-text-pdf'
@@ -50,9 +54,12 @@ import { Route as EditPdfRouteImport } from './routes/edit-pdf'
 import { Route as EditMetadataPdfRouteImport } from './routes/edit-metadata-pdf'
 import { Route as DuplicatePagesPdfRouteImport } from './routes/duplicate-pages-pdf'
 import { Route as DeletePdfPagesRouteImport } from './routes/delete-pdf-pages'
+import { Route as CsvToPdfRouteImport } from './routes/csv-to-pdf'
 import { Route as CropPdfRouteImport } from './routes/crop-pdf'
 import { Route as ConvertPdfRouteImport } from './routes/convert-pdf'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CompressPdfToSizeRouteImport } from './routes/compress-pdf-to-$size'
+import { Route as CompressPdfForUseRouteImport } from './routes/compress-pdf-for-$use'
 import { Route as CompressPdfRouteImport } from './routes/compress-pdf'
 import { Route as ComparePdfRouteImport } from './routes/compare-pdf'
 import { Route as ChangelogRouteImport } from './routes/changelog'
@@ -78,6 +85,11 @@ const WordToPdfRoute = WordToPdfRouteImport.update({
   path: '/word-to-pdf',
   getParentRoute: () => rootRouteImport,
 } as any)
+const WebpToPdfRoute = WebpToPdfRouteImport.update({
+  id: '/webp-to-pdf',
+  path: '/webp-to-pdf',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WatermarkPdfRoute = WatermarkPdfRouteImport.update({
   id: '/watermark-pdf',
   path: '/watermark-pdf',
@@ -86,6 +98,11 @@ const WatermarkPdfRoute = WatermarkPdfRouteImport.update({
 const UnlockPdfRoute = UnlockPdfRouteImport.update({
   id: '/unlock-pdf',
   path: '/unlock-pdf',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TxtToPdfRoute = TxtToPdfRouteImport.update({
+  id: '/txt-to-pdf',
+  path: '/txt-to-pdf',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TermsRoute = TermsRouteImport.update({
@@ -146,6 +163,11 @@ const ProtectPdfRoute = ProtectPdfRouteImport.update({
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PngToPdfRoute = PngToPdfRouteImport.update({
+  id: '/png-to-pdf',
+  path: '/png-to-pdf',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PdfToWordRoute = PdfToWordRouteImport.update({
@@ -223,6 +245,11 @@ const HtmlToPdfRoute = HtmlToPdfRouteImport.update({
   path: '/html-to-pdf',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HeicToPdfRoute = HeicToPdfRouteImport.update({
+  id: '/heic-to-pdf',
+  path: '/heic-to-pdf',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GrayscalePdfRoute = GrayscalePdfRouteImport.update({
   id: '/grayscale-pdf',
   path: '/grayscale-pdf',
@@ -278,6 +305,11 @@ const DeletePdfPagesRoute = DeletePdfPagesRouteImport.update({
   path: '/delete-pdf-pages',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CsvToPdfRoute = CsvToPdfRouteImport.update({
+  id: '/csv-to-pdf',
+  path: '/csv-to-pdf',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CropPdfRoute = CropPdfRouteImport.update({
   id: '/crop-pdf',
   path: '/crop-pdf',
@@ -291,6 +323,16 @@ const ConvertPdfRoute = ConvertPdfRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompressPdfToSizeRoute = CompressPdfToSizeRouteImport.update({
+  id: '/compress-pdf-to-$size',
+  path: '/compress-pdf-to-$size',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompressPdfForUseRoute = CompressPdfForUseRouteImport.update({
+  id: '/compress-pdf-for-$use',
+  path: '/compress-pdf-for-$use',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CompressPdfRoute = CompressPdfRouteImport.update({
@@ -402,9 +444,12 @@ export interface FileRoutesByFullPath {
   '/changelog': typeof ChangelogRoute
   '/compare-pdf': typeof ComparePdfRoute
   '/compress-pdf': typeof CompressPdfRoute
+  '/compress-pdf-for-$use': typeof CompressPdfForUseRoute
+  '/compress-pdf-to-$size': typeof CompressPdfToSizeRoute
   '/contact': typeof ContactRoute
   '/convert-pdf': typeof ConvertPdfRoute
   '/crop-pdf': typeof CropPdfRoute
+  '/csv-to-pdf': typeof CsvToPdfRoute
   '/delete-pdf-pages': typeof DeletePdfPagesRoute
   '/duplicate-pages-pdf': typeof DuplicatePagesPdfRoute
   '/edit-metadata-pdf': typeof EditMetadataPdfRoute
@@ -416,6 +461,7 @@ export interface FileRoutesByFullPath {
   '/extract-text-pdf': typeof ExtractTextPdfRoute
   '/flatten-pdf': typeof FlattenPdfRoute
   '/grayscale-pdf': typeof GrayscalePdfRoute
+  '/heic-to-pdf': typeof HeicToPdfRoute
   '/html-to-pdf': typeof HtmlToPdfRoute
   '/invert-pdf': typeof InvertPdfRoute
   '/jpg-to-pdf': typeof JpgToPdfRoute
@@ -431,6 +477,7 @@ export interface FileRoutesByFullPath {
   '/pdf-to-png': typeof PdfToPngRoute
   '/pdf-to-ppt': typeof PdfToPptRoute
   '/pdf-to-word': typeof PdfToWordRoute
+  '/png-to-pdf': typeof PngToPdfRoute
   '/privacy': typeof PrivacyRoute
   '/protect-pdf': typeof ProtectPdfRoute
   '/redact-pdf': typeof RedactPdfRoute
@@ -443,8 +490,10 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/split-pdf': typeof SplitPdfRoute
   '/terms': typeof TermsRoute
+  '/txt-to-pdf': typeof TxtToPdfRoute
   '/unlock-pdf': typeof UnlockPdfRoute
   '/watermark-pdf': typeof WatermarkPdfRoute
+  '/webp-to-pdf': typeof WebpToPdfRoute
   '/word-to-pdf': typeof WordToPdfRoute
   '/cp-crisp-7x92k': typeof AuthenticatedCpCrisp7x92kRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -466,9 +515,12 @@ export interface FileRoutesByTo {
   '/changelog': typeof ChangelogRoute
   '/compare-pdf': typeof ComparePdfRoute
   '/compress-pdf': typeof CompressPdfRoute
+  '/compress-pdf-for-$use': typeof CompressPdfForUseRoute
+  '/compress-pdf-to-$size': typeof CompressPdfToSizeRoute
   '/contact': typeof ContactRoute
   '/convert-pdf': typeof ConvertPdfRoute
   '/crop-pdf': typeof CropPdfRoute
+  '/csv-to-pdf': typeof CsvToPdfRoute
   '/delete-pdf-pages': typeof DeletePdfPagesRoute
   '/duplicate-pages-pdf': typeof DuplicatePagesPdfRoute
   '/edit-metadata-pdf': typeof EditMetadataPdfRoute
@@ -480,6 +532,7 @@ export interface FileRoutesByTo {
   '/extract-text-pdf': typeof ExtractTextPdfRoute
   '/flatten-pdf': typeof FlattenPdfRoute
   '/grayscale-pdf': typeof GrayscalePdfRoute
+  '/heic-to-pdf': typeof HeicToPdfRoute
   '/html-to-pdf': typeof HtmlToPdfRoute
   '/invert-pdf': typeof InvertPdfRoute
   '/jpg-to-pdf': typeof JpgToPdfRoute
@@ -495,6 +548,7 @@ export interface FileRoutesByTo {
   '/pdf-to-png': typeof PdfToPngRoute
   '/pdf-to-ppt': typeof PdfToPptRoute
   '/pdf-to-word': typeof PdfToWordRoute
+  '/png-to-pdf': typeof PngToPdfRoute
   '/privacy': typeof PrivacyRoute
   '/protect-pdf': typeof ProtectPdfRoute
   '/redact-pdf': typeof RedactPdfRoute
@@ -507,8 +561,10 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/split-pdf': typeof SplitPdfRoute
   '/terms': typeof TermsRoute
+  '/txt-to-pdf': typeof TxtToPdfRoute
   '/unlock-pdf': typeof UnlockPdfRoute
   '/watermark-pdf': typeof WatermarkPdfRoute
+  '/webp-to-pdf': typeof WebpToPdfRoute
   '/word-to-pdf': typeof WordToPdfRoute
   '/cp-crisp-7x92k': typeof AuthenticatedCpCrisp7x92kRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -532,9 +588,12 @@ export interface FileRoutesById {
   '/changelog': typeof ChangelogRoute
   '/compare-pdf': typeof ComparePdfRoute
   '/compress-pdf': typeof CompressPdfRoute
+  '/compress-pdf-for-$use': typeof CompressPdfForUseRoute
+  '/compress-pdf-to-$size': typeof CompressPdfToSizeRoute
   '/contact': typeof ContactRoute
   '/convert-pdf': typeof ConvertPdfRoute
   '/crop-pdf': typeof CropPdfRoute
+  '/csv-to-pdf': typeof CsvToPdfRoute
   '/delete-pdf-pages': typeof DeletePdfPagesRoute
   '/duplicate-pages-pdf': typeof DuplicatePagesPdfRoute
   '/edit-metadata-pdf': typeof EditMetadataPdfRoute
@@ -546,6 +605,7 @@ export interface FileRoutesById {
   '/extract-text-pdf': typeof ExtractTextPdfRoute
   '/flatten-pdf': typeof FlattenPdfRoute
   '/grayscale-pdf': typeof GrayscalePdfRoute
+  '/heic-to-pdf': typeof HeicToPdfRoute
   '/html-to-pdf': typeof HtmlToPdfRoute
   '/invert-pdf': typeof InvertPdfRoute
   '/jpg-to-pdf': typeof JpgToPdfRoute
@@ -561,6 +621,7 @@ export interface FileRoutesById {
   '/pdf-to-png': typeof PdfToPngRoute
   '/pdf-to-ppt': typeof PdfToPptRoute
   '/pdf-to-word': typeof PdfToWordRoute
+  '/png-to-pdf': typeof PngToPdfRoute
   '/privacy': typeof PrivacyRoute
   '/protect-pdf': typeof ProtectPdfRoute
   '/redact-pdf': typeof RedactPdfRoute
@@ -573,8 +634,10 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/split-pdf': typeof SplitPdfRoute
   '/terms': typeof TermsRoute
+  '/txt-to-pdf': typeof TxtToPdfRoute
   '/unlock-pdf': typeof UnlockPdfRoute
   '/watermark-pdf': typeof WatermarkPdfRoute
+  '/webp-to-pdf': typeof WebpToPdfRoute
   '/word-to-pdf': typeof WordToPdfRoute
   '/_authenticated/cp-crisp-7x92k': typeof AuthenticatedCpCrisp7x92kRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -598,9 +661,12 @@ export interface FileRouteTypes {
     | '/changelog'
     | '/compare-pdf'
     | '/compress-pdf'
+    | '/compress-pdf-for-$use'
+    | '/compress-pdf-to-$size'
     | '/contact'
     | '/convert-pdf'
     | '/crop-pdf'
+    | '/csv-to-pdf'
     | '/delete-pdf-pages'
     | '/duplicate-pages-pdf'
     | '/edit-metadata-pdf'
@@ -612,6 +678,7 @@ export interface FileRouteTypes {
     | '/extract-text-pdf'
     | '/flatten-pdf'
     | '/grayscale-pdf'
+    | '/heic-to-pdf'
     | '/html-to-pdf'
     | '/invert-pdf'
     | '/jpg-to-pdf'
@@ -627,6 +694,7 @@ export interface FileRouteTypes {
     | '/pdf-to-png'
     | '/pdf-to-ppt'
     | '/pdf-to-word'
+    | '/png-to-pdf'
     | '/privacy'
     | '/protect-pdf'
     | '/redact-pdf'
@@ -639,8 +707,10 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/split-pdf'
     | '/terms'
+    | '/txt-to-pdf'
     | '/unlock-pdf'
     | '/watermark-pdf'
+    | '/webp-to-pdf'
     | '/word-to-pdf'
     | '/cp-crisp-7x92k'
     | '/blog/$slug'
@@ -662,9 +732,12 @@ export interface FileRouteTypes {
     | '/changelog'
     | '/compare-pdf'
     | '/compress-pdf'
+    | '/compress-pdf-for-$use'
+    | '/compress-pdf-to-$size'
     | '/contact'
     | '/convert-pdf'
     | '/crop-pdf'
+    | '/csv-to-pdf'
     | '/delete-pdf-pages'
     | '/duplicate-pages-pdf'
     | '/edit-metadata-pdf'
@@ -676,6 +749,7 @@ export interface FileRouteTypes {
     | '/extract-text-pdf'
     | '/flatten-pdf'
     | '/grayscale-pdf'
+    | '/heic-to-pdf'
     | '/html-to-pdf'
     | '/invert-pdf'
     | '/jpg-to-pdf'
@@ -691,6 +765,7 @@ export interface FileRouteTypes {
     | '/pdf-to-png'
     | '/pdf-to-ppt'
     | '/pdf-to-word'
+    | '/png-to-pdf'
     | '/privacy'
     | '/protect-pdf'
     | '/redact-pdf'
@@ -703,8 +778,10 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/split-pdf'
     | '/terms'
+    | '/txt-to-pdf'
     | '/unlock-pdf'
     | '/watermark-pdf'
+    | '/webp-to-pdf'
     | '/word-to-pdf'
     | '/cp-crisp-7x92k'
     | '/blog/$slug'
@@ -727,9 +804,12 @@ export interface FileRouteTypes {
     | '/changelog'
     | '/compare-pdf'
     | '/compress-pdf'
+    | '/compress-pdf-for-$use'
+    | '/compress-pdf-to-$size'
     | '/contact'
     | '/convert-pdf'
     | '/crop-pdf'
+    | '/csv-to-pdf'
     | '/delete-pdf-pages'
     | '/duplicate-pages-pdf'
     | '/edit-metadata-pdf'
@@ -741,6 +821,7 @@ export interface FileRouteTypes {
     | '/extract-text-pdf'
     | '/flatten-pdf'
     | '/grayscale-pdf'
+    | '/heic-to-pdf'
     | '/html-to-pdf'
     | '/invert-pdf'
     | '/jpg-to-pdf'
@@ -756,6 +837,7 @@ export interface FileRouteTypes {
     | '/pdf-to-png'
     | '/pdf-to-ppt'
     | '/pdf-to-word'
+    | '/png-to-pdf'
     | '/privacy'
     | '/protect-pdf'
     | '/redact-pdf'
@@ -768,8 +850,10 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/split-pdf'
     | '/terms'
+    | '/txt-to-pdf'
     | '/unlock-pdf'
     | '/watermark-pdf'
+    | '/webp-to-pdf'
     | '/word-to-pdf'
     | '/_authenticated/cp-crisp-7x92k'
     | '/blog/$slug'
@@ -793,9 +877,12 @@ export interface RootRouteChildren {
   ChangelogRoute: typeof ChangelogRoute
   ComparePdfRoute: typeof ComparePdfRoute
   CompressPdfRoute: typeof CompressPdfRoute
+  CompressPdfForUseRoute: typeof CompressPdfForUseRoute
+  CompressPdfToSizeRoute: typeof CompressPdfToSizeRoute
   ContactRoute: typeof ContactRoute
   ConvertPdfRoute: typeof ConvertPdfRoute
   CropPdfRoute: typeof CropPdfRoute
+  CsvToPdfRoute: typeof CsvToPdfRoute
   DeletePdfPagesRoute: typeof DeletePdfPagesRoute
   DuplicatePagesPdfRoute: typeof DuplicatePagesPdfRoute
   EditMetadataPdfRoute: typeof EditMetadataPdfRoute
@@ -807,6 +894,7 @@ export interface RootRouteChildren {
   ExtractTextPdfRoute: typeof ExtractTextPdfRoute
   FlattenPdfRoute: typeof FlattenPdfRoute
   GrayscalePdfRoute: typeof GrayscalePdfRoute
+  HeicToPdfRoute: typeof HeicToPdfRoute
   HtmlToPdfRoute: typeof HtmlToPdfRoute
   InvertPdfRoute: typeof InvertPdfRoute
   JpgToPdfRoute: typeof JpgToPdfRoute
@@ -822,6 +910,7 @@ export interface RootRouteChildren {
   PdfToPngRoute: typeof PdfToPngRoute
   PdfToPptRoute: typeof PdfToPptRoute
   PdfToWordRoute: typeof PdfToWordRoute
+  PngToPdfRoute: typeof PngToPdfRoute
   PrivacyRoute: typeof PrivacyRoute
   ProtectPdfRoute: typeof ProtectPdfRoute
   RedactPdfRoute: typeof RedactPdfRoute
@@ -834,8 +923,10 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SplitPdfRoute: typeof SplitPdfRoute
   TermsRoute: typeof TermsRoute
+  TxtToPdfRoute: typeof TxtToPdfRoute
   UnlockPdfRoute: typeof UnlockPdfRoute
   WatermarkPdfRoute: typeof WatermarkPdfRoute
+  WebpToPdfRoute: typeof WebpToPdfRoute
   WordToPdfRoute: typeof WordToPdfRoute
   ConvertSlugRoute: typeof ConvertSlugRoute
   ToolsSlugRoute: typeof ToolsSlugRoute
@@ -852,6 +943,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WordToPdfRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/webp-to-pdf': {
+      id: '/webp-to-pdf'
+      path: '/webp-to-pdf'
+      fullPath: '/webp-to-pdf'
+      preLoaderRoute: typeof WebpToPdfRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/watermark-pdf': {
       id: '/watermark-pdf'
       path: '/watermark-pdf'
@@ -864,6 +962,13 @@ declare module '@tanstack/react-router' {
       path: '/unlock-pdf'
       fullPath: '/unlock-pdf'
       preLoaderRoute: typeof UnlockPdfRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/txt-to-pdf': {
+      id: '/txt-to-pdf'
+      path: '/txt-to-pdf'
+      fullPath: '/txt-to-pdf'
+      preLoaderRoute: typeof TxtToPdfRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/terms': {
@@ -948,6 +1053,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/png-to-pdf': {
+      id: '/png-to-pdf'
+      path: '/png-to-pdf'
+      fullPath: '/png-to-pdf'
+      preLoaderRoute: typeof PngToPdfRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pdf-to-word': {
@@ -1055,6 +1167,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HtmlToPdfRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/heic-to-pdf': {
+      id: '/heic-to-pdf'
+      path: '/heic-to-pdf'
+      fullPath: '/heic-to-pdf'
+      preLoaderRoute: typeof HeicToPdfRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/grayscale-pdf': {
       id: '/grayscale-pdf'
       path: '/grayscale-pdf'
@@ -1132,6 +1251,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DeletePdfPagesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/csv-to-pdf': {
+      id: '/csv-to-pdf'
+      path: '/csv-to-pdf'
+      fullPath: '/csv-to-pdf'
+      preLoaderRoute: typeof CsvToPdfRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/crop-pdf': {
       id: '/crop-pdf'
       path: '/crop-pdf'
@@ -1151,6 +1277,20 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compress-pdf-to-$size': {
+      id: '/compress-pdf-to-$size'
+      path: '/compress-pdf-to-$size'
+      fullPath: '/compress-pdf-to-$size'
+      preLoaderRoute: typeof CompressPdfToSizeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compress-pdf-for-$use': {
+      id: '/compress-pdf-for-$use'
+      path: '/compress-pdf-for-$use'
+      fullPath: '/compress-pdf-for-$use'
+      preLoaderRoute: typeof CompressPdfForUseRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/compress-pdf': {
@@ -1324,9 +1464,12 @@ const rootRouteChildren: RootRouteChildren = {
   ChangelogRoute: ChangelogRoute,
   ComparePdfRoute: ComparePdfRoute,
   CompressPdfRoute: CompressPdfRoute,
+  CompressPdfForUseRoute: CompressPdfForUseRoute,
+  CompressPdfToSizeRoute: CompressPdfToSizeRoute,
   ContactRoute: ContactRoute,
   ConvertPdfRoute: ConvertPdfRoute,
   CropPdfRoute: CropPdfRoute,
+  CsvToPdfRoute: CsvToPdfRoute,
   DeletePdfPagesRoute: DeletePdfPagesRoute,
   DuplicatePagesPdfRoute: DuplicatePagesPdfRoute,
   EditMetadataPdfRoute: EditMetadataPdfRoute,
@@ -1338,6 +1481,7 @@ const rootRouteChildren: RootRouteChildren = {
   ExtractTextPdfRoute: ExtractTextPdfRoute,
   FlattenPdfRoute: FlattenPdfRoute,
   GrayscalePdfRoute: GrayscalePdfRoute,
+  HeicToPdfRoute: HeicToPdfRoute,
   HtmlToPdfRoute: HtmlToPdfRoute,
   InvertPdfRoute: InvertPdfRoute,
   JpgToPdfRoute: JpgToPdfRoute,
@@ -1353,6 +1497,7 @@ const rootRouteChildren: RootRouteChildren = {
   PdfToPngRoute: PdfToPngRoute,
   PdfToPptRoute: PdfToPptRoute,
   PdfToWordRoute: PdfToWordRoute,
+  PngToPdfRoute: PngToPdfRoute,
   PrivacyRoute: PrivacyRoute,
   ProtectPdfRoute: ProtectPdfRoute,
   RedactPdfRoute: RedactPdfRoute,
@@ -1365,8 +1510,10 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SplitPdfRoute: SplitPdfRoute,
   TermsRoute: TermsRoute,
+  TxtToPdfRoute: TxtToPdfRoute,
   UnlockPdfRoute: UnlockPdfRoute,
   WatermarkPdfRoute: WatermarkPdfRoute,
+  WebpToPdfRoute: WebpToPdfRoute,
   WordToPdfRoute: WordToPdfRoute,
   ConvertSlugRoute: ConvertSlugRoute,
   ToolsSlugRoute: ToolsSlugRoute,

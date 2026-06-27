@@ -4,8 +4,12 @@ import { TOOLS } from "@/lib/tools";
 import { allUseCasePairs } from "@/lib/pseo/use-cases";
 import { allComparisonPairs } from "@/lib/pseo/competitors";
 import { FORMAT_PAIRS } from "@/lib/pseo/formats";
+import { SIZE_TARGETS } from "@/lib/pseo/size-targets";
 
 import { listPublishedPosts } from "@/lib/blog.functions";
+
+const COMPRESS_USES = ["whatsapp", "email", "passport-photo"];
+const ROOT_FORMAT_ALIASES = ["png-to-pdf", "heic-to-pdf", "webp-to-pdf", "csv-to-pdf", "txt-to-pdf"];
 
 // Always emit absolute URLs. Falls back to crisppdf.com when VITE_SITE_URL is unset.
 const BASE_URL = ((import.meta.env.VITE_SITE_URL as string | undefined) ?? "https://crisppdf.com").replace(/\/$/, "");
@@ -65,6 +69,21 @@ export const Route = createFileRoute("/sitemap.xml")({
             path: `/convert/${f.slug}`,
             changefreq: "monthly" as const,
             priority: "0.6",
+          })),
+          ...SIZE_TARGETS.map((s) => ({
+            path: `/compress-pdf-to-${s.slug}`,
+            changefreq: "monthly" as const,
+            priority: "0.7",
+          })),
+          ...COMPRESS_USES.map((u) => ({
+            path: `/compress-pdf-for-${u}`,
+            changefreq: "monthly" as const,
+            priority: "0.7",
+          })),
+          ...ROOT_FORMAT_ALIASES.map((slug) => ({
+            path: `/${slug}`,
+            changefreq: "monthly" as const,
+            priority: "0.7",
           })),
         ];
 

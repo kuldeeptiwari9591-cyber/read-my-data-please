@@ -10,7 +10,7 @@ import { TOOL_COMPONENTS } from "@/components/tools";
 import { ToolShell } from "@/components/tools/ToolShell";
 import { ComingSoonTool } from "@/components/tools/ComingSoonTool";
 import { RateLimitBanner } from "@/components/tools/RateLimitBanner";
-import { getToolContent } from "@/lib/tool-content";
+import { getToolContent, getAeoAnswer } from "@/lib/tool-content";
 import { ToolDisabledGate } from "@/components/ToolDisabledGate";
 import { ToolPageSkeleton } from "@/components/ToolPageSkeleton";
 import { toolIconMap, categoryColorMap } from "@/lib/toolIcons";
@@ -57,7 +57,7 @@ export function ToolPageView({ slug }: { slug: string }) {
 
   const useCaseLinks = USE_CASES.filter((u) => u.toolSlugs.includes(tool.slug)).slice(0, 6);
   const compareLinks = COMPETITORS.filter((c) => c.toolSlugs.includes(tool.slug));
-  const answer = `${tool.name} on CrispPDF is the fastest free way to ${tool.short.toLowerCase()}. ${tool.processing === "browser" ? "Runs entirely in your browser — your file is never uploaded." : "Server-assisted but files are processed in memory and discarded immediately."} No signup, no watermark, no daily limit.`;
+  const answer = getAeoAnswer(tool.slug, tool.name, tool.short, tool.processing);
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-background text-foreground">
@@ -195,15 +195,17 @@ export function ToolPageView({ slug }: { slug: string }) {
           <h2 className="mt-2 font-display text-2xl font-semibold md:text-3xl">
             {tool.name} — frequently asked questions
           </h2>
-          <div className="mt-6 grid gap-3 lg:grid-cols-2">
+          <div className="tool-faq mt-6 grid gap-3 lg:grid-cols-2">
             {content.faqs.map((f) => (
               <details
                 key={f.q}
                 className="group rounded-xl border border-border bg-surface/60 px-5 py-4 backdrop-blur-sm transition-colors hover:border-primary/60"
               >
                 <summary className="cursor-pointer list-none font-display text-sm font-medium leading-snug">
-                  <span className="mr-2 text-primary">+</span>
-                  {f.q}
+                  <h3 className="inline">
+                    <span className="mr-2 text-primary">+</span>
+                    {f.q}
+                  </h3>
                 </summary>
 
                 <p className="mt-3 pl-5 text-sm leading-relaxed text-muted-foreground">{f.a}</p>
