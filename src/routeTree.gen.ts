@@ -54,6 +54,7 @@ import { Route as CropPdfRouteImport } from './routes/crop-pdf'
 import { Route as ConvertPdfRouteImport } from './routes/convert-pdf'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CompressPdfToSizeRouteImport } from './routes/compress-pdf-to-$size'
+import { Route as CompressPdfForUseRouteImport } from './routes/compress-pdf-for-$use'
 import { Route as CompressPdfRouteImport } from './routes/compress-pdf'
 import { Route as ComparePdfRouteImport } from './routes/compare-pdf'
 import { Route as ChangelogRouteImport } from './routes/changelog'
@@ -299,6 +300,11 @@ const CompressPdfToSizeRoute = CompressPdfToSizeRouteImport.update({
   path: '/compress-pdf-to-$size',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CompressPdfForUseRoute = CompressPdfForUseRouteImport.update({
+  id: '/compress-pdf-for-$use',
+  path: '/compress-pdf-for-$use',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CompressPdfRoute = CompressPdfRouteImport.update({
   id: '/compress-pdf',
   path: '/compress-pdf',
@@ -408,6 +414,7 @@ export interface FileRoutesByFullPath {
   '/changelog': typeof ChangelogRoute
   '/compare-pdf': typeof ComparePdfRoute
   '/compress-pdf': typeof CompressPdfRoute
+  '/compress-pdf-for-$use': typeof CompressPdfForUseRoute
   '/compress-pdf-to-$size': typeof CompressPdfToSizeRoute
   '/contact': typeof ContactRoute
   '/convert-pdf': typeof ConvertPdfRoute
@@ -473,6 +480,7 @@ export interface FileRoutesByTo {
   '/changelog': typeof ChangelogRoute
   '/compare-pdf': typeof ComparePdfRoute
   '/compress-pdf': typeof CompressPdfRoute
+  '/compress-pdf-for-$use': typeof CompressPdfForUseRoute
   '/compress-pdf-to-$size': typeof CompressPdfToSizeRoute
   '/contact': typeof ContactRoute
   '/convert-pdf': typeof ConvertPdfRoute
@@ -540,6 +548,7 @@ export interface FileRoutesById {
   '/changelog': typeof ChangelogRoute
   '/compare-pdf': typeof ComparePdfRoute
   '/compress-pdf': typeof CompressPdfRoute
+  '/compress-pdf-for-$use': typeof CompressPdfForUseRoute
   '/compress-pdf-to-$size': typeof CompressPdfToSizeRoute
   '/contact': typeof ContactRoute
   '/convert-pdf': typeof ConvertPdfRoute
@@ -607,6 +616,7 @@ export interface FileRouteTypes {
     | '/changelog'
     | '/compare-pdf'
     | '/compress-pdf'
+    | '/compress-pdf-for-$use'
     | '/compress-pdf-to-$size'
     | '/contact'
     | '/convert-pdf'
@@ -672,6 +682,7 @@ export interface FileRouteTypes {
     | '/changelog'
     | '/compare-pdf'
     | '/compress-pdf'
+    | '/compress-pdf-for-$use'
     | '/compress-pdf-to-$size'
     | '/contact'
     | '/convert-pdf'
@@ -738,6 +749,7 @@ export interface FileRouteTypes {
     | '/changelog'
     | '/compare-pdf'
     | '/compress-pdf'
+    | '/compress-pdf-for-$use'
     | '/compress-pdf-to-$size'
     | '/contact'
     | '/convert-pdf'
@@ -805,6 +817,7 @@ export interface RootRouteChildren {
   ChangelogRoute: typeof ChangelogRoute
   ComparePdfRoute: typeof ComparePdfRoute
   CompressPdfRoute: typeof CompressPdfRoute
+  CompressPdfForUseRoute: typeof CompressPdfForUseRoute
   CompressPdfToSizeRoute: typeof CompressPdfToSizeRoute
   ContactRoute: typeof ContactRoute
   ConvertPdfRoute: typeof ConvertPdfRoute
@@ -1173,6 +1186,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CompressPdfToSizeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/compress-pdf-for-$use': {
+      id: '/compress-pdf-for-$use'
+      path: '/compress-pdf-for-$use'
+      fullPath: '/compress-pdf-for-$use'
+      preLoaderRoute: typeof CompressPdfForUseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/compress-pdf': {
       id: '/compress-pdf'
       path: '/compress-pdf'
@@ -1344,6 +1364,7 @@ const rootRouteChildren: RootRouteChildren = {
   ChangelogRoute: ChangelogRoute,
   ComparePdfRoute: ComparePdfRoute,
   CompressPdfRoute: CompressPdfRoute,
+  CompressPdfForUseRoute: CompressPdfForUseRoute,
   CompressPdfToSizeRoute: CompressPdfToSizeRoute,
   ContactRoute: ContactRoute,
   ConvertPdfRoute: ConvertPdfRoute,
