@@ -296,7 +296,7 @@ function Index() {
       </section>
 
       {/* ALL TOOLS GRID */}
-      <section id="tools" className="relative mx-auto max-w-7xl px-6 py-24">
+      <section id="tools" className="relative mx-auto max-w-7xl px-6 pt-10 pb-24 md:pt-14">
         <div className="mx-auto max-w-2xl text-center">
           <p className="font-mono text-xs uppercase tracking-[0.2em] text-primary">
             // The full toolkit
