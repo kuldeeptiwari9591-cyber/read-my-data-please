@@ -28,12 +28,73 @@ import {
   type ToolCategory,
 } from "@/lib/tools";
 import { abs, OG_DEFAULT } from "@/lib/site-url";
-
-
+const HOME_FAQS: Array<{ q: string; a: string }> = [
+  {
+    q: "Is CrispPDF really free?",
+    a: "Yes — all 40 tools, no daily limits, no signup, no watermarks. Forever.",
+  },
+  {
+    q: "Are my files private?",
+    a: "Your files aren't stored. They're processed only to produce your output and then dropped immediately.",
+  },
+  {
+    q: "Why no signup?",
+    a: "You shouldn't need an account to merge two PDFs. Friction-free is the whole point.",
+  },
+  {
+    q: "Is there a file size limit?",
+    a: "Most tools handle PDFs up to ~100 MB comfortably. Very large files may take a few extra seconds.",
+  },
+  {
+    q: "Do you have an API?",
+    a: "Not yet. We're focused on the web app first. Tell us what you'd want and we'll prioritize.",
+  },
+  {
+    q: "Which browsers does CrispPDF support?",
+    a: "CrispPDF works on all modern browsers — Chrome, Firefox, Safari, and Edge on desktop and mobile. No plugins or extensions required. Any browser released after 2018 works fine.",
+  },
+  {
+    q: "Does CrispPDF work on mobile and tablets?",
+    a: "Yes. CrispPDF is fully responsive and touch-friendly. Every tool works on iOS Safari, Android Chrome, and tablet browsers. Upload, process, and download without a keyboard.",
+  },
+  {
+    q: "Are there watermarks on processed files?",
+    a: "Never. CrispPDF does not add any watermarks, branding, or stamps to your output. What you download is exactly what you processed — clean and unmodified.",
+  },
+  {
+    q: "Can I use CrispPDF for commercial documents?",
+    a: "Yes. CrispPDF can be used for personal and commercial documents. You retain full ownership of everything you upload and download. We never claim rights over your files.",
+  },
+  {
+    q: "How many files can I process per day?",
+    a: "There are no daily limits on CrispPDF. Process as many files as you need — free users get the same unlimited access with no throttling or paywalls.",
+  },
+  {
+    q: "What happens to my file after processing?",
+    a: "Your file is used only to generate your output and then immediately discarded. We do not store, log, analyse, or share your documents at any point.",
+  },
+  {
+    q: "Is CrispPDF safe for confidential documents?",
+    a: "Yes. Most tools process files entirely inside your browser, meaning your document never leaves your device. For tools that use a server function, files are processed in memory only and never written to disk.",
+  },
+  {
+    q: "Who built CrispPDF?",
+    a: "CrispPDF is an independent product built by developers who believe PDF tools should be free, private, and fast for everyone. No ads, no data selling, no premium upsells.",
+  },
+];
 
 export const Route = createFileRoute("/")({
   head: () => {
     const canonical = abs("/");
+    const faqLd = {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: HOME_FAQS.map((f) => ({
+        "@type": "Question",
+        name: f.q,
+        acceptedAnswer: { "@type": "Answer", text: f.a },
+      })),
+    };
     return {
       meta: [
         { title: "CrispPDF — 40 Free Online PDF Tools · No signup, no watermarks" },
@@ -54,10 +115,12 @@ export const Route = createFileRoute("/")({
         { name: "twitter:image", content: OG_DEFAULT },
       ],
       links: [{ rel: "canonical", href: canonical }],
+      scripts: [{ type: "application/ld+json", children: JSON.stringify(faqLd) }],
     };
   },
   component: Index,
 });
+
 
 const CATEGORY_ORDER: ToolCategory[] = [
   "organize",
