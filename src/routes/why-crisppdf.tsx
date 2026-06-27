@@ -114,12 +114,10 @@ function WhyCrispPDF() {
             Because your PDF tools shouldn't know your business.
           </p>
           <div className="mt-6" data-speakable="true">
-            <AnswerBlock>
-              CrispPDF is a free online PDF toolkit that runs almost entirely inside your browser.
-              When you compress, merge, or sign a PDF, the processing happens on your device — not
-              on our servers. We never see your files, we never store them, and we never sell your
-              data. All 40 tools. Always free. No signup.
-            </AnswerBlock>
+            <AnswerBlock
+              title="What is CrispPDF?"
+              answer="CrispPDF is a free online PDF toolkit that runs almost entirely inside your browser. When you compress, merge, or sign a PDF, the processing happens on your device — not on our servers. We never see your files, we never store them, and we never sell your data. All 40 tools. Always free. No signup."
+            />
           </div>
         </section>
 
