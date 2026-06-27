@@ -152,7 +152,7 @@ function FAQPage() {
       <main className="mx-auto max-w-3xl px-6 py-16">
         <header>
           <h1 className="font-display text-4xl font-bold tracking-tight md:text-5xl">Frequently Asked Questions</h1>
-          <p className="mt-3 text-base text-muted-foreground">50 deep answers about how CrispPDF works, what's safe, what's supported, and what's specific to India.</p>
+          <p className="mt-3 text-base text-muted-foreground">58 deep answers about CrispPDF itself, how it works, what's safe, what's supported, and what's specific to India.</p>
         </header>
 
         <div className="mt-12 space-y-10">
