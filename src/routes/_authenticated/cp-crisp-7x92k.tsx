@@ -89,7 +89,7 @@ function AdminPanel() {
   const listAnnouncements = useServerFn(adminListAnnouncements);
   const upsertAnnouncement = useServerFn(adminUpsertAnnouncement);
 
-  const [tab, setTab] = useState<"posts" | "feedback" | "ops" | "tools" | "settings">("posts");
+  const [tab, setTab] = useState<"posts" | "feedback" | "ops" | "tools" | "settings" | "changelog">("posts");
   const [allowed, setAllowed] = useState<boolean | null>(null);
   const [posts, setPosts] = useState<PostRow[]>([]);
   const [feedback, setFeedback] = useState<Feedback[]>([]);
@@ -214,7 +214,7 @@ function AdminPanel() {
         </div>
 
         <div className="mt-6 flex gap-2 border-b border-border">
-          {(["posts", "feedback", "ops", "tools", "settings"] as const).map((t) => (
+          {(["posts", "feedback", "ops", "tools", "settings", "changelog"] as const).map((t) => (
             <button
               key={t}
               onClick={() => setTab(t)}

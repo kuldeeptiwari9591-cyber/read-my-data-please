@@ -12,7 +12,7 @@ const COMPANY = [
   { label: "About", to: "/about" },
   { label: "FAQ", to: "/faq" },
   { label: "Blog", to: "/blog" },
-  { label: "Changelog", to: "/changelog" },
+  
   { label: "Feedback", to: "/feedback" },
   { label: "Contact", to: "/contact" },
   { label: "Privacy", to: "/privacy" },
