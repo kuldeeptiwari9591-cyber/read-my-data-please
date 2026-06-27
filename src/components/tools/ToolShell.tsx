@@ -156,14 +156,18 @@ export function downloadBlob(blob: Blob, filename: string) {
   // Confetti celebration (Animation 6)
   celebrate(0.75);
 
-  // Ops log (best-effort)
+  // Broadcast download for ShareCard context
   try {
     if (typeof window !== "undefined") {
       const m = window.location.pathname.match(/^\/([a-z0-9-]+)/i);
-      if (m) {
+      const slug = m?.[1];
+      window.dispatchEvent(
+        new CustomEvent("crisppdf:download", { detail: { size: blob.size, slug } }),
+      );
+      if (slug) {
         void import("@/lib/ops-log").then(({ logOperation }) =>
           logOperation({
-            toolSlug: m[1],
+            toolSlug: slug,
             bytesIn: blob.size,
             success: true,
           }),
