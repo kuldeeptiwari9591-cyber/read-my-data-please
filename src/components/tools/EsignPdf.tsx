@@ -23,7 +23,7 @@ export function EsignPdf() {
   const padRef = useRef<HTMLCanvasElement>(null);
   const padInstance = useRef<{ clear: () => void; toDataURL: () => string; isEmpty: () => boolean } | null>(null);
 
-  // Init signature pad
+  // Init signature pad — theme-aware background + ink color
   useEffect(() => {
     let mounted = true;
     (async () => {
@@ -33,8 +33,19 @@ export function EsignPdf() {
       const ratio = window.devicePixelRatio || 1;
       c.width = c.offsetWidth * ratio;
       c.height = c.offsetHeight * ratio;
-      c.getContext("2d")!.scale(ratio, ratio);
-      const pad = new SignaturePad(c, { penColor: "#0f172a", minWidth: 0.8, maxWidth: 2.4 });
+      const ctx = c.getContext("2d")!;
+      ctx.scale(ratio, ratio);
+      const isDark = document.documentElement.classList.contains("dark");
+      const bg = isDark ? "#13131A" : "#ffffff";
+      const ink = isDark ? "#f1f5f9" : "#0f172a";
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, c.width, c.height);
+      const pad = new SignaturePad(c, {
+        penColor: ink,
+        backgroundColor: bg,
+        minWidth: 0.8,
+        maxWidth: 2.4,
+      });
       padInstance.current = pad;
     })();
     return () => {
