@@ -243,7 +243,19 @@ function FeedbackPage() {
             </div>
           )}
 
-          <button type="submit" disabled={busy} className="w-full rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary-hover disabled:opacity-60">
+          {HCAPTCHA_SITE_KEY && (
+            <div className="flex justify-center">
+              <HCaptcha
+                ref={captchaRef}
+                sitekey={HCAPTCHA_SITE_KEY}
+                onVerify={(token) => setCaptchaToken(token)}
+                onExpire={() => setCaptchaToken(null)}
+                theme="dark"
+              />
+            </div>
+          )}
+
+          <button type="submit" disabled={busy || (!!HCAPTCHA_SITE_KEY && !captchaToken)} className="w-full rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary-hover disabled:opacity-60">
             {busy ? "Sending…" : tab === "feedback" ? "Send Feedback" : tab === "bug" ? "Report Bug" : "Request This Tool"}
           </button>
         </form>
