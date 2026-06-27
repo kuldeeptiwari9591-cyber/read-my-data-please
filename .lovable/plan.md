@@ -1,103 +1,151 @@
-# Migrating CrispPDF off Lovable — Full Process
+# Migrate CrispPDF from Lovable → Vercel (with Netlify variant)
 
-Honest take first: **possible, but you lose meaningful infra**. The TanStack Start app itself ports cleanly. The Lovable Cloud backend (managed Supabase) does **not** export as a full database dump — only per-table CSV. So a clean cutover means standing up your own Supabase project and replaying schema + data into it. Lovable-specific helpers (`lovable.auth.signInWithOAuth` broker, managed `_authenticated` gate, hCaptcha env injection, scheduled `pg_cron` security scan) need manual re-wiring.
+Goal: move frontend, server functions, database, auth, secrets, and cron off Lovable with zero data loss and minimum downtime. Honest constraint up front: **auth user passwords cannot be exported on the free Supabase plan** — users will get a password-reset email. Everything else transfers cleanly.
 
----
-
-## What moves where
-
-| Piece | Today (Lovable) | Target |
-|---|---|---|
-| Frontend (React/TanStack Start) | Lovable build → Cloudflare Workers | Netlify / Vercel / Render |
-| Server functions (`createServerFn`) | Same Worker | Same host as frontend (all three support it) |
-| Server routes (`/api/public/*`) | Same Worker | Same host |
-| Database + Auth + Storage | Lovable Cloud (managed Supabase) | Your own Supabase project (recommended) |
-| Secrets (`LOVABLE_API_KEY`, hCaptcha, Sentry, GA4, PostHog) | Lovable secrets | Host env vars |
-| Cron (`pg_cron` daily security scan) | Lovable Cloud | Supabase pg_cron OR host scheduler |
-| Domain | Lovable Domains | New host's DNS panel |
+Pre-built assets you already have in the repo: `migration-export/schema.sql` and `migration-export/MIGRATION.md`. This plan supersedes them where they conflict.
 
 ---
 
-## Host recommendation
+## Phase 0 — Pre-flight (30 min, do BEFORE touching anything)
 
-- **Vercel** — best DX for TanStack Start, native edge functions, good free tier. **Pick this** unless you have a reason not to.
-- **Netlify** — works, comparable. Pick if you already use Netlify.
-- **Render** — runs as a Node server (not edge). Heavier, slower cold starts. Only pick if you need long-running processes.
+1. Push the repo to your own GitHub account (Lovable → GitHub connect → transfer ownership in GitHub settings).
+2. Pick a target host: **Vercel** (recommended — best TanStack Start support) or **Netlify** (works, same steps).
+3. Buy / confirm the domain you want to launch on. Keep the existing `*.lovable.app` URL alive until cutover.
+4. Make a Google Cloud OAuth client (Console → APIs & Services → Credentials → OAuth client ID → Web application). Save Client ID + Secret — you'll need them in Phase 2.
+5. Sign up for: Supabase (free tier OK to start), Vercel, hCaptcha (you already have keys), PostHog, Sentry. Reuse existing PostHog / Sentry projects.
 
-I'll write the plan around Vercel; swap names for Netlify/Render — the steps are identical.
+## Phase 1 — Stand up the new Supabase project (1 hr)
+
+1. supabase.com → New Project. Region close to your users (India → Mumbai / Singapore). Save:
+   - Project URL, anon (publishable) key, service_role key, DB password, project ref.
+2. SQL Editor → paste the entire contents of `migration-export/schema.sql` → Run. Creates all 7 tables (`announcements`, `blog_posts`, `feedback`, `operations`, `security_audit_log`, `tool_settings`, `user_roles`) with RLS, GRANTs, the `has_role` function, and the `app_role` enum.
+3. Database → Extensions → enable `pg_cron` and `pg_net`.
+4. Authentication → Providers:
+   - **Email**: enable. Turn ON "Confirm email" and "Leaked password protection (HIBP)".
+   - **Google**: enable. Paste Client ID + Secret from Phase 0. Copy the Supabase callback URL (`https://<ref>.supabase.co/auth/v1/callback`) into Google Cloud → Authorized redirect URIs.
+5. Authentication → URL Configuration → set Site URL to your final domain; add `https://<final-domain>/auth/callback` and `http://localhost:8080` (for local dev) to "Redirect URLs".
+
+## Phase 2 — Code changes (one commit, do not deploy yet)
+
+These are the only files that must change for portability:
+
+1. **Replace Lovable OAuth broker.** Search `grep -rn "lovable.auth\|@/integrations/lovable" src/`. For each match, swap to standard Supabase:
+   ```ts
+   await supabase.auth.signInWithOAuth({
+     provider: "google",
+     options: { redirectTo: `${window.location.origin}/auth/callback` },
+   });
+   ```
+   Currently CrispPDF has no `lovable.auth` calls (verified), but the `/auth` page may still need a Google button wired this way if you want Google sign-in post-migration.
+2. **Create `/auth/callback` route** at `src/routes/auth.callback.tsx` that calls `supabase.auth.getSession()` then redirects to `/` (or saved path).
+3. **Regenerate Supabase types** against new project:
+   ```bash
+   npx supabase login
+   npx supabase gen types typescript --project-id <new-ref> > src/integrations/supabase/types.ts
+   ```
+4. **Verify `src/integrations/supabase/client.ts` and `client.server.ts`** read env names that Vercel will provide (`VITE_SUPABASE_URL`, `SUPABASE_URL`, etc.). No code change usually — just confirm.
+5. **Delete the now-unused `@/integrations/lovable/*` import paths and `@lovable.dev/cloud-auth-js` from `package.json`** (only if step 1 found matches).
+6. Commit as `chore: portability — swap Lovable OAuth, regen types`. **Do not deploy this commit on Lovable** — push to a `migration` branch.
+
+## Phase 3 — Deploy frontend to Vercel (45 min)
+
+1. vercel.com → Add New Project → import the GitHub repo → branch `migration`.
+2. Framework: Vite (auto-detected). Build command: `bun run build`. Output: `.output/` (TanStack Start default — Vercel detects it).
+3. Project Settings → Environment Variables (Production + Preview + Development for each):
+
+   | Name | Value |
+   |---|---|
+   | `VITE_SUPABASE_URL` | new project URL |
+   | `VITE_SUPABASE_PUBLISHABLE_KEY` | new anon key |
+   | `VITE_SUPABASE_PROJECT_ID` | new project ref |
+   | `SUPABASE_URL` | new project URL |
+   | `SUPABASE_PUBLISHABLE_KEY` | new anon key |
+   | `SUPABASE_SERVICE_ROLE_KEY` | new service role key |
+   | `VITE_SITE_URL` | https://your-final-domain.com |
+   | `VITE_GA4_ID` | G-XXXX |
+   | `VITE_POSTHOG_KEY` | phc_… |
+   | `VITE_SENTRY_DSN` | https://…ingest.sentry.io/… |
+   | `VITE_HCAPTCHA_SITE_KEY` | hCaptcha site key |
+   | `HCAPTCHA_SECRET` | hCaptcha secret |
+
+4. Deploy → wait for `*.vercel.app` URL.
+5. Smoke test on `*.vercel.app`: home loads, compress-pdf works, merge-pdf works, sign up + sign in, feedback submits with hCaptcha, blog renders, sitemap loads.
+6. Add custom domain (Settings → Domains). Update DNS at registrar per Vercel's instructions (A `76.76.21.21` or CNAME). Wait for SSL (5-30 min).
+7. Update `VITE_SITE_URL` env to the final domain → redeploy so canonicals/sitemap absolutize.
+
+### Netlify variant (skip if using Vercel)
+Same flow. New site → import from GitHub → Vite auto-detected. Env vars under Site Settings → Environment. `netlify.toml` already exists in the repo. DNS via Netlify Domains tab.
+
+## Phase 4 — Data migration (cutover day, 30-60 min)
+
+1. **Freeze writes on Lovable**: Cloud → set `tool_settings.maintenance_mode = true` or push a banner via `announcements`.
+2. **Export from Lovable** (Cloud → Database → Tables → Download CSV) in this order:
+   1. `tool_settings`
+   2. `announcements`
+   3. `blog_posts`
+   4. `feedback`
+   5. `operations`
+   6. `security_audit_log`
+   7. `user_roles` (LAST — depends on auth.users)
+3. **Auth users**: Cloud → Users → export CSV of email addresses. You cannot transfer password hashes on free plan.
+4. **Import into new Supabase**: Table Editor → Import CSV per table, same order. For `user_roles` you'll first need users to exist — see step 5.
+5. **Recreate auth users**: in new Supabase Authentication → Users → bulk invite (uploads CSV of emails, sends password-reset to each). Users set a new password on first sign-in.
+6. **Re-create admin user_roles**: once your own admin user is re-invited and you've signed in, run in SQL Editor:
+   ```sql
+   INSERT INTO user_roles(user_id, role)
+   VALUES ((SELECT id FROM auth.users WHERE email='you@example.com'), 'admin');
+   ```
+7. **Recreate the daily security-scan cron** in SQL Editor:
+   ```sql
+   SELECT cron.schedule(
+     'daily-security-scan', '0 3 * * *',
+     $$ SELECT net.http_post(
+       url := 'https://your-final-domain.com/api/public/hooks/security-scan',
+       headers := '{"Content-Type":"application/json"}'::jsonb
+     ); $$
+   );
+   ```
+
+## Phase 5 — DNS flip & verification (15 min)
+
+1. At your registrar, change DNS to point to Vercel (remove the Lovable A record).
+2. Wait 5-30 min for propagation. Verify with `dig your-domain.com`.
+3. Vercel issues SSL automatically.
+4. Hit the live URL: smoke-test the same 6 flows from Phase 3 step 5.
+5. Submit new `https://your-domain.com/sitemap.xml` to Google Search Console + Bing Webmaster Tools. Add a property for the new domain if you migrated domains.
+
+## Phase 6 — Post-cutover (first 7 days)
+
+1. Watch Sentry for errors and PostHog for funnel drop-offs for 48 h.
+2. Keep the Lovable project running 7 days as fallback.
+3. Email users (if you have a list) telling them to reset password on next sign-in.
+4. Day 8: delete Lovable project.
 
 ---
 
-## Phase 1 — Stand up your own Supabase project (do FIRST)
+## What you will lose
 
-1. Create a new project at supabase.com. Copy `Project URL`, `anon key`, `service_role key`, DB password.
-2. Export schema from current Lovable Cloud DB. Two paths:
-   - **You run it:** I'll bundle every migration in `supabase/migrations/` into one consolidated `schema.sql` you paste into the new project's SQL editor. This recreates tables, RLS, GRANTs, functions, triggers, `pg_cron` jobs.
-   - **Lovable support:** ask them for a `pg_dump` of your project. Lovable docs say only CSV is self-serve, but support can sometimes help on a paid plan.
-3. Export data per table as CSV from Lovable Cloud → Database → Tables → Download CSV. Tables to export: `announcements`, `blog_posts`, `feedback`, `operations`, `security_audit_log`, `tool_settings`, `user_roles`.
-4. Import CSVs into the new Supabase project (Table Editor → Import CSV per table). Order matters: `user_roles` last (depends on `auth.users`).
-5. Recreate auth users. `auth.users` rows can't be CSV-imported. Either:
-   - Use Supabase Auth Admin API to re-invite users (they reset password), OR
-   - On Supabase paid plan, request an auth migration.
-6. Re-enable extensions: `pg_cron`, `pg_net`. Re-create the daily security scan cron job.
+- **Auth passwords** — users reset via email (free Supabase plan limit).
+- **Realtime subscriptions** disconnect during the DNS flip (no realtime usage in CrispPDF, so impact = zero).
+- **Lovable connectors / Lovable AI Gateway** — not used in CrispPDF, no action.
+- **Lovable-managed Google OAuth broker** — replaced with standard Supabase OAuth (Phase 2 step 1).
 
----
+## What stays identical
 
-## Phase 2 — Strip Lovable-specific code
+- All 40 PDF tools (run in the browser, no server dependency).
+- All SEO infra (sitemap, robots, llms.txt, ai.txt, JSON-LD, pSEO routes).
+- Database schema, RLS, audit log, rate limiting, hCaptcha, PostHog, Sentry, web-vitals tracking.
+- Admin panel at `/_authenticated/cp-crisp-7x92k`.
 
-Things that won't work outside Lovable and need swapping:
+## Estimated total time
 
-1. **`lovable.auth.signInWithOAuth("google", …)`** — replace with `supabase.auth.signInWithOAuth({ provider: "google", options: { redirectTo } })`. Configure Google OAuth in the new Supabase dashboard (Auth → Providers → Google) with your own client ID/secret from Google Cloud Console.
-2. **Managed `_authenticated/route.tsx`** — keep the file but verify it's the version that calls `supabase.auth.getUser()`. It already is — no change needed.
-3. **`@/integrations/supabase/client.ts`, `client.server.ts`, `auth-middleware.ts`, `auth-attacher.ts`, `types.ts`** — these are auto-generated. Replace env reads to point at your new project (URL + keys). Regenerate `types.ts` with `npx supabase gen types typescript`.
-4. **`LOVABLE_API_KEY`** — only used if you call Lovable AI Gateway. If yes, either keep paying Lovable for the gateway, or swap to direct OpenAI/Anthropic with your own keys (need code changes wherever the gateway is called).
-5. **Lovable connector gateway calls** (Google Search Console etc.) — replace with direct provider OAuth in your app.
-6. **hCaptcha env vars** — `VITE_HCAPTCHA_SITEKEY` + `HCAPTCHA_SECRET` move to Vercel env.
+~4-5 hours of focused work across two days (Phases 0-3 day one, Phases 4-6 day two during a low-traffic window).
 
----
+## What I do next if you approve
 
-## Phase 3 — Deploy frontend to Vercel
+1. Create the `migration` branch.
+2. Wire `supabase.auth.signInWithOAuth("google", …)` into `/auth` page + add `/auth/callback` route.
+3. Update `migration-export/MIGRATION.md` to match this plan exactly.
+4. Hand you the commit to push — you handle the Vercel + Supabase clicks since they need your credentials.
 
-1. Push the repo to your own GitHub (Lovable Connect → GitHub if not already; then transfer ownership in GitHub).
-2. `vercel.com` → Import Project → pick repo. Vercel auto-detects Vite/TanStack Start.
-3. Add env vars in Vercel Project Settings → Environment Variables:
-   - `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`, `VITE_SUPABASE_PROJECT_ID`
-   - `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SERVICE_ROLE_KEY`
-   - `VITE_SITE_URL` (your final domain), `VITE_GA4_ID`, `VITE_POSTHOG_KEY`, `VITE_SENTRY_DSN`
-   - `VITE_HCAPTCHA_SITEKEY`, `HCAPTCHA_SECRET`
-4. First deploy → verify on the `*.vercel.app` URL. Smoke-test 5 tools, sign-in, blog, feedback.
-5. Add custom domain in Vercel → Domains. Update DNS (A `76.76.21.21` or CNAME per Vercel instructions). Wait for SSL.
-6. Re-publish `VITE_SITE_URL` with the final domain and redeploy so canonicals/sitemap absolutize.
-7. Resubmit `/sitemap.xml` to Google Search Console for the new domain.
-
----
-
-## Phase 4 — Cutover
-
-1. Freeze writes on Lovable (set a maintenance banner via `tool_settings`).
-2. Re-export any CSVs that changed since Phase 1 and re-import.
-3. Flip DNS to Vercel.
-4. Monitor Sentry + PostHog for errors for 48h.
-5. Keep Lovable project running 7 days as a fallback before deleting.
-
----
-
-## What you should expect to break or lose
-
-- **Auth users + passwords** — users will need to reset passwords unless you pay Supabase for an auth migration.
-- **Realtime subscribers** disconnect during cutover.
-- **`pg_cron` jobs** must be recreated on the new DB.
-- **Daily security scan endpoint** (`/api/public/hooks/security-scan`) keeps working; just re-point cron at the Vercel URL.
-- **Lovable AI Gateway**: if used, either keep paying for it or rewrite call sites.
-- **SEO**: 1–4 weeks of ranking dip on a domain change (mitigated by 301s; not needed if same domain).
-
----
-
-## What I will do next (after you approve)
-
-1. Generate `schema.sql` — a single consolidated SQL file with every table, RLS policy, GRANT, function, trigger, and cron job, ready to paste into the new Supabase project's SQL editor.
-2. Generate `MIGRATION.md` in the repo with the exact Phase 1–4 checklist + Vercel/Netlify/Render command snippets.
-3. List every file that contains `lovable.` or Lovable-specific env vars so you know exactly what to edit when you cut over.
-4. **Not** modify any auth, OAuth, or env code yet — that flip happens at cutover so the current live app keeps working.
-
-Approve and I'll generate `schema.sql` + `MIGRATION.md`.
+Approve and I'll start with step 2.
