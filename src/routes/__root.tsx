@@ -22,6 +22,7 @@ import "../lib/i18n";
 import { applyClientLocale } from "../lib/i18n";
 import { hreflangLinks } from "../lib/hreflang";
 import { OG_DEFAULT } from "../lib/site-url";
+import { organizationLd, websiteLd } from "../lib/seo/jsonld";
 
 
 function NotFoundComponent() {
@@ -165,6 +166,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap",
       },
       ...hreflangLinks("/"),
+    ],
+    scripts: [
+      { type: "application/ld+json", children: JSON.stringify(organizationLd()) },
+      { type: "application/ld+json", children: JSON.stringify(websiteLd()) },
     ],
   }),
   shellComponent: RootShell,
