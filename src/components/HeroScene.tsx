@@ -155,6 +155,9 @@ function Prism() {
       </mesh>
     </Float>
   );
+}
+
+
 
 // CSS-only fallback gradient that ALWAYS shows so the hero never looks empty.
 function HeroBackdrop() {
@@ -236,6 +239,9 @@ export function HeroScene() {
 
             <Core />
             <OrbitingNodes />
+            <TorusKnot />
+            <Prism />
+
 
             <Ring radius={2.1} tilt={[Math.PI / 2.4, 0, 0]} speed={0.18} color="#8B5CF6" />
             <Ring radius={2.5} tilt={[Math.PI / 3, Math.PI / 6, 0]} speed={-0.12} color="#6366F1" />
