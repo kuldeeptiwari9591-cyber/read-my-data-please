@@ -211,7 +211,7 @@ function AdminPanel() {
         </div>
 
         <div className="mt-6 flex gap-2 border-b border-border">
-          {(["posts", "feedback", "ops"] as const).map((t) => (
+          {(["posts", "feedback", "ops", "tools", "settings"] as const).map((t) => (
             <button
               key={t}
               onClick={() => setTab(t)}
