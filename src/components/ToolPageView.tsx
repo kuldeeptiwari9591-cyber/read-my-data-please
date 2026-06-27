@@ -10,7 +10,7 @@ import { TOOL_COMPONENTS } from "@/components/tools";
 import { ToolShell } from "@/components/tools/ToolShell";
 import { ComingSoonTool } from "@/components/tools/ComingSoonTool";
 import { RateLimitBanner } from "@/components/tools/RateLimitBanner";
-import { getToolContent } from "@/lib/tool-content";
+import { getToolContent, getAeoAnswer } from "@/lib/tool-content";
 import { ToolDisabledGate } from "@/components/ToolDisabledGate";
 import { ToolPageSkeleton } from "@/components/ToolPageSkeleton";
 import { toolIconMap, categoryColorMap } from "@/lib/toolIcons";
