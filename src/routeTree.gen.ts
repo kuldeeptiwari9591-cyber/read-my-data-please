@@ -24,6 +24,7 @@ import { Route as ReorderPdfPagesRouteImport } from './routes/reorder-pdf-pages'
 import { Route as RedactPdfRouteImport } from './routes/redact-pdf'
 import { Route as ProtectPdfRouteImport } from './routes/protect-pdf'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as PngToPdfRouteImport } from './routes/png-to-pdf'
 import { Route as PdfToWordRouteImport } from './routes/pdf-to-word'
 import { Route as PdfToPptRouteImport } from './routes/pdf-to-ppt'
 import { Route as PdfToPngRouteImport } from './routes/pdf-to-png'
@@ -148,6 +149,11 @@ const ProtectPdfRoute = ProtectPdfRouteImport.update({
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PngToPdfRoute = PngToPdfRouteImport.update({
+  id: '/png-to-pdf',
+  path: '/png-to-pdf',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PdfToWordRoute = PdfToWordRouteImport.update({
@@ -445,6 +451,7 @@ export interface FileRoutesByFullPath {
   '/pdf-to-png': typeof PdfToPngRoute
   '/pdf-to-ppt': typeof PdfToPptRoute
   '/pdf-to-word': typeof PdfToWordRoute
+  '/png-to-pdf': typeof PngToPdfRoute
   '/privacy': typeof PrivacyRoute
   '/protect-pdf': typeof ProtectPdfRoute
   '/redact-pdf': typeof RedactPdfRoute
@@ -511,6 +518,7 @@ export interface FileRoutesByTo {
   '/pdf-to-png': typeof PdfToPngRoute
   '/pdf-to-ppt': typeof PdfToPptRoute
   '/pdf-to-word': typeof PdfToWordRoute
+  '/png-to-pdf': typeof PngToPdfRoute
   '/privacy': typeof PrivacyRoute
   '/protect-pdf': typeof ProtectPdfRoute
   '/redact-pdf': typeof RedactPdfRoute
@@ -579,6 +587,7 @@ export interface FileRoutesById {
   '/pdf-to-png': typeof PdfToPngRoute
   '/pdf-to-ppt': typeof PdfToPptRoute
   '/pdf-to-word': typeof PdfToWordRoute
+  '/png-to-pdf': typeof PngToPdfRoute
   '/privacy': typeof PrivacyRoute
   '/protect-pdf': typeof ProtectPdfRoute
   '/redact-pdf': typeof RedactPdfRoute
@@ -647,6 +656,7 @@ export interface FileRouteTypes {
     | '/pdf-to-png'
     | '/pdf-to-ppt'
     | '/pdf-to-word'
+    | '/png-to-pdf'
     | '/privacy'
     | '/protect-pdf'
     | '/redact-pdf'
@@ -713,6 +723,7 @@ export interface FileRouteTypes {
     | '/pdf-to-png'
     | '/pdf-to-ppt'
     | '/pdf-to-word'
+    | '/png-to-pdf'
     | '/privacy'
     | '/protect-pdf'
     | '/redact-pdf'
@@ -780,6 +791,7 @@ export interface FileRouteTypes {
     | '/pdf-to-png'
     | '/pdf-to-ppt'
     | '/pdf-to-word'
+    | '/png-to-pdf'
     | '/privacy'
     | '/protect-pdf'
     | '/redact-pdf'
@@ -848,6 +860,7 @@ export interface RootRouteChildren {
   PdfToPngRoute: typeof PdfToPngRoute
   PdfToPptRoute: typeof PdfToPptRoute
   PdfToWordRoute: typeof PdfToWordRoute
+  PngToPdfRoute: typeof PngToPdfRoute
   PrivacyRoute: typeof PrivacyRoute
   ProtectPdfRoute: typeof ProtectPdfRoute
   RedactPdfRoute: typeof RedactPdfRoute
@@ -974,6 +987,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/png-to-pdf': {
+      id: '/png-to-pdf'
+      path: '/png-to-pdf'
+      fullPath: '/png-to-pdf'
+      preLoaderRoute: typeof PngToPdfRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pdf-to-word': {
@@ -1395,6 +1415,7 @@ const rootRouteChildren: RootRouteChildren = {
   PdfToPngRoute: PdfToPngRoute,
   PdfToPptRoute: PdfToPptRoute,
   PdfToWordRoute: PdfToWordRoute,
+  PngToPdfRoute: PngToPdfRoute,
   PrivacyRoute: PrivacyRoute,
   ProtectPdfRoute: ProtectPdfRoute,
   RedactPdfRoute: RedactPdfRoute,
