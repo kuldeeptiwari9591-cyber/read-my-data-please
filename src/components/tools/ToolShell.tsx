@@ -4,6 +4,7 @@ import { PdfThumbnailStrip } from "@/components/visuals/PdfThumbnailStrip";
 import { PDFHealthScore } from "@/components/visuals/PDFHealthScore";
 import { ShareCard } from "@/components/visuals/ShareCard";
 import { celebrate } from "@/lib/celebrate";
+import { TOOLS_BY_SLUG } from "@/lib/tools";
 
 interface FileDropProps {
   multiple?: boolean;
@@ -55,6 +56,52 @@ interface ToolShellProps {
   slug?: string;
 }
 
+function fmtBytes(b?: number) {
+  if (!b && b !== 0) return "";
+  if (b < 1024) return `${b} B`;
+  if (b < 1024 * 1024) return `${(b / 1024).toFixed(1)} KB`;
+  return `${(b / (1024 * 1024)).toFixed(1)} MB`;
+}
+
+function ShareCardSlot({ slug, title }: { slug: string; title: string }) {
+  const [downloaded, setDownloaded] = useState(false);
+  const [originalSize, setOriginalSize] = useState<number | undefined>();
+  const [resultSize, setResultSize] = useState<number | undefined>();
+  const [count, setCount] = useState<number | undefined>();
+
+  useEffect(() => {
+    const onUp = (e: Event) => {
+      const d = (e as CustomEvent).detail as { size?: number; count?: number };
+      setOriginalSize(d?.size);
+      setCount(d?.count);
+    };
+    const onDown = (e: Event) => {
+      const d = (e as CustomEvent).detail as { size?: number; slug?: string };
+      if (d?.slug && slug && d.slug !== slug) return;
+      setResultSize(d?.size);
+      setDownloaded(true);
+    };
+    window.addEventListener("crisppdf:upload", onUp);
+    window.addEventListener("crisppdf:download", onDown);
+    return () => {
+      window.removeEventListener("crisppdf:upload", onUp);
+      window.removeEventListener("crisppdf:download", onDown);
+    };
+  }, [slug]);
+
+  if (!downloaded || !slug) return null;
+
+  const ctx: Record<string, string> = {};
+  if (originalSize) ctx.originalSize = fmtBytes(originalSize);
+  if (resultSize) ctx.newSize = fmtBytes(resultSize);
+  if (originalSize && resultSize && originalSize > 0) {
+    ctx.percent = Math.max(0, Math.round((1 - resultSize / originalSize) * 100)).toString();
+  }
+  if (count) ctx.count = String(count);
+
+  return <ShareCard toolSlug={slug} toolName={title} context={ctx} />;
+}
+
 export function ToolShell({ title, description, icon, children, slug }: ToolShellProps) {
   const [resolvedSlug, setResolvedSlug] = useState<string | undefined>(slug);
   useEffect(() => {
@@ -65,8 +112,11 @@ export function ToolShell({ title, description, icon, children, slug }: ToolShel
     }
   }, [slug]);
 
+  const ctxSlug = resolvedSlug ?? "";
+  const ctxTitle = TOOLS_BY_SLUG[ctxSlug]?.name ?? String(title);
+
   return (
-    <ToolShellContext.Provider value={{ slug: resolvedSlug ?? "", title: String(title) }}>
+    <ToolShellContext.Provider value={{ slug: ctxSlug, title: ctxTitle }}>
       <div>
         <div className="flex items-start gap-5">
           <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/25 to-secondary/25 ring-1 ring-primary/30 shadow-[0_0_30px_rgba(99,102,241,0.25)]">
@@ -78,6 +128,7 @@ export function ToolShell({ title, description, icon, children, slug }: ToolShel
           </div>
         </div>
         <div className="mt-10">{children}</div>
+        <ShareCardSlot slug={ctxSlug} title={ctxTitle} />
       </div>
     </ToolShellContext.Provider>
   );
