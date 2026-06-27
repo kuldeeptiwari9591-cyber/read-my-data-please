@@ -37,6 +37,7 @@ export function HoloUploadZone({
   const [drag, setDrag] = useState(false);
   const [dropPoint, setDropPoint] = useState<{ x: number; y: number } | null>(null);
   const [flash, setFlash] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const scale = useSpring(1, { stiffness: 300, damping: 20 });
