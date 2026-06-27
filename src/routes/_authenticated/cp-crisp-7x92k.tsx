@@ -261,13 +261,25 @@ function AdminPanel() {
                   rows={3}
                   className="w-full rounded-md border border-border bg-surface/40 px-3 py-2 text-sm"
                 />
-                <textarea
-                  placeholder="Body (markdown / plain text)"
-                  value={draft.body}
-                  onChange={(e) => setDraft({ ...draft, body: e.target.value })}
-                  rows={14}
-                  className="w-full rounded-md border border-border bg-surface/40 px-3 py-2 font-mono text-xs"
-                />
+                <Suspense
+                  fallback={
+                    <textarea
+                      value={draft.body}
+                      onChange={(e) => setDraft({ ...draft, body: e.target.value })}
+                      rows={14}
+                      className="w-full rounded-md border border-border bg-surface/40 px-3 py-2 font-mono text-xs"
+                    />
+                  }
+                >
+                  <div data-color-mode={isDark ? "dark" : "light"}>
+                    <MDEditor
+                      value={draft.body}
+                      onChange={(v) => setDraft({ ...draft, body: v ?? "" })}
+                      preview="live"
+                      height={500}
+                    />
+                  </div>
+                </Suspense>
                 <label className="flex items-center gap-2 text-sm">
                   <input
                     type="checkbox"
