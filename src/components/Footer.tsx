@@ -17,8 +17,9 @@ export function Footer() {
   return (
     <footer className="relative mt-32 border-t border-border/60 bg-surface/40 backdrop-blur-xl">
       <div className="pointer-events-none absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
-      <div className="mx-auto grid max-w-7xl gap-12 px-6 py-16 md:grid-cols-5">
-        <div className="md:col-span-2">
+      <div className="mx-auto grid max-w-7xl gap-12 px-6 py-16 md:grid-cols-3 lg:grid-cols-7">
+        <div className="lg:col-span-2">
+
           <Logo size={36} />
           <p className="mt-4 max-w-xs text-sm text-muted-foreground">
             Every PDF tool you need. Free. Crisp. Fast. No signup, no watermarks, no nonsense.
