@@ -10,7 +10,7 @@ import {
   FileLock2,
   Infinity as InfinityIcon,
 } from "lucide-react";
-import { HeroScene } from "@/components/HeroScene";
+import { HeroSceneLazy as HeroScene } from "@/components/HeroSceneLazy";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { GlassCard } from "@/components/GlassCard";

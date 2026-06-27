@@ -25,6 +25,8 @@ import { OG_DEFAULT } from "../lib/site-url";
 import { organizationLd, websiteLd } from "../lib/seo/jsonld";
 import { initPostHog } from "../lib/posthog";
 import { initSentry } from "../lib/sentry";
+import { startWebVitals } from "../lib/web-vitals";
+import { startAxeAudit } from "../lib/a11y-dev";
 
 
 function NotFoundComponent() {
@@ -216,6 +218,8 @@ function RootComponent() {
     applyClientLocale();
     initSentry();
     initPostHog();
+    startWebVitals();
+    void startAxeAudit();
   }, []);
 
   return (
