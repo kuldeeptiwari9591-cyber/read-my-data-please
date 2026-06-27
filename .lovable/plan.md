@@ -1,109 +1,60 @@
-## Goal
-Layer **SEO + AEO (Answer Engine Optimization) + GEO (Generative Engine Optimization) + pSEO (Programmatic SEO)** on top of the existing 40 tools so CrispPDF ranks in Google, gets cited by ChatGPT/Perplexity/Gemini/Google AI Overviews, and captures long-tail traffic at scale.
+## CrispPDF SEO Research Plan (no code)
 
-The 40 core tool pages, canonicals, sitemap, JSON-LD, hreflang, and per-tool FAQs already exist — this plan adds the missing layers.
+Deliverable: a research-only knowledge pack under `docs/seo/` that the next prompt uses to implement. Zero code/route changes this turn.
 
----
+### Data sourcing
+- **Semrush API** (US database default, IN database for India task) for the 15 highest-value tools and 3 main competitors only — exact volumes, KDI, SERP, gaps.
+- **Knowledge-grounded estimates** (banded volume: low / med / high / very-high) for the remaining 25 tools, long-tails, AEO questions, and blog ideas.
+- Every Semrush-derived number gets a source tag `[semrush:us]` or `[semrush:in]`; every estimate gets `[est]` so we can later upgrade estimates to real data.
 
-## 1. AEO — Answer Engine Optimization (cite-worthy structure)
-Make every tool & blog page easy for LLMs to quote.
+### Top 15 tools getting full Semrush treatment
+merge-pdf, split-pdf, compress-pdf, pdf-to-word, pdf-to-excel, pdf-to-jpg, word-to-pdf, jpg-to-pdf, rotate-pdf, unlock-pdf, protect-pdf, esign-pdf, ocr-pdf, edit-metadata-pdf (proxy for "edit pdf"), watermark-pdf.
 
-- **TL;DR / Answer block** at top of each tool page (40–60 word direct answer to "how do I {tool name}"). Used by AI Overviews and Perplexity.
-- **Speakable schema** (`SpeakableSpecification`) on the TL;DR + FAQ — voice + AI assistants.
-- **"Last updated" + "Reviewed by"** byline on every tool/blog page → `dateModified` in JSON-LD.
-- Expand `HowTo` JSON-LD with `tool`, `supply`, `totalTime`, `estimatedCost: $0`.
-- Add **`Question` + `Answer` JSON-LD** stand-alone (in addition to FAQPage) for top 3 questions per tool.
-- Self-contained answers — every FAQ answer must stand alone without surrounding context (LLMs quote single sentences).
+Per tool: `keyword_research` (primary + related + questions), `serp_analysis` (KDI + who ranks), `keyword_compare` (primary vs 2 long-tails).
 
-## 2. GEO — Generative Engine Optimization (get cited by LLMs)
-- **`llms.txt`** at `/llms.txt` and `/llms-full.txt` — the emerging standard ChatGPT/Anthropic/Perplexity crawlers read. Lists all 40 tools + canonical descriptions.
-- **`ai.txt`** declaring crawl policy for GPTBot, ClaudeBot, PerplexityBot, Google-Extended (allow — we *want* citations).
-- **Statistics & comparison blocks** on tool pages ("CrispPDF processes a 50 MB PDF in ~3 s vs. iLovePDF ~8 s") — LLMs prefer pages with quotable numbers.
-- **Author entity / Organization sameAs** linking to GitHub, X, LinkedIn → builds entity graph Google + LLMs use.
+### Competitor pull
+`domain_analysis` + `top_pages` + `competitive_analysis` for ilovepdf.com, smallpdf.com, pdf24.org — feeds Task 6 gap analysis and Task 4B comparison page priority. India angle: re-run `domain_analysis` on database `in` for the same three.
 
-## 3. pSEO — Programmatic SEO (3 new route templates, ~600 pages)
-Generated from data tables, each with unique copy + schema:
+### Output files under `docs/seo/`
 
-**A. Tool × Use-case** — `/{tool}-for-{use-case}` (≈200 pages)
-  e.g. `/compress-pdf-for-email`, `/merge-pdf-for-students`, `/esign-pdf-for-contracts`
-  Source: `useCases[]` array per tool (10 use-cases × 40 tools, filtered for sense → ~200).
+```text
+docs/seo/
+├── 00-master-plan.md       Final deliverable: Top 100, quick wins, pSEO priority, content calendar, India quick wins
+├── 01-tool-keywords.md     Task 1 — 40-row table (15 Semrush-backed, 25 estimated)
+├── 02-india.md             Task 2 — Hinglish, mobile, student, state/city
+├── 03-longtail-clusters.md Task 3 — 50 long-tails across 5 intent buckets
+├── 04-pseo-pages.md        Task 4 — use-case (40), comparison (50), format (20) page specs
+├── 05-blog-plan.md         Task 5 — 12 posts with outline, internal links, KW
+├── 06-competitor-gap.md    Task 6 — gap keywords, PAA, schema audit
+├── 07-aeo-geo.md           Task 7 — 30 AI questions + 50-word TL;DRs per tool
+└── 08-intent-map.md        Task 8 — info/nav/transactional/commercial map for top 15
+```
 
-**B. Tool comparisons** — `/{tool}-vs-{competitor}` (≈120 pages)
-  e.g. `/merge-pdf-vs-ilovepdf`, `/compress-pdf-vs-smallpdf`, `/pdf-to-word-vs-adobe`
-  Source: 3 competitors × 40 tools. Honest comparison table (price, privacy, watermark, signup, speed).
+### Format inside each file
+- Tables exactly matching the user's requested columns.
+- Each keyword row carries: volume band, competition, intent, target URL, source tag.
+- Every claim about competitor weakness is concrete (price, watermark, signup wall, upload-to-server) — no vibes.
 
-**C. Format conversions matrix** — `/{from}-to-{to}` (≈30 pages)
-  Fills gaps in the convert grid: `/png-to-pdf`, `/csv-to-pdf`, `/txt-to-pdf`, etc. Routes either to a real tool or to a "coming soon + closest alternative" page (still indexable).
+### Master plan structure (`00-master-plan.md`)
+1. Top 100 keywords ranked by `(volume × intent) / competition`, with target page + priority (P0/P1/P2).
+2. 20 quick-win keywords (low competition + med volume, rankable in 2–4 weeks).
+3. 50 pSEO pages to ship first — ordered, with expected traffic band.
+4. Content calendar (Week 1 tool-page optimisation → Week 2–4 blog → Month 2 pSEO → Month 3 comparisons).
+5. India-first top 10 with Hindi/Hinglish variants.
 
-Each pSEO page has: unique H1, unique 150-word intro, unique FAQ (3 Qs), canonical to itself, JSON-LD, internal links to 3 sibling pages + parent tool.
+### Honest constraints
+- Semrush volumes for non-US markets can be sparse; India numbers will lean on `database: in` where available and fall back to bands.
+- "Featured snippet opportunity (yes/no)" judged from SERP feature presence in `serp_analysis`; for non-Semrush rows it stays an estimate flagged `[est]`.
+- I will not invent specific monthly numbers for the 25 estimated tools — only bands.
 
-## 4. Internal linking + topical authority
-- **Related-tools cluster** (3 cards) at bottom of every tool page, grouped by category.
-- **Breadcrumb on pSEO pages** (Home › Tool › Use case).
-- **Hub pages** per category: `/organize-pdf`, `/convert-pdf`, `/edit-pdf`, `/secure-pdf` — list every tool in category with descriptions (currently flat).
-- **Contextual links** in blog posts auto-linked to relevant tool pages.
+### Out of scope this turn
+- No route, component, schema, or sitemap changes.
+- No new pSEO/blog/route files — only the research markdown under `docs/seo/`.
+- No multi-language keyword research beyond India (EN+HI); ES/PT/HI variants for the other locales come in a later pass if you want.
 
-## 5. Technical SEO hardening
-- **Sitemap split**: `/sitemap.xml` index → `/sitemap-tools.xml`, `/sitemap-pseo.xml`, `/sitemap-blog.xml`, `/sitemap-static.xml` (Google's 50k-URL rule + faster recrawl).
-- **`<lastmod>`** populated from build timestamp / blog `updated_at`.
-- **WebSite + SearchAction JSON-LD** at root (sitelinks search box).
-- **Image alt text audit** — every `<img>` (logo, icons, blog images) gets descriptive alt.
-- **Core Web Vitals**: lazy-load below-fold hero canvas (already partial), defer non-critical JS, preload logo + hero font.
-- **404 → suggest tools** based on URL slug (already animated, add fuzzy match).
+### Build order once approved
+1. Run all Semrush calls (top 15 tools US + IN, 3 competitors US + IN, ~10 SERPs).
+2. Write the 8 task files in parallel.
+3. Synthesise `00-master-plan.md` last from the other 8.
 
-## 6. Content / E-E-A-T signals
-- **About page**: add team / founder section (real or stated as solo dev) → Person schema.
-- **Tool pages**: add "Built and maintained by [Name], updated {date}" line.
-- **Blog**: expand from 3 → 12 posts (9 new, covering long-tail like "how to merge PDF on iPhone without app", "reduce PDF size below 100 KB").
-- **Trust signals**: visible "No upload — runs in your browser" badge near every upload zone (already there partially) + privacy summary on every tool page.
-
-## 7. Tracking what works
-- GA4 already wired. Add **`tool_view`, `pseo_view`, `comparison_click`, `outbound_click`** events.
-- **Search Console**: emit `/llms.txt` + new sitemaps so user can submit them after launch.
-
----
-
-## Technical details
-
-### New files
-- `src/lib/pseo/use-cases.ts` — `Record<toolSlug, UseCase[]>`
-- `src/lib/pseo/competitors.ts` — competitor data table
-- `src/lib/pseo/formats.ts` — format conversion matrix
-- `src/routes/$tool-for-$useCase.tsx` — dynamic pSEO route (or flat split files generated)
-- `src/routes/$tool-vs-$competitor.tsx`
-- `src/routes/$from-to-$to.tsx`
-- `src/routes/organize-pdf.tsx`, `convert-pdf.tsx`, `edit-pdf.tsx`, `secure-pdf.tsx` — category hubs
-- `src/routes/llms[.]txt.ts`, `src/routes/llms-full[.]txt.ts`
-- `src/routes/ai[.]txt.ts`
-- `src/routes/sitemap-tools[.]xml.ts`, `sitemap-pseo[.]xml.ts`, `sitemap-blog[.]xml.ts`
-- `src/components/seo/AnswerBlock.tsx` (TL;DR component)
-- `src/components/seo/RelatedTools.tsx`
-- `src/components/seo/ComparisonTable.tsx`
-- `src/lib/seo/jsonld.ts` — centralised JSON-LD builders (Question, Speakable, Organization, BreadcrumbList)
-
-### Modified files
-- `src/components/ToolPageView.tsx` — inject AnswerBlock, RelatedTools, last-updated byline
-- `src/lib/tool-head.ts` — add Question/Speakable schema, dateModified
-- `src/routes/sitemap[.]xml.ts` — convert to sitemap-index
-- `src/routes/__root.tsx` — add WebSite+SearchAction JSON-LD
-- `public/robots.txt` — point at sitemap-index, allow AI crawlers
-- `src/lib/tools.ts` — add `useCases`, `lastUpdated` fields
-
-### Out of scope (ask before doing)
-- Multi-language pSEO duplication (would 4× page count — confirm first)
-- Paid backlink / outreach campaigns
-- Real benchmark numbers (need actual measurements; will use honest placeholders flagged in code)
-
----
-
-## Build order
-1. AEO foundation (AnswerBlock + Speakable + dateModified) — biggest LLM ranking win, lowest effort
-2. `llms.txt` + `ai.txt` + WebSite JSON-LD — 30 min, instant GEO win
-3. Category hub pages + RelatedTools internal-link block
-4. pSEO templates (use-case → comparison → format) — biggest scale, do in that order
-5. Sitemap split + new sitemaps
-6. Blog expansion (9 new posts) — last, longest-running
-
----
-
-Shall I proceed with all 6 phases, or do you want to ship in smaller chunks (e.g. **Phase 1–3 only** first, then review traffic before pSEO)?
+Approve and I'll execute the research and write the 9 files — no app code touched.
