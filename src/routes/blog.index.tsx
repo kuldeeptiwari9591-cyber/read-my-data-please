@@ -7,7 +7,7 @@ import { Footer } from "@/components/Footer";
 import { listPublishedPosts, type BlogListItem } from "@/lib/blog.functions";
 import { abs, OG_DEFAULT } from "@/lib/site-url";
 
-export const Route = createFileRoute("/blog")({
+export const Route = createFileRoute("/blog/")({
   loader: () => listPublishedPosts(),
   head: () => {
     const canonical = abs("/blog");
