@@ -9,6 +9,7 @@ import {
   adminUpsertPost,
   adminDeletePost,
   adminListFeedback,
+  adminUpdateFeedbackStatus,
   adminOpsSummary,
   adminListToolSettings,
   adminSetToolEnabled,
