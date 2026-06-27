@@ -14,6 +14,8 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 
 import { Toaster } from "../components/ui/sonner";
 import { CookieBanner } from "../components/CookieBanner";
+import { SiteBanner } from "../components/SiteBanner";
+import { MaintenanceGate } from "../components/MaintenanceGate";
 import { Logo } from "../components/Logo";
 import logoAsset from "../assets/crisppdf-logo.png.asset.json";
 import "../lib/i18n";
