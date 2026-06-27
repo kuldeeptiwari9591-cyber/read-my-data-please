@@ -68,11 +68,11 @@ const CATEGORY_ORDER: ToolCategory[] = [
   "secure",
 ];
 
-const STATS = [
-  { value: "40", label: "Free tools" },
-  { value: "0", label: "Signups required" },
-  { value: "0", label: "Watermarks added" },
-  { value: "∞", label: "Daily uses" },
+const STATS: Array<{ label: string; target?: number; suffix?: string; static?: string }> = [
+  { label: "Free tools", target: 40, suffix: "+" },
+  { label: "Signups required", target: 0 },
+  { label: "Watermarks added", target: 0 },
+  { label: "Daily uses", static: "∞" },
 ];
 
 const FEATURES = [
