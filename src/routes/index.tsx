@@ -16,6 +16,7 @@ import { Footer } from "@/components/Footer";
 import { GlassCard } from "@/components/GlassCard";
 import { ToolCard } from "@/components/ToolCard";
 import { SearchBar } from "@/components/SearchBar";
+import { AnimatedCounter } from "@/components/AnimatedCounter";
 import { ParticlesBackground } from "@/components/visuals/ParticlesBackground";
 import { GradientBlob } from "@/components/visuals/GradientBlob";
 import {
