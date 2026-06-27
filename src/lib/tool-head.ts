@@ -2,6 +2,9 @@ import { TOOLS_BY_SLUG } from "@/lib/tools";
 import { getToolContent } from "@/lib/tool-content";
 import { abs, OG_DEFAULT } from "@/lib/site-url";
 import { hreflangLinks } from "@/lib/hreflang";
+import { questionLd, speakableLd } from "@/lib/seo/jsonld";
+
+const SITE_LAST_UPDATED = "2026-06-27";
 
 export function buildToolHead(slug: string) {
   const tool = TOOLS_BY_SLUG[slug];
@@ -24,11 +27,15 @@ export function buildToolHead(slug: string) {
     operatingSystem: "Any (web browser)",
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
     description,
+    dateModified: SITE_LAST_UPDATED,
   };
   const howTo = {
     "@context": "https://schema.org",
     "@type": "HowTo",
     name: `How to use ${tool.name}`,
+    totalTime: "PT1M",
+    estimatedCost: { "@type": "MonetaryAmount", currency: "USD", value: "0" },
+    tool: [{ "@type": "HowToTool", name: "Modern web browser" }],
     step: content.howTo.map((s, i) => ({
       "@type": "HowToStep",
       position: i + 1,
@@ -77,6 +84,11 @@ export function buildToolHead(slug: string) {
       { type: "application/ld+json", children: JSON.stringify(howTo) },
       { type: "application/ld+json", children: JSON.stringify(faqLd) },
       { type: "application/ld+json", children: JSON.stringify(breadcrumb) },
+      { type: "application/ld+json", children: JSON.stringify(speakableLd(path)) },
+      ...content.faqs.slice(0, 3).map((f) => ({
+        type: "application/ld+json",
+        children: JSON.stringify(questionLd(f.q, f.a)),
+      })),
     ],
   };
 }

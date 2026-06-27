@@ -1,6 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { TOOLS } from "@/lib/tools";
+import { allUseCasePairs } from "@/lib/pseo/use-cases";
+import { allComparisonPairs } from "@/lib/pseo/competitors";
+import { FORMAT_PAIRS } from "@/lib/pseo/formats";
 
 import { listPublishedPosts } from "@/lib/blog.functions";
 
@@ -39,10 +42,29 @@ export const Route = createFileRoute("/sitemap.xml")({
             priority: "0.6",
             lastmod: p.published_at ?? undefined,
           })),
+          { path: "/organize-pdf", changefreq: "monthly", priority: "0.7" },
+          { path: "/convert-pdf", changefreq: "monthly", priority: "0.7" },
+          { path: "/edit-pdf", changefreq: "monthly", priority: "0.7" },
+          { path: "/secure-pdf", changefreq: "monthly", priority: "0.7" },
           ...TOOLS.map((t) => ({
             path: `/${t.slug}`,
             changefreq: "monthly" as const,
             priority: "0.8",
+          })),
+          ...allUseCasePairs().map((p) => ({
+            path: `/use-cases/${p.toolSlug}-for-${p.useCaseSlug}`,
+            changefreq: "monthly" as const,
+            priority: "0.5",
+          })),
+          ...allComparisonPairs().map((p) => ({
+            path: `/vs/${p.toolSlug}-vs-${p.competitorSlug}`,
+            changefreq: "monthly" as const,
+            priority: "0.5",
+          })),
+          ...FORMAT_PAIRS.map((f) => ({
+            path: `/convert/${f.slug}`,
+            changefreq: "monthly" as const,
+            priority: "0.6",
           })),
         ];
 

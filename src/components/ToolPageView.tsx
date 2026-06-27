@@ -15,6 +15,9 @@ import { ToolDisabledGate } from "@/components/ToolDisabledGate";
 import { ToolPageSkeleton } from "@/components/ToolPageSkeleton";
 import { toolIconMap, categoryColorMap } from "@/lib/toolIcons";
 import { analytics } from "@/lib/analytics";
+import { AnswerBlock } from "@/components/seo/AnswerBlock";
+import { USE_CASES } from "@/lib/pseo/use-cases";
+import { COMPETITORS } from "@/lib/pseo/competitors";
 
 export function ToolPageView({ slug }: { slug: string }) {
   const tool = TOOLS_BY_SLUG[slug];
@@ -51,6 +54,10 @@ export function ToolPageView({ slug }: { slug: string }) {
   const related = TOOLS.filter(
     (t) => t.category === tool.category && t.slug !== tool.slug,
   ).slice(0, 4);
+
+  const useCaseLinks = USE_CASES.filter((u) => u.toolSlugs.includes(tool.slug)).slice(0, 6);
+  const compareLinks = COMPETITORS.filter((c) => c.toolSlugs.includes(tool.slug));
+  const answer = `${tool.name} on CrispPDF is the fastest free way to ${tool.short.toLowerCase()}. ${tool.processing === "browser" ? "Runs entirely in your browser — your file is never uploaded." : "Server-assisted but files are processed in memory and discarded immediately."} No signup, no watermark, no daily limit.`;
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-background text-foreground">
@@ -134,6 +141,14 @@ export function ToolPageView({ slug }: { slug: string }) {
           </div>
         </div>
 
+        <AnswerBlock title={tool.name} answer={answer} />
+
+        <p className="mt-4 font-mono text-[11px] text-muted-foreground">
+          Updated 2026 · Maintained by the CrispPDF team
+        </p>
+
+
+
         <div className="mt-16">
           <p className="font-mono text-xs uppercase tracking-[0.2em] text-primary">// How to use</p>
           <h2 className="mt-2 font-display text-2xl font-semibold md:text-3xl">
@@ -207,7 +222,42 @@ export function ToolPageView({ slug }: { slug: string }) {
             </div>
           </div>
         )}
+
+        {useCaseLinks.length > 0 && (
+          <div className="mt-16">
+            <h2 className="font-display text-xl font-semibold">{tool.name} for…</h2>
+            <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {useCaseLinks.map((u) => (
+                <Link
+                  key={u.slug}
+                  to={`/use-cases/${tool.slug}-for-${u.slug}` as never}
+                  className="rounded-xl border border-border bg-surface/40 px-4 py-3 text-sm font-medium transition-colors hover:border-primary/60"
+                >
+                  {tool.name} for {u.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {compareLinks.length > 0 && (
+          <div className="mt-12">
+            <h2 className="font-display text-xl font-semibold">Compare {tool.name} with</h2>
+            <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
+              {compareLinks.map((c) => (
+                <Link
+                  key={c.slug}
+                  to={`/vs/${tool.slug}-vs-${c.slug}` as never}
+                  className="rounded-xl border border-border bg-surface/40 px-4 py-3 text-sm font-medium transition-colors hover:border-primary/60"
+                >
+                  {tool.name} vs {c.name}
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
       </section>
+
 
       <Footer />
     </div>
