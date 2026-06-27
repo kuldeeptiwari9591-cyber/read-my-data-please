@@ -1,5 +1,6 @@
 import { Logo } from "./Logo";
 import { MegaMenu } from "./MegaMenu";
+import { ThemeToggle } from "./ThemeToggle";
 
 export function Header() {
   return (
@@ -8,6 +9,7 @@ export function Header() {
         <Logo size={34} />
         <div className="flex items-center gap-1 sm:gap-2">
           <MegaMenu />
+          <ThemeToggle />
         </div>
       </div>
     </header>
