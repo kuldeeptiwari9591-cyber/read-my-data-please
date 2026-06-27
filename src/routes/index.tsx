@@ -207,7 +207,7 @@ function Index() {
           to="rgba(6,182,212,0.25)"
           duration={18}
         />
-        <div className="relative z-10 mx-auto flex max-w-6xl flex-col items-center justify-center px-6 pt-20 pb-12 text-center md:pt-24 md:pb-16">
+        <div className="relative z-10 mx-auto flex max-w-6xl flex-col items-center justify-center px-6 pt-28 pb-24 text-center md:pt-40 md:pb-32 lg:min-h-[88vh]">
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -222,7 +222,7 @@ function Index() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="mt-6 font-display text-5xl font-bold leading-[1.05] tracking-tight md:text-7xl"
+            className="mt-8 font-display text-6xl font-bold leading-[1.02] tracking-tight md:text-8xl lg:text-[8.5rem]"
           >
             Every PDF tool
             <br />

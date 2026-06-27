@@ -103,6 +103,59 @@ function OrbitingNodes() {
   );
 }
 
+// Slow-spinning torus knot — second focal element for retention.
+function TorusKnot() {
+  const ref = useRef<THREE.Mesh>(null);
+  useFrame((state) => {
+    const t = state.clock.elapsedTime;
+    if (ref.current) {
+      ref.current.rotation.x = t * 0.22;
+      ref.current.rotation.y = t * 0.14;
+    }
+  });
+  return (
+    <Float speed={0.8} rotationIntensity={0.4} floatIntensity={0.8}>
+      <mesh ref={ref} position={[3.6, 1.4, -1]}>
+        <torusKnotGeometry args={[0.42, 0.13, 96, 16]} />
+        <meshStandardMaterial
+          color="#06B6D4"
+          emissive="#0891B2"
+          emissiveIntensity={0.6}
+          metalness={0.6}
+          roughness={0.25}
+        />
+      </mesh>
+    </Float>
+  );
+}
+
+// Slow drifting prism on the opposite side, balances composition.
+function Prism() {
+  const ref = useRef<THREE.Mesh>(null);
+  useFrame((state) => {
+    const t = state.clock.elapsedTime;
+    if (ref.current) {
+      ref.current.rotation.y = t * 0.18;
+      ref.current.rotation.z = t * 0.08;
+    }
+  });
+  return (
+    <Float speed={0.6} rotationIntensity={0.3} floatIntensity={0.6}>
+      <mesh ref={ref} position={[-3.8, -1.2, -1.5]}>
+        <octahedronGeometry args={[0.55, 0]} />
+        <meshStandardMaterial
+          color="#F472B6"
+          emissive="#DB2777"
+          emissiveIntensity={0.4}
+          metalness={0.5}
+          roughness={0.3}
+          transparent
+          opacity={0.85}
+        />
+      </mesh>
+    </Float>
+  );
+
 // CSS-only fallback gradient that ALWAYS shows so the hero never looks empty.
 function HeroBackdrop() {
   return (
