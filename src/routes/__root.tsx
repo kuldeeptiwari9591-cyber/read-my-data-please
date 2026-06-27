@@ -177,11 +177,21 @@ function RootShell({ children }: { children: ReactNode }) {
   // SSR renders light theme; client applies stored preference pre-paint via
   // the inline script below to prevent a flash.
   const themeBootstrap = `(function(){try{var t=localStorage.getItem('crisppdf-theme');if(t==='dark'){document.documentElement.classList.add('dark');}}catch(e){}})();`;
+  const gaId = import.meta.env.VITE_GA4_ID as string | undefined;
+  const gaBootstrap = gaId
+    ? `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${gaId}',{anonymize_ip:true,page_path:window.location.pathname});`
+    : null;
   return (
     <html lang="en">
       <head>
         <HeadContent />
         <script dangerouslySetInnerHTML={{ __html: themeBootstrap }} />
+        {gaId && (
+          <>
+            <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} />
+            <script dangerouslySetInnerHTML={{ __html: gaBootstrap! }} />
+          </>
+        )}
       </head>
       <body className="bg-background text-foreground">
         {children}
