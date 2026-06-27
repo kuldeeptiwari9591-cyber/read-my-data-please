@@ -59,12 +59,9 @@ export function ToolPageView({ slug }: { slug: string }) {
             CrispPDF
           </Link>
           <span>/</span>
-          <Link to="/" className="transition-colors hover:text-foreground">
-            Tools
-          </Link>
-          <span>/</span>
           <span className="font-mono text-foreground">{tool.name}</span>
         </nav>
+
 
         <Link
           to="/"
