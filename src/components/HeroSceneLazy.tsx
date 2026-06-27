@@ -19,11 +19,12 @@ export function HeroSceneLazy() {
     const w = window as Window & {
       requestIdleCallback?: (cb: () => void, opts?: { timeout?: number }) => number;
     };
-    const handle = w.requestIdleCallback
-      ? w.requestIdleCallback(() => setShow(true), { timeout: 1500 })
+    const ric = w.requestIdleCallback;
+    const handle = ric
+      ? ric(() => setShow(true), { timeout: 1500 })
       : window.setTimeout(() => setShow(true), 600);
     return () => {
-      if (w.requestIdleCallback && typeof handle === "number") {
+      if (ric && typeof handle === "number") {
         (w as unknown as { cancelIdleCallback?: (h: number) => void }).cancelIdleCallback?.(handle);
       } else {
         clearTimeout(handle as unknown as number);
