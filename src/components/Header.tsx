@@ -33,7 +33,7 @@ export function Header() {
           <Link to="/" hash="how" className="transition-colors hover:text-foreground">
             {tr("howItWorks")}
           </Link>
-          <Link to="/" hash="why" className="transition-colors hover:text-foreground">
+          <Link to="/why-crisppdf" className="transition-colors hover:text-foreground">
             {tr("whyCrisp")}
           </Link>
           <Link to="/blog" className="transition-colors hover:text-foreground">

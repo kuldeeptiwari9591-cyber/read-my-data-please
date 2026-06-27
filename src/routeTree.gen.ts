@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WordToPdfRouteImport } from './routes/word-to-pdf'
+import { Route as WhyCrisppdfRouteImport } from './routes/why-crisppdf'
 import { Route as WebpToPdfRouteImport } from './routes/webp-to-pdf'
 import { Route as WatermarkPdfRouteImport } from './routes/watermark-pdf'
 import { Route as UnlockPdfRouteImport } from './routes/unlock-pdf'
@@ -45,6 +46,8 @@ import { Route as HtmlToPdfRouteImport } from './routes/html-to-pdf'
 import { Route as HeicToPdfRouteImport } from './routes/heic-to-pdf'
 import { Route as GrayscalePdfRouteImport } from './routes/grayscale-pdf'
 import { Route as FlattenPdfRouteImport } from './routes/flatten-pdf'
+import { Route as FeedbackRouteImport } from './routes/feedback'
+import { Route as FaqRouteImport } from './routes/faq'
 import { Route as ExtractTextPdfRouteImport } from './routes/extract-text-pdf'
 import { Route as ExtractPdfPagesRouteImport } from './routes/extract-pdf-pages'
 import { Route as ExtractImagesPdfRouteImport } from './routes/extract-images-pdf'
@@ -79,6 +82,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AiDottxtRouteImport } from './routes/ai[.]txt'
 import { Route as AddWatermarkTextPdfRouteImport } from './routes/add-watermark-text-pdf'
 import { Route as AddPageNumbersPdfRouteImport } from './routes/add-page-numbers-pdf'
+import { Route as AboutCrisppdfRouteImport } from './routes/about-crisppdf'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
@@ -92,6 +96,11 @@ import { Route as AuthenticatedCpCrisp7x92kRouteImport } from './routes/_authent
 const WordToPdfRoute = WordToPdfRouteImport.update({
   id: '/word-to-pdf',
   path: '/word-to-pdf',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WhyCrisppdfRoute = WhyCrisppdfRouteImport.update({
+  id: '/why-crisppdf',
+  path: '/why-crisppdf',
   getParentRoute: () => rootRouteImport,
 } as any)
 const WebpToPdfRoute = WebpToPdfRouteImport.update({
@@ -269,6 +278,16 @@ const FlattenPdfRoute = FlattenPdfRouteImport.update({
   path: '/flatten-pdf',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FeedbackRoute = FeedbackRouteImport.update({
+  id: '/feedback',
+  path: '/feedback',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ExtractTextPdfRoute = ExtractTextPdfRouteImport.update({
   id: '/extract-text-pdf',
   path: '/extract-text-pdf',
@@ -440,6 +459,11 @@ const AddPageNumbersPdfRoute = AddPageNumbersPdfRouteImport.update({
   path: '/add-page-numbers-pdf',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AboutCrisppdfRoute = AboutCrisppdfRouteImport.update({
+  id: '/about-crisppdf',
+  path: '/about-crisppdf',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -489,6 +513,7 @@ const AuthenticatedCpCrisp7x92kRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/about-crisppdf': typeof AboutCrisppdfRoute
   '/add-page-numbers-pdf': typeof AddPageNumbersPdfRoute
   '/add-watermark-text-pdf': typeof AddWatermarkTextPdfRoute
   '/ai.txt': typeof AiDottxtRoute
@@ -523,6 +548,8 @@ export interface FileRoutesByFullPath {
   '/extract-images-pdf': typeof ExtractImagesPdfRoute
   '/extract-pdf-pages': typeof ExtractPdfPagesRoute
   '/extract-text-pdf': typeof ExtractTextPdfRoute
+  '/faq': typeof FaqRoute
+  '/feedback': typeof FeedbackRoute
   '/flatten-pdf': typeof FlattenPdfRoute
   '/grayscale-pdf': typeof GrayscalePdfRoute
   '/heic-to-pdf': typeof HeicToPdfRoute
@@ -558,6 +585,7 @@ export interface FileRoutesByFullPath {
   '/unlock-pdf': typeof UnlockPdfRoute
   '/watermark-pdf': typeof WatermarkPdfRoute
   '/webp-to-pdf': typeof WebpToPdfRoute
+  '/why-crisppdf': typeof WhyCrisppdfRoute
   '/word-to-pdf': typeof WordToPdfRoute
   '/cp-crisp-7x92k': typeof AuthenticatedCpCrisp7x92kRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -569,6 +597,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/about-crisppdf': typeof AboutCrisppdfRoute
   '/add-page-numbers-pdf': typeof AddPageNumbersPdfRoute
   '/add-watermark-text-pdf': typeof AddWatermarkTextPdfRoute
   '/ai.txt': typeof AiDottxtRoute
@@ -603,6 +632,8 @@ export interface FileRoutesByTo {
   '/extract-images-pdf': typeof ExtractImagesPdfRoute
   '/extract-pdf-pages': typeof ExtractPdfPagesRoute
   '/extract-text-pdf': typeof ExtractTextPdfRoute
+  '/faq': typeof FaqRoute
+  '/feedback': typeof FeedbackRoute
   '/flatten-pdf': typeof FlattenPdfRoute
   '/grayscale-pdf': typeof GrayscalePdfRoute
   '/heic-to-pdf': typeof HeicToPdfRoute
@@ -638,6 +669,7 @@ export interface FileRoutesByTo {
   '/unlock-pdf': typeof UnlockPdfRoute
   '/watermark-pdf': typeof WatermarkPdfRoute
   '/webp-to-pdf': typeof WebpToPdfRoute
+  '/why-crisppdf': typeof WhyCrisppdfRoute
   '/word-to-pdf': typeof WordToPdfRoute
   '/cp-crisp-7x92k': typeof AuthenticatedCpCrisp7x92kRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -651,6 +683,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/about': typeof AboutRoute
+  '/about-crisppdf': typeof AboutCrisppdfRoute
   '/add-page-numbers-pdf': typeof AddPageNumbersPdfRoute
   '/add-watermark-text-pdf': typeof AddWatermarkTextPdfRoute
   '/ai.txt': typeof AiDottxtRoute
@@ -685,6 +718,8 @@ export interface FileRoutesById {
   '/extract-images-pdf': typeof ExtractImagesPdfRoute
   '/extract-pdf-pages': typeof ExtractPdfPagesRoute
   '/extract-text-pdf': typeof ExtractTextPdfRoute
+  '/faq': typeof FaqRoute
+  '/feedback': typeof FeedbackRoute
   '/flatten-pdf': typeof FlattenPdfRoute
   '/grayscale-pdf': typeof GrayscalePdfRoute
   '/heic-to-pdf': typeof HeicToPdfRoute
@@ -720,6 +755,7 @@ export interface FileRoutesById {
   '/unlock-pdf': typeof UnlockPdfRoute
   '/watermark-pdf': typeof WatermarkPdfRoute
   '/webp-to-pdf': typeof WebpToPdfRoute
+  '/why-crisppdf': typeof WhyCrisppdfRoute
   '/word-to-pdf': typeof WordToPdfRoute
   '/_authenticated/cp-crisp-7x92k': typeof AuthenticatedCpCrisp7x92kRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -733,6 +769,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/about-crisppdf'
     | '/add-page-numbers-pdf'
     | '/add-watermark-text-pdf'
     | '/ai.txt'
@@ -767,6 +804,8 @@ export interface FileRouteTypes {
     | '/extract-images-pdf'
     | '/extract-pdf-pages'
     | '/extract-text-pdf'
+    | '/faq'
+    | '/feedback'
     | '/flatten-pdf'
     | '/grayscale-pdf'
     | '/heic-to-pdf'
@@ -802,6 +841,7 @@ export interface FileRouteTypes {
     | '/unlock-pdf'
     | '/watermark-pdf'
     | '/webp-to-pdf'
+    | '/why-crisppdf'
     | '/word-to-pdf'
     | '/cp-crisp-7x92k'
     | '/blog/$slug'
@@ -813,6 +853,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/about-crisppdf'
     | '/add-page-numbers-pdf'
     | '/add-watermark-text-pdf'
     | '/ai.txt'
@@ -847,6 +888,8 @@ export interface FileRouteTypes {
     | '/extract-images-pdf'
     | '/extract-pdf-pages'
     | '/extract-text-pdf'
+    | '/faq'
+    | '/feedback'
     | '/flatten-pdf'
     | '/grayscale-pdf'
     | '/heic-to-pdf'
@@ -882,6 +925,7 @@ export interface FileRouteTypes {
     | '/unlock-pdf'
     | '/watermark-pdf'
     | '/webp-to-pdf'
+    | '/why-crisppdf'
     | '/word-to-pdf'
     | '/cp-crisp-7x92k'
     | '/blog/$slug'
@@ -894,6 +938,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/about'
+    | '/about-crisppdf'
     | '/add-page-numbers-pdf'
     | '/add-watermark-text-pdf'
     | '/ai.txt'
@@ -928,6 +973,8 @@ export interface FileRouteTypes {
     | '/extract-images-pdf'
     | '/extract-pdf-pages'
     | '/extract-text-pdf'
+    | '/faq'
+    | '/feedback'
     | '/flatten-pdf'
     | '/grayscale-pdf'
     | '/heic-to-pdf'
@@ -963,6 +1010,7 @@ export interface FileRouteTypes {
     | '/unlock-pdf'
     | '/watermark-pdf'
     | '/webp-to-pdf'
+    | '/why-crisppdf'
     | '/word-to-pdf'
     | '/_authenticated/cp-crisp-7x92k'
     | '/blog/$slug'
@@ -976,6 +1024,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
+  AboutCrisppdfRoute: typeof AboutCrisppdfRoute
   AddPageNumbersPdfRoute: typeof AddPageNumbersPdfRoute
   AddWatermarkTextPdfRoute: typeof AddWatermarkTextPdfRoute
   AiDottxtRoute: typeof AiDottxtRoute
@@ -1010,6 +1059,8 @@ export interface RootRouteChildren {
   ExtractImagesPdfRoute: typeof ExtractImagesPdfRoute
   ExtractPdfPagesRoute: typeof ExtractPdfPagesRoute
   ExtractTextPdfRoute: typeof ExtractTextPdfRoute
+  FaqRoute: typeof FaqRoute
+  FeedbackRoute: typeof FeedbackRoute
   FlattenPdfRoute: typeof FlattenPdfRoute
   GrayscalePdfRoute: typeof GrayscalePdfRoute
   HeicToPdfRoute: typeof HeicToPdfRoute
@@ -1045,6 +1096,7 @@ export interface RootRouteChildren {
   UnlockPdfRoute: typeof UnlockPdfRoute
   WatermarkPdfRoute: typeof WatermarkPdfRoute
   WebpToPdfRoute: typeof WebpToPdfRoute
+  WhyCrisppdfRoute: typeof WhyCrisppdfRoute
   WordToPdfRoute: typeof WordToPdfRoute
   ConvertSlugRoute: typeof ConvertSlugRoute
   ToolsSlugRoute: typeof ToolsSlugRoute
@@ -1059,6 +1111,13 @@ declare module '@tanstack/react-router' {
       path: '/word-to-pdf'
       fullPath: '/word-to-pdf'
       preLoaderRoute: typeof WordToPdfRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/why-crisppdf': {
+      id: '/why-crisppdf'
+      path: '/why-crisppdf'
+      fullPath: '/why-crisppdf'
+      preLoaderRoute: typeof WhyCrisppdfRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/webp-to-pdf': {
@@ -1306,6 +1365,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FlattenPdfRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/feedback': {
+      id: '/feedback'
+      path: '/feedback'
+      fullPath: '/feedback'
+      preLoaderRoute: typeof FeedbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/extract-text-pdf': {
       id: '/extract-text-pdf'
       path: '/extract-text-pdf'
@@ -1544,6 +1617,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AddPageNumbersPdfRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about-crisppdf': {
+      id: '/about-crisppdf'
+      path: '/about-crisppdf'
+      fullPath: '/about-crisppdf'
+      preLoaderRoute: typeof AboutCrisppdfRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -1635,6 +1715,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AboutRoute: AboutRoute,
+  AboutCrisppdfRoute: AboutCrisppdfRoute,
   AddPageNumbersPdfRoute: AddPageNumbersPdfRoute,
   AddWatermarkTextPdfRoute: AddWatermarkTextPdfRoute,
   AiDottxtRoute: AiDottxtRoute,
@@ -1669,6 +1750,8 @@ const rootRouteChildren: RootRouteChildren = {
   ExtractImagesPdfRoute: ExtractImagesPdfRoute,
   ExtractPdfPagesRoute: ExtractPdfPagesRoute,
   ExtractTextPdfRoute: ExtractTextPdfRoute,
+  FaqRoute: FaqRoute,
+  FeedbackRoute: FeedbackRoute,
   FlattenPdfRoute: FlattenPdfRoute,
   GrayscalePdfRoute: GrayscalePdfRoute,
   HeicToPdfRoute: HeicToPdfRoute,
@@ -1704,6 +1787,7 @@ const rootRouteChildren: RootRouteChildren = {
   UnlockPdfRoute: UnlockPdfRoute,
   WatermarkPdfRoute: WatermarkPdfRoute,
   WebpToPdfRoute: WebpToPdfRoute,
+  WhyCrisppdfRoute: WhyCrisppdfRoute,
   WordToPdfRoute: WordToPdfRoute,
   ConvertSlugRoute: ConvertSlugRoute,
   ToolsSlugRoute: ToolsSlugRoute,

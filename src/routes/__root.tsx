@@ -23,6 +23,8 @@ import { applyClientLocale } from "../lib/i18n";
 import { hreflangLinks } from "../lib/hreflang";
 import { OG_DEFAULT } from "../lib/site-url";
 import { organizationLd, websiteLd } from "../lib/seo/jsonld";
+import { initPostHog } from "../lib/posthog";
+import { initSentry } from "../lib/sentry";
 
 
 function NotFoundComponent() {
@@ -212,6 +214,8 @@ function RootComponent() {
   useEffect(() => {
     // Apply user locale after hydration so SSR/CSR markup matches.
     applyClientLocale();
+    initSentry();
+    initPostHog();
   }, []);
 
   return (

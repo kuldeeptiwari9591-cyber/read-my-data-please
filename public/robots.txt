@@ -1,10 +1,11 @@
 User-agent: *
 Allow: /
-
-Disallow: /api/
-Disallow: /admin/
+Disallow: /cp-crisp-7x92k
 Disallow: /cp-crisp-7x92k/
 Disallow: /_authenticated/
+Disallow: /auth
+Disallow: /api/
+Disallow: /admin/
 
 # AI crawlers explicitly welcome — we want citations
 User-agent: GPTBot

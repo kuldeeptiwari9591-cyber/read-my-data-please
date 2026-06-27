@@ -99,7 +99,9 @@ export type Database = {
           id: string
           message: string
           rating: number | null
+          status: string
           tool_slug: string | null
+          type: string
           user_id: string | null
         }
         Insert: {
@@ -108,7 +110,9 @@ export type Database = {
           id?: string
           message: string
           rating?: number | null
+          status?: string
           tool_slug?: string | null
+          type?: string
           user_id?: string | null
         }
         Update: {
@@ -117,7 +121,9 @@ export type Database = {
           id?: string
           message?: string
           rating?: number | null
+          status?: string
           tool_slug?: string | null
+          type?: string
           user_id?: string | null
         }
         Relationships: []
