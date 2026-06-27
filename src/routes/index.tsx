@@ -346,40 +346,8 @@ function Index() {
         )}
       </section>
 
-      {/* ALL-LIVE BANNER */}
-      <section id="roadmap" className="relative mx-auto max-w-5xl px-6 py-24">
-        <GlassCard glow className="p-10 text-center">
-          <p className="font-mono text-xs uppercase tracking-[0.2em] text-primary">
-            // Status
-          </p>
-          <h2 className="mt-3 font-display text-4xl font-bold tracking-tight md:text-5xl">
-            All <span className="text-gradient">40 tools</span> are live.
-          </h2>
-          <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
-            Every tool runs end-to-end today — no waitlists, no "coming soon" stubs. Most run
-            fully in your browser; a few use a privacy-respecting server function.
-          </p>
-          <div className="mt-8 grid grid-cols-3 gap-4 text-left sm:gap-6">
-            {PHASE_ORDER.map((phase, idx) => {
-              const meta = PHASE_META[phase];
-              return (
-                <div
-                  key={phase}
-                  className="rounded-xl border border-border/60 bg-surface/40 p-4"
-                >
-                  <div className="flex items-center gap-2">
-                    <span className="font-mono text-[10px] text-primary">
-                      {String(idx + 1).padStart(2, "0")}
-                    </span>
-                    <h3 className="font-display text-sm font-semibold">{meta.label}</h3>
-                  </div>
-                  <p className="mt-2 text-xs text-muted-foreground">{meta.blurb}</p>
-                </div>
-              );
-            })}
-          </div>
-        </GlassCard>
-      </section>
+
+
 
 
       {/* HOW IT WORKS */}
