@@ -135,7 +135,7 @@ export function RedactPdf() {
               <div key={i}>
                 <div className="mb-2 text-xs text-muted-foreground">Page {i + 1} — drag to redact</div>
                 <div
-                  className="relative cursor-crosshair overflow-hidden rounded-xl border border-border bg-white shadow-sm select-none"
+                  className="relative cursor-crosshair overflow-hidden rounded-xl border border-border bg-background shadow-sm select-none"
                   onMouseDown={onDown(i)}
                   onMouseMove={onMove}
                   onMouseUp={onUp}
