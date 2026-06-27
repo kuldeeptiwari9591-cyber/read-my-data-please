@@ -82,6 +82,8 @@ export function WatermarkImagePdf() {
             )}
             <div className="flex-1 truncate text-sm">{image.name}</div>
             <button
+              type="button"
+              aria-label="Remove watermark image"
               onClick={() => setImage(null)}
               className="rounded p-1 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
             >

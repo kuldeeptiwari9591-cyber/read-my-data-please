@@ -98,7 +98,7 @@ export const Route = createFileRoute("/")({
     };
     return {
       meta: [
-        { title: "CrispPDF — 40 Free Online PDF Tools · No signup, no watermarks" },
+        { title: "CrispPDF — 40 Free Online PDF Tools · No Signup" },
         {
           name: "description",
           content:

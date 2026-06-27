@@ -196,6 +196,7 @@ export function EsignPdf() {
                           )}
                           <button
                             type="button"
+                            aria-label="Remove signature placement"
                             onClick={(e) => {
                               e.stopPropagation();
                               removePlacement(idx);
