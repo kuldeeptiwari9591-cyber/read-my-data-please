@@ -519,8 +519,9 @@ function Index() {
             Ready when you are.
           </h2>
           <p className="mt-4 text-muted-foreground">
-            {TOOLS.length} tools, zero setup. Pick one and go.
+            {TOOLS.length} tools. Zero setup. Always free.
           </p>
+
           <a
             href="#tools"
             className="mt-8 inline-flex items-center gap-2 rounded-md bg-gradient-to-r from-primary to-secondary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-[0_0_30px_rgba(99,102,241,0.4)] transition-transform hover:scale-[1.03]"
