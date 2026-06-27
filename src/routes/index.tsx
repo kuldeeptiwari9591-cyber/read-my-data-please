@@ -196,7 +196,7 @@ function Index() {
       <Header />
 
       {/* HERO */}
-      <section className="relative min-h-[88vh] overflow-hidden">
+      <section className="relative overflow-hidden">
         <HeroScene />
         <ParticlesBackground className="opacity-70" />
         <GradientBlob className="-top-24 -left-24" size={520} />
@@ -207,7 +207,7 @@ function Index() {
           to="rgba(6,182,212,0.25)"
           duration={18}
         />
-        <div className="relative z-10 mx-auto flex min-h-[88vh] max-w-6xl flex-col items-center justify-center px-6 py-24 text-center">
+        <div className="relative z-10 mx-auto flex max-w-6xl flex-col items-center justify-center px-6 pt-20 pb-12 text-center md:pt-24 md:pb-16">
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -275,7 +275,7 @@ function Index() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.45 }}
-            className="mt-20 grid w-full max-w-3xl grid-cols-2 gap-3 md:grid-cols-4"
+            className="mt-12 grid w-full max-w-3xl grid-cols-2 gap-3 md:grid-cols-4"
           >
             {STATS.map((s) => (
               <GlassCard key={s.label} className="px-4 py-5 text-center">
@@ -296,7 +296,7 @@ function Index() {
       </section>
 
       {/* ALL TOOLS GRID */}
-      <section id="tools" className="relative mx-auto max-w-7xl px-6 py-24">
+      <section id="tools" className="relative mx-auto max-w-7xl px-6 pt-10 pb-24 md:pt-14">
         <div className="mx-auto max-w-2xl text-center">
           <p className="font-mono text-xs uppercase tracking-[0.2em] text-primary">
             // The full toolkit
