@@ -221,7 +221,16 @@ function AdminPanel() {
                   : "border-transparent text-muted-foreground hover:text-foreground"
               }`}
             >
-              {t} {t === "posts" ? `(${posts.length})` : t === "feedback" ? `(${feedback.length})` : `(${ops.length})`}
+              {t}{" "}
+              {t === "posts"
+                ? `(${posts.length})`
+                : t === "feedback"
+                  ? `(${feedback.length})`
+                  : t === "ops"
+                    ? `(${ops.length})`
+                    : t === "tools"
+                      ? `(${tools.length})`
+                      : ""}
             </button>
           ))}
         </div>
