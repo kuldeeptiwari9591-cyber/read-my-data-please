@@ -58,8 +58,6 @@ import { Route as CsvToPdfRouteImport } from './routes/csv-to-pdf'
 import { Route as CropPdfRouteImport } from './routes/crop-pdf'
 import { Route as ConvertPdfRouteImport } from './routes/convert-pdf'
 import { Route as ContactRouteImport } from './routes/contact'
-import { Route as CompressPdfToSizeRouteImport } from './routes/compress-pdf-to-$size'
-import { Route as CompressPdfForUseRouteImport } from './routes/compress-pdf-for-$use'
 import { Route as CompressPdfRouteImport } from './routes/compress-pdf'
 import { Route as ComparePdfRouteImport } from './routes/compare-pdf'
 import { Route as ChangelogRouteImport } from './routes/changelog'
@@ -325,16 +323,6 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CompressPdfToSizeRoute = CompressPdfToSizeRouteImport.update({
-  id: '/compress-pdf-to-$size',
-  path: '/compress-pdf-to-$size',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CompressPdfForUseRoute = CompressPdfForUseRouteImport.update({
-  id: '/compress-pdf-for-$use',
-  path: '/compress-pdf-for-$use',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const CompressPdfRoute = CompressPdfRouteImport.update({
   id: '/compress-pdf',
   path: '/compress-pdf',
@@ -444,8 +432,6 @@ export interface FileRoutesByFullPath {
   '/changelog': typeof ChangelogRoute
   '/compare-pdf': typeof ComparePdfRoute
   '/compress-pdf': typeof CompressPdfRoute
-  '/compress-pdf-for-$use': typeof CompressPdfForUseRoute
-  '/compress-pdf-to-$size': typeof CompressPdfToSizeRoute
   '/contact': typeof ContactRoute
   '/convert-pdf': typeof ConvertPdfRoute
   '/crop-pdf': typeof CropPdfRoute
@@ -515,8 +501,6 @@ export interface FileRoutesByTo {
   '/changelog': typeof ChangelogRoute
   '/compare-pdf': typeof ComparePdfRoute
   '/compress-pdf': typeof CompressPdfRoute
-  '/compress-pdf-for-$use': typeof CompressPdfForUseRoute
-  '/compress-pdf-to-$size': typeof CompressPdfToSizeRoute
   '/contact': typeof ContactRoute
   '/convert-pdf': typeof ConvertPdfRoute
   '/crop-pdf': typeof CropPdfRoute
@@ -588,8 +572,6 @@ export interface FileRoutesById {
   '/changelog': typeof ChangelogRoute
   '/compare-pdf': typeof ComparePdfRoute
   '/compress-pdf': typeof CompressPdfRoute
-  '/compress-pdf-for-$use': typeof CompressPdfForUseRoute
-  '/compress-pdf-to-$size': typeof CompressPdfToSizeRoute
   '/contact': typeof ContactRoute
   '/convert-pdf': typeof ConvertPdfRoute
   '/crop-pdf': typeof CropPdfRoute
@@ -661,8 +643,6 @@ export interface FileRouteTypes {
     | '/changelog'
     | '/compare-pdf'
     | '/compress-pdf'
-    | '/compress-pdf-for-$use'
-    | '/compress-pdf-to-$size'
     | '/contact'
     | '/convert-pdf'
     | '/crop-pdf'
@@ -732,8 +712,6 @@ export interface FileRouteTypes {
     | '/changelog'
     | '/compare-pdf'
     | '/compress-pdf'
-    | '/compress-pdf-for-$use'
-    | '/compress-pdf-to-$size'
     | '/contact'
     | '/convert-pdf'
     | '/crop-pdf'
@@ -804,8 +782,6 @@ export interface FileRouteTypes {
     | '/changelog'
     | '/compare-pdf'
     | '/compress-pdf'
-    | '/compress-pdf-for-$use'
-    | '/compress-pdf-to-$size'
     | '/contact'
     | '/convert-pdf'
     | '/crop-pdf'
@@ -877,8 +853,6 @@ export interface RootRouteChildren {
   ChangelogRoute: typeof ChangelogRoute
   ComparePdfRoute: typeof ComparePdfRoute
   CompressPdfRoute: typeof CompressPdfRoute
-  CompressPdfForUseRoute: typeof CompressPdfForUseRoute
-  CompressPdfToSizeRoute: typeof CompressPdfToSizeRoute
   ContactRoute: typeof ContactRoute
   ConvertPdfRoute: typeof ConvertPdfRoute
   CropPdfRoute: typeof CropPdfRoute
@@ -1279,20 +1253,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/compress-pdf-to-$size': {
-      id: '/compress-pdf-to-$size'
-      path: '/compress-pdf-to-$size'
-      fullPath: '/compress-pdf-to-$size'
-      preLoaderRoute: typeof CompressPdfToSizeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/compress-pdf-for-$use': {
-      id: '/compress-pdf-for-$use'
-      path: '/compress-pdf-for-$use'
-      fullPath: '/compress-pdf-for-$use'
-      preLoaderRoute: typeof CompressPdfForUseRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/compress-pdf': {
       id: '/compress-pdf'
       path: '/compress-pdf'
@@ -1464,8 +1424,6 @@ const rootRouteChildren: RootRouteChildren = {
   ChangelogRoute: ChangelogRoute,
   ComparePdfRoute: ComparePdfRoute,
   CompressPdfRoute: CompressPdfRoute,
-  CompressPdfForUseRoute: CompressPdfForUseRoute,
-  CompressPdfToSizeRoute: CompressPdfToSizeRoute,
   ContactRoute: ContactRoute,
   ConvertPdfRoute: ConvertPdfRoute,
   CropPdfRoute: CropPdfRoute,
