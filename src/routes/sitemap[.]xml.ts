@@ -4,11 +4,9 @@ import { TOOLS } from "@/lib/tools";
 
 import { listPublishedPosts } from "@/lib/blog.functions";
 
-// Prefer VITE_SITE_URL; fall back to the production domain so search engines
-// always receive absolute URLs from the sitemap.
-const BASE_URL = (
-  (import.meta.env.VITE_SITE_URL as string | undefined) ?? "https://crisppdf.com"
-).replace(/\/$/, "");
+// Only emit absolute URLs when VITE_SITE_URL is explicitly configured —
+// never hardcode a fallback domain.
+const BASE_URL = ((import.meta.env.VITE_SITE_URL as string | undefined) ?? "").replace(/\/$/, "");
 
 interface SitemapEntry {
   path: string;
