@@ -5,9 +5,11 @@ import { ArrowUpRight } from "lucide-react";
 import { GlassCard } from "./GlassCard";
 import { MiniDemo } from "./visuals/MiniDemo";
 import type { Tool } from "@/lib/tools";
+import { toolIconMap, categoryColorMap } from "@/lib/toolIcons";
 
 export function ToolCard({ tool }: { tool: Tool }) {
-  const Icon = tool.icon;
+  const Icon = toolIconMap[tool.slug] ?? tool.icon;
+  const colorClass = categoryColorMap[tool.category] ?? "text-primary";
   const [hover, setHover] = useState(false);
   return (
     <Link to={("/" + tool.slug) as never} className="group block">
@@ -21,10 +23,10 @@ export function ToolCard({ tool }: { tool: Tool }) {
             <motion.div
               animate={{ y: hover ? -2 : 0 }}
               transition={{ type: "spring", stiffness: 300, damping: 25 }}
-              className="flex h-11 w-11 items-center justify-center rounded-lg bg-gradient-to-br from-primary/20 to-secondary/20 ring-1 ring-primary/30"
+              className="flex h-11 w-11 items-center justify-center rounded-lg bg-gradient-to-br from-primary/15 to-secondary/15 ring-1 ring-primary/25"
               style={{ willChange: "transform" }}
             >
-              <Icon className="h-5 w-5 text-primary" />
+              <Icon className={`h-5 w-5 ${colorClass}`} />
             </motion.div>
             <ArrowUpRight className="h-4 w-4 text-muted-foreground transition-colors group-hover:text-foreground" />
           </div>
