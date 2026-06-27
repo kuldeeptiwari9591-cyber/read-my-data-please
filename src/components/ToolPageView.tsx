@@ -141,6 +141,14 @@ export function ToolPageView({ slug }: { slug: string }) {
           </div>
         </div>
 
+        <AnswerBlock title={tool.name} answer={answer} />
+
+        <p className="mt-4 font-mono text-[11px] text-muted-foreground">
+          Updated 2026 · Maintained by the CrispPDF team
+        </p>
+
+
+
         <div className="mt-16">
           <p className="font-mono text-xs uppercase tracking-[0.2em] text-primary">// How to use</p>
           <h2 className="mt-2 font-display text-2xl font-semibold md:text-3xl">
