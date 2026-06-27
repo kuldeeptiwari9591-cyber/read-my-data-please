@@ -160,7 +160,10 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Outlet />
+      <SiteBanner />
+      <MaintenanceGate>
+        <Outlet />
+      </MaintenanceGate>
       <Toaster />
       <CookieBanner />
     </QueryClientProvider>
