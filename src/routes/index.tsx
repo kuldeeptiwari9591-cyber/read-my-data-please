@@ -215,7 +215,13 @@ function Index() {
           >
             {STATS.map((s) => (
               <GlassCard key={s.label} className="px-4 py-5 text-center">
-                <div className="font-display text-3xl font-bold text-gradient">{s.value}</div>
+                <div className="font-display text-3xl font-bold text-gradient">
+                  {s.static ? (
+                    s.static
+                  ) : (
+                    <AnimatedCounter target={s.target ?? 0} suffix={s.suffix ?? ""} />
+                  )}
+                </div>
                 <div className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">
                   {s.label}
                 </div>
