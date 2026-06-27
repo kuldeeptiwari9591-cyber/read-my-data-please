@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import { createServerClient } from "@/integrations/supabase/server";
+import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
 type FeedbackType = "feedback" | "bug" | "tool_request";
 
@@ -24,8 +24,7 @@ export const submitFeedback = createServerFn({ method: "POST" })
     },
   )
   .handler(async ({ data }) => {
-    const supabase = createServerClient();
-    const { error } = await supabase.from("feedback").insert({
+    const { error } = await supabaseAdmin.from("feedback").insert({
       type: data.type,
       tool_slug: data.tool_slug ?? null,
       rating: data.rating ?? null,
