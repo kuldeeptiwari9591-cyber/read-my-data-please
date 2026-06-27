@@ -13,6 +13,7 @@ import { Route as WordToPdfRouteImport } from './routes/word-to-pdf'
 import { Route as WebpToPdfRouteImport } from './routes/webp-to-pdf'
 import { Route as WatermarkPdfRouteImport } from './routes/watermark-pdf'
 import { Route as UnlockPdfRouteImport } from './routes/unlock-pdf'
+import { Route as TxtToPdfRouteImport } from './routes/txt-to-pdf'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SplitPdfRouteImport } from './routes/split-pdf'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
@@ -97,6 +98,11 @@ const WatermarkPdfRoute = WatermarkPdfRouteImport.update({
 const UnlockPdfRoute = UnlockPdfRouteImport.update({
   id: '/unlock-pdf',
   path: '/unlock-pdf',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TxtToPdfRoute = TxtToPdfRouteImport.update({
+  id: '/txt-to-pdf',
+  path: '/txt-to-pdf',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TermsRoute = TermsRouteImport.update({
@@ -484,6 +490,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/split-pdf': typeof SplitPdfRoute
   '/terms': typeof TermsRoute
+  '/txt-to-pdf': typeof TxtToPdfRoute
   '/unlock-pdf': typeof UnlockPdfRoute
   '/watermark-pdf': typeof WatermarkPdfRoute
   '/webp-to-pdf': typeof WebpToPdfRoute
@@ -554,6 +561,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/split-pdf': typeof SplitPdfRoute
   '/terms': typeof TermsRoute
+  '/txt-to-pdf': typeof TxtToPdfRoute
   '/unlock-pdf': typeof UnlockPdfRoute
   '/watermark-pdf': typeof WatermarkPdfRoute
   '/webp-to-pdf': typeof WebpToPdfRoute
@@ -626,6 +634,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/split-pdf': typeof SplitPdfRoute
   '/terms': typeof TermsRoute
+  '/txt-to-pdf': typeof TxtToPdfRoute
   '/unlock-pdf': typeof UnlockPdfRoute
   '/watermark-pdf': typeof WatermarkPdfRoute
   '/webp-to-pdf': typeof WebpToPdfRoute
@@ -698,6 +707,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/split-pdf'
     | '/terms'
+    | '/txt-to-pdf'
     | '/unlock-pdf'
     | '/watermark-pdf'
     | '/webp-to-pdf'
@@ -768,6 +778,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/split-pdf'
     | '/terms'
+    | '/txt-to-pdf'
     | '/unlock-pdf'
     | '/watermark-pdf'
     | '/webp-to-pdf'
@@ -839,6 +850,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/split-pdf'
     | '/terms'
+    | '/txt-to-pdf'
     | '/unlock-pdf'
     | '/watermark-pdf'
     | '/webp-to-pdf'
@@ -911,6 +923,7 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SplitPdfRoute: typeof SplitPdfRoute
   TermsRoute: typeof TermsRoute
+  TxtToPdfRoute: typeof TxtToPdfRoute
   UnlockPdfRoute: typeof UnlockPdfRoute
   WatermarkPdfRoute: typeof WatermarkPdfRoute
   WebpToPdfRoute: typeof WebpToPdfRoute
@@ -949,6 +962,13 @@ declare module '@tanstack/react-router' {
       path: '/unlock-pdf'
       fullPath: '/unlock-pdf'
       preLoaderRoute: typeof UnlockPdfRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/txt-to-pdf': {
+      id: '/txt-to-pdf'
+      path: '/txt-to-pdf'
+      fullPath: '/txt-to-pdf'
+      preLoaderRoute: typeof TxtToPdfRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/terms': {
@@ -1490,6 +1510,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SplitPdfRoute: SplitPdfRoute,
   TermsRoute: TermsRoute,
+  TxtToPdfRoute: TxtToPdfRoute,
   UnlockPdfRoute: UnlockPdfRoute,
   WatermarkPdfRoute: WatermarkPdfRoute,
   WebpToPdfRoute: WebpToPdfRoute,
