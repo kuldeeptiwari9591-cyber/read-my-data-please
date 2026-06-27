@@ -24,7 +24,7 @@ export async function logAudit(entry: AuditEntry): Promise<void> {
       ip: entry.ip ?? null,
       user_agent: entry.user_agent ?? null,
       route: entry.route ?? null,
-      details: entry.details ?? {},
+      details: (entry.details ?? {}) as never,
     });
   } catch (e) {
     // Never throw from audit — it must not break user-facing flows.
