@@ -122,10 +122,10 @@ function ShareButtons({ title, slug }: { title: string; slug: string }) {
           <MessageCircle className="h-4 w-4" /> WhatsApp
         </a>
         <a href={tw} target="_blank" rel="noopener noreferrer" className={btn}>
-          <Twitter className="h-4 w-4" /> Twitter
+          <Share2 className="h-4 w-4" /> Twitter
         </a>
         <a href={li} target="_blank" rel="noopener noreferrer" className={btn}>
-          <Linkedin className="h-4 w-4" /> LinkedIn
+          <Share2 className="h-4 w-4" /> LinkedIn
         </a>
         <button onClick={onCopy} className={btn}>
           {copied ? (
