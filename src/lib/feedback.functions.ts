@@ -25,6 +25,7 @@ export const submitFeedback = createServerFn({ method: "POST" })
       rating?: number | null;
       message: string;
       email?: string | null;
+      captchaToken?: string | null;
     }) => {
       if (!d || typeof d !== "object") throw new Error("Invalid payload");
       if (!["feedback", "bug", "tool_request"].includes(d.type))
@@ -34,7 +35,6 @@ export const submitFeedback = createServerFn({ method: "POST" })
       if (d.email && d.email.length > 200) throw new Error("Email too long");
       if (d.rating != null && (d.rating < 1 || d.rating > 5))
         throw new Error("Invalid rating");
-      // Reject obvious URL-spam payloads (>3 links) — common abuse vector.
       const links = (d.message.match(/https?:\/\//gi) ?? []).length;
       if (links > 3) throw new Error("Too many links in message");
       return d;
@@ -42,6 +42,21 @@ export const submitFeedback = createServerFn({ method: "POST" })
   )
   .handler(async ({ data }) => {
     const { ip, ua } = clientFingerprint();
+
+    // hCaptcha verification (no-op when HCAPTCHA_SECRET unset)
+    const { verifyHCaptcha } = await import("@/lib/hcaptcha.server");
+    const captcha = await verifyHCaptcha(data.captchaToken, ip);
+    if (!captcha.ok) {
+      await logAudit({
+        event: "feedback.captcha_failed",
+        severity: "warn",
+        ip,
+        user_agent: ua,
+        route: "/feedback",
+        details: { reason: "reason" in captcha ? captcha.reason : "unknown" },
+      });
+      throw new Error("Captcha verification failed. Please try again.");
+    }
 
     const rl = checkRateLimit({
       key: `feedback:${ip}`,
