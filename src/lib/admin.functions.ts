@@ -138,7 +138,7 @@ export const adminListAnnouncements = createServerFn({ method: "GET" })
     await assertAdmin(context);
     const { data, error } = await context.supabase
       .from("announcements")
-      .select("id,type,title,body,severity,is_active,eta,created_at")
+      .select("id,type,title,body,severity,active,eta,created_at")
       .order("created_at", { ascending: false });
     if (error) throw new Error(error.message);
     return data ?? [];
@@ -153,7 +153,7 @@ export const adminUpsertAnnouncement = createServerFn({ method: "POST" })
       title?: string;
       body: string;
       severity: "info" | "warning" | "success";
-      is_active: boolean;
+      active: boolean;
       eta?: string | null;
     }) => {
       if (!["banner", "maintenance"].includes(d.type)) throw new Error("Invalid type");
@@ -166,10 +166,10 @@ export const adminUpsertAnnouncement = createServerFn({ method: "POST" })
     await assertAdmin(context);
     const payload = {
       type: data.type,
-      title: data.title ?? null,
+      title: data.title ?? data.body.slice(0, 80),
       body: data.body,
       severity: data.severity,
-      is_active: data.is_active,
+      active: data.active,
       eta: data.eta ?? null,
     };
     const q = data.id
