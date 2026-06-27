@@ -15,6 +15,9 @@ import { ToolDisabledGate } from "@/components/ToolDisabledGate";
 import { ToolPageSkeleton } from "@/components/ToolPageSkeleton";
 import { toolIconMap, categoryColorMap } from "@/lib/toolIcons";
 import { analytics } from "@/lib/analytics";
+import { AnswerBlock } from "@/components/seo/AnswerBlock";
+import { USE_CASES } from "@/lib/pseo/use-cases";
+import { COMPETITORS } from "@/lib/pseo/competitors";
 
 export function ToolPageView({ slug }: { slug: string }) {
   const tool = TOOLS_BY_SLUG[slug];
@@ -51,6 +54,10 @@ export function ToolPageView({ slug }: { slug: string }) {
   const related = TOOLS.filter(
     (t) => t.category === tool.category && t.slug !== tool.slug,
   ).slice(0, 4);
+
+  const useCaseLinks = USE_CASES.filter((u) => u.toolSlugs.includes(tool.slug)).slice(0, 6);
+  const compareLinks = COMPETITORS.filter((c) => c.toolSlugs.includes(tool.slug));
+  const answer = `${tool.name} on CrispPDF is the fastest free way to ${tool.short.toLowerCase()}. ${tool.processing === "browser" ? "Runs entirely in your browser — your file is never uploaded." : "Server-assisted but files are processed in memory and discarded immediately."} No signup, no watermark, no daily limit.`;
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-background text-foreground">
