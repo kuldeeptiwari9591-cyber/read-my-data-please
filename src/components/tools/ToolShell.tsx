@@ -5,6 +5,7 @@ import { PDFHealthScore } from "@/components/visuals/PDFHealthScore";
 import { ShareCard } from "@/components/visuals/ShareCard";
 import { celebrate } from "@/lib/celebrate";
 import { TOOLS_BY_SLUG } from "@/lib/tools";
+import { analytics } from "@/lib/analytics";
 
 interface FileDropProps {
   multiple?: boolean;
