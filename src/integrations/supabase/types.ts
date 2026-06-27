@@ -19,25 +19,31 @@ export type Database = {
           active: boolean
           body: string
           created_at: string
+          eta: string | null
           id: string
           severity: string
           title: string
+          type: string
         }
         Insert: {
           active?: boolean
           body: string
           created_at?: string
+          eta?: string | null
           id?: string
           severity?: string
           title: string
+          type?: string
         }
         Update: {
           active?: boolean
           body?: string
           created_at?: string
+          eta?: string | null
           id?: string
           severity?: string
           title?: string
+          type?: string
         }
         Relationships: []
       }
@@ -52,6 +58,7 @@ export type Database = {
           published: boolean
           published_at: string | null
           slug: string
+          tags: string[]
           title: string
           updated_at: string
         }
@@ -65,6 +72,7 @@ export type Database = {
           published?: boolean
           published_at?: string | null
           slug: string
+          tags?: string[]
           title: string
           updated_at?: string
         }
@@ -78,6 +86,7 @@ export type Database = {
           published?: boolean
           published_at?: string | null
           slug?: string
+          tags?: string[]
           title?: string
           updated_at?: string
         }
@@ -146,6 +155,27 @@ export type Database = {
           success?: boolean
           tool_slug?: string
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      tool_settings: {
+        Row: {
+          enabled: boolean
+          name: string
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          enabled?: boolean
+          name: string
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          enabled?: boolean
+          name?: string
+          slug?: string
+          updated_at?: string
         }
         Relationships: []
       }

@@ -16,6 +16,7 @@ import { Footer } from "@/components/Footer";
 import { GlassCard } from "@/components/GlassCard";
 import { ToolCard } from "@/components/ToolCard";
 import { SearchBar } from "@/components/SearchBar";
+import { AnimatedCounter } from "@/components/AnimatedCounter";
 import { ParticlesBackground } from "@/components/visuals/ParticlesBackground";
 import { GradientBlob } from "@/components/visuals/GradientBlob";
 import {
@@ -68,11 +69,11 @@ const CATEGORY_ORDER: ToolCategory[] = [
   "secure",
 ];
 
-const STATS = [
-  { value: "40", label: "Free tools" },
-  { value: "0", label: "Signups required" },
-  { value: "0", label: "Watermarks added" },
-  { value: "∞", label: "Daily uses" },
+const STATS: Array<{ label: string; target?: number; suffix?: string; static?: string }> = [
+  { label: "Free tools", target: 40, suffix: "+" },
+  { label: "Signups required", target: 0 },
+  { label: "Watermarks added", target: 0 },
+  { label: "Daily uses", static: "∞" },
 ];
 
 const FEATURES = [
@@ -215,7 +216,13 @@ function Index() {
           >
             {STATS.map((s) => (
               <GlassCard key={s.label} className="px-4 py-5 text-center">
-                <div className="font-display text-3xl font-bold text-gradient">{s.value}</div>
+                <div className="font-display text-3xl font-bold text-gradient">
+                  {s.static ? (
+                    s.static
+                  ) : (
+                    <AnimatedCounter target={s.target ?? 0} suffix={s.suffix ?? ""} />
+                  )}
+                </div>
                 <div className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">
                   {s.label}
                 </div>

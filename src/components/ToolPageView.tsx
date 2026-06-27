@@ -11,6 +11,7 @@ import { ToolShell } from "@/components/tools/ToolShell";
 import { ComingSoonTool } from "@/components/tools/ComingSoonTool";
 import { RateLimitBanner } from "@/components/tools/RateLimitBanner";
 import { getToolContent } from "@/lib/tool-content";
+import { ToolDisabledGate } from "@/components/ToolDisabledGate";
 
 export function ToolPageView({ slug }: { slug: string }) {
   const tool = TOOLS_BY_SLUG[slug];
@@ -102,36 +103,38 @@ export function ToolPageView({ slug }: { slug: string }) {
 
             <RateLimitBanner slug={tool.slug} />
 
-            {Component ? (
-              <Suspense
-                fallback={
-                  <div className="flex min-h-[20rem] flex-col items-center justify-center gap-3 rounded-2xl border border-border/60 bg-surface/40 p-12 text-center">
-                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                    <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                      Loading {tool.name}…
-                    </p>
-                  </div>
-                }
-              >
-                <Component />
-              </Suspense>
-            ) : (
-              <ToolShell
-                title={tool.name}
-                description={tool.description}
-                icon={<Icon className="h-7 w-7 text-primary" />}
-              >
-                <ComingSoonTool
-                  tool={tool}
-                  multiple={tool.slug === "merge-pdf" || tool.slug.includes("to-pdf")}
-                  accept={
-                    tool.category === "convert-to" && tool.slug !== "html-to-pdf"
-                      ? "image/*,application/pdf,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx"
-                      : "application/pdf,.pdf"
+            <ToolDisabledGate slug={tool.slug} toolName={tool.name}>
+              {Component ? (
+                <Suspense
+                  fallback={
+                    <div className="flex min-h-[20rem] flex-col items-center justify-center gap-3 rounded-2xl border border-border/60 bg-surface/40 p-12 text-center">
+                      <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                      <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
+                        Loading {tool.name}…
+                      </p>
+                    </div>
                   }
-                />
-              </ToolShell>
-            )}
+                >
+                  <Component />
+                </Suspense>
+              ) : (
+                <ToolShell
+                  title={tool.name}
+                  description={tool.description}
+                  icon={<Icon className="h-7 w-7 text-primary" />}
+                >
+                  <ComingSoonTool
+                    tool={tool}
+                    multiple={tool.slug === "merge-pdf" || tool.slug.includes("to-pdf")}
+                    accept={
+                      tool.category === "convert-to" && tool.slug !== "html-to-pdf"
+                        ? "image/*,application/pdf,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx"
+                        : "application/pdf,.pdf"
+                    }
+                  />
+                </ToolShell>
+              )}
+            </ToolDisabledGate>
           </div>
         </div>
 

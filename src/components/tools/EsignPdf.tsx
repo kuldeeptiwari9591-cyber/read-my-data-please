@@ -23,7 +23,7 @@ export function EsignPdf() {
   const padRef = useRef<HTMLCanvasElement>(null);
   const padInstance = useRef<{ clear: () => void; toDataURL: () => string; isEmpty: () => boolean } | null>(null);
 
-  // Init signature pad
+  // Init signature pad — theme-aware background + ink color
   useEffect(() => {
     let mounted = true;
     (async () => {
@@ -33,8 +33,19 @@ export function EsignPdf() {
       const ratio = window.devicePixelRatio || 1;
       c.width = c.offsetWidth * ratio;
       c.height = c.offsetHeight * ratio;
-      c.getContext("2d")!.scale(ratio, ratio);
-      const pad = new SignaturePad(c, { penColor: "#0f172a", minWidth: 0.8, maxWidth: 2.4 });
+      const ctx = c.getContext("2d")!;
+      ctx.scale(ratio, ratio);
+      const isDark = document.documentElement.classList.contains("dark");
+      const bg = isDark ? "#13131A" : "#ffffff";
+      const ink = isDark ? "#f1f5f9" : "#0f172a";
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, c.width, c.height);
+      const pad = new SignaturePad(c, {
+        penColor: ink,
+        backgroundColor: bg,
+        minWidth: 0.8,
+        maxWidth: 2.4,
+      });
       padInstance.current = pad;
     })();
     return () => {
@@ -163,7 +174,7 @@ export function EsignPdf() {
                     <span>{signature ? "Click to place signature" : "Capture a signature first →"}</span>
                   </div>
                   <div
-                    className="relative cursor-crosshair overflow-hidden rounded-xl border border-border bg-white shadow-sm"
+                    className="relative cursor-crosshair overflow-hidden rounded-xl border border-border bg-background shadow-sm"
                     onClick={(e) => placeOnPage(i, e)}
                   >
                     <img src={src} alt={`Page ${i + 1}`} className="block w-full" />
@@ -207,7 +218,7 @@ export function EsignPdf() {
             <div className="mb-2 text-sm font-semibold">Your signature</div>
             <canvas
               ref={padRef}
-              className="h-40 w-full rounded-md border border-border bg-white"
+              className="h-40 w-full rounded-md border border-border bg-background"
             />
             <div className="mt-3 flex gap-2">
               <button
@@ -224,7 +235,7 @@ export function EsignPdf() {
               </button>
             </div>
             {signature && (
-              <div className="mt-3 rounded-md border border-border bg-white p-2">
+              <div className="mt-3 rounded-md border border-border bg-background p-2">
                 <img src={signature} alt="signature preview" className="block h-12 w-full object-contain" />
               </div>
             )}

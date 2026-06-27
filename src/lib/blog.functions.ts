@@ -9,6 +9,7 @@ export type BlogListItem = {
   cover_image: string | null;
   author: string | null;
   published_at: string | null;
+  tags: string[];
 };
 
 export type BlogPost = BlogListItem & { body: string };
@@ -26,7 +27,7 @@ export const listPublishedPosts = createServerFn({ method: "GET" }).handler(
     const sb = publicClient();
     const { data, error } = await sb
       .from("blog_posts")
-      .select("slug,title,excerpt,cover_image,author,published_at")
+      .select("slug,title,excerpt,cover_image,author,published_at,tags")
       .eq("published", true)
       .order("published_at", { ascending: false })
       .limit(50);
@@ -46,7 +47,7 @@ export const getPostBySlug = createServerFn({ method: "GET" })
     const sb = publicClient();
     const { data: row, error } = await sb
       .from("blog_posts")
-      .select("slug,title,excerpt,body,cover_image,author,published_at")
+      .select("slug,title,excerpt,body,cover_image,author,published_at,tags")
       .eq("slug", data.slug)
       .eq("published", true)
       .maybeSingle();

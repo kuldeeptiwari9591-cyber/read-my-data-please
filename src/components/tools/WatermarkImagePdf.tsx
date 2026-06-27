@@ -78,7 +78,7 @@ export function WatermarkImagePdf() {
         ) : (
           <div className="mt-2 flex items-center gap-3 rounded-xl border border-border bg-surface/60 p-3">
             {preview && (
-              <img src={preview} alt="" className="h-16 w-16 rounded-md object-contain bg-white/5" />
+              <img src={preview} alt="" className="h-16 w-16 rounded-md object-contain bg-background/40 border border-border" />
             )}
             <div className="flex-1 truncate text-sm">{image.name}</div>
             <button

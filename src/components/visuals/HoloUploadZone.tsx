@@ -5,8 +5,9 @@ import {
   useReducedMotion,
   useSpring,
 } from "framer-motion";
-import { Upload, FileText, X, Check, Sparkles } from "lucide-react";
+import { Upload, FileText, X, Check, Sparkles, AlertCircle } from "lucide-react";
 import { loadPdfjs } from "@/lib/pdfjs";
+import { validateFile, inferExpected } from "@/utils/validateFile";
 
 interface HoloUploadZoneProps {
   multiple?: boolean;
@@ -36,6 +37,7 @@ export function HoloUploadZone({
   const [drag, setDrag] = useState(false);
   const [dropPoint, setDropPoint] = useState<{ x: number; y: number } | null>(null);
   const [flash, setFlash] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const scale = useSpring(1, { stiffness: 300, damping: 20 });
@@ -49,9 +51,9 @@ export function HoloUploadZone({
     : { scale: [1, 1.02, 1], opacity: [0.85, 1, 0.85] };
 
   const handleFiles = useCallback(
-    (list: FileList | null) => {
+    async (list: FileList | null) => {
       if (!list) return;
-      const arr = Array.from(list).filter((f) =>
+      const candidates = Array.from(list).filter((f) =>
         accept.split(",").some((a) => {
           const ax = a.trim().toLowerCase();
           if (ax.startsWith(".")) return f.name.toLowerCase().endsWith(ax);
@@ -61,10 +63,34 @@ export function HoloUploadZone({
           );
         }),
       );
-      if (arr.length === 0) return;
-      onFiles(multiple ? [...files, ...arr] : arr.slice(0, 1));
+      if (candidates.length === 0) {
+        setError("Unsupported file type for this tool.");
+        return;
+      }
+      // Magic-bytes + size validation
+      const expected = inferExpected(accept);
+      const validated: File[] = [];
+      for (const f of candidates) {
+        const r = await validateFile(f, expected);
+        if (!r.valid) {
+          setError(r.error ?? "Invalid file.");
+          return;
+        }
+        validated.push(f);
+      }
+      setError(null);
+      onFiles(multiple ? [...files, ...validated] : validated.slice(0, 1));
       setFlash(true);
       window.setTimeout(() => setFlash(false), 400);
+      // Broadcast for ToolShell ShareCard context
+      try {
+        const total = validated.reduce((a, b) => a + b.size, 0);
+        window.dispatchEvent(
+          new CustomEvent("crisppdf:upload", { detail: { size: total, count: validated.length } }),
+        );
+      } catch {
+        /* noop */
+      }
     },
     [accept, files, multiple, onFiles],
   );
@@ -212,6 +238,14 @@ export function HoloUploadZone({
           </div>
         </div>
       </motion.div>
+
+      {error && (
+        <div className="mt-3 flex items-start gap-2 rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2 text-xs text-destructive">
+          <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+          <span>{error}</span>
+        </div>
+      )}
+
 
       {files.length > 0 && (
         <ul className="mt-4 space-y-2">

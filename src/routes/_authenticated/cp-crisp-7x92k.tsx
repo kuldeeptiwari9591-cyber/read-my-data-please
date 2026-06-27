@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { Header } from "@/components/Header";
 import { toast } from "sonner";
@@ -10,7 +10,13 @@ import {
   adminDeletePost,
   adminListFeedback,
   adminOpsSummary,
+  adminListToolSettings,
+  adminSetToolEnabled,
+  adminListAnnouncements,
+  adminUpsertAnnouncement,
 } from "@/lib/admin.functions";
+
+const MDEditor = lazy(() => import("@uiw/react-md-editor"));
 
 export const Route = createFileRoute("/_authenticated/cp-crisp-7x92k")({
   head: () => ({
@@ -57,27 +63,79 @@ const blank = {
   published: false,
 };
 
+type ToolRow = { slug: string; name: string; enabled: boolean };
+type Announcement = {
+  id: string;
+  type: string;
+  title: string | null;
+  body: string;
+  severity: string;
+  active: boolean;
+  eta: string | null;
+  created_at: string;
+};
+
 function AdminPanel() {
   const listPosts = useServerFn(adminListPosts);
   const upsertPost = useServerFn(adminUpsertPost);
   const deletePost = useServerFn(adminDeletePost);
   const listFeedback = useServerFn(adminListFeedback);
   const listOps = useServerFn(adminOpsSummary);
+  const listTools = useServerFn(adminListToolSettings);
+  const setToolEnabled = useServerFn(adminSetToolEnabled);
+  const listAnnouncements = useServerFn(adminListAnnouncements);
+  const upsertAnnouncement = useServerFn(adminUpsertAnnouncement);
 
-  const [tab, setTab] = useState<"posts" | "feedback" | "ops">("posts");
+  const [tab, setTab] = useState<"posts" | "feedback" | "ops" | "tools" | "settings">("posts");
   const [allowed, setAllowed] = useState<boolean | null>(null);
   const [posts, setPosts] = useState<PostRow[]>([]);
   const [feedback, setFeedback] = useState<Feedback[]>([]);
   const [ops, setOps] = useState<Op[]>([]);
+  const [tools, setTools] = useState<ToolRow[]>([]);
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [draft, setDraft] = useState(blank);
   const [busy, setBusy] = useState(false);
+  const [isDark, setIsDark] = useState(false);
+
+  // banner & maintenance drafts
+  const [bannerBody, setBannerBody] = useState("");
+  const [bannerSeverity, setBannerSeverity] = useState<"info" | "warning" | "success">("info");
+  const [bannerActive, setBannerActive] = useState(false);
+  const [maintBody, setMaintBody] = useState("We're making CrispPDF better. Back shortly!");
+  const [maintEta, setMaintEta] = useState("");
+  const [maintActive, setMaintActive] = useState(false);
+
+  useEffect(() => {
+    setIsDark(document.documentElement.classList.contains("dark"));
+  }, []);
 
   const refresh = async () => {
     try {
-      const [p, f, o] = await Promise.all([listPosts(), listFeedback(), listOps()]);
+      const [p, f, o, t, a] = await Promise.all([
+        listPosts(),
+        listFeedback(),
+        listOps(),
+        listTools(),
+        listAnnouncements(),
+      ]);
       setPosts(p as PostRow[]);
       setFeedback(f as Feedback[]);
       setOps(o as Op[]);
+      setTools(t as ToolRow[]);
+      const ann = a as Announcement[];
+      setAnnouncements(ann);
+      const b = ann.find((x) => x.type === "banner");
+      if (b) {
+        setBannerBody(b.body);
+        setBannerSeverity((b.severity as "info" | "warning" | "success") ?? "info");
+        setBannerActive(b.active);
+      }
+      const m = ann.find((x) => x.type === "maintenance");
+      if (m) {
+        setMaintBody(m.body);
+        setMaintEta(m.eta ?? "");
+        setMaintActive(m.active);
+      }
       setAllowed(true);
     } catch (e) {
       setAllowed(false);
@@ -153,7 +211,7 @@ function AdminPanel() {
         </div>
 
         <div className="mt-6 flex gap-2 border-b border-border">
-          {(["posts", "feedback", "ops"] as const).map((t) => (
+          {(["posts", "feedback", "ops", "tools", "settings"] as const).map((t) => (
             <button
               key={t}
               onClick={() => setTab(t)}
@@ -163,7 +221,16 @@ function AdminPanel() {
                   : "border-transparent text-muted-foreground hover:text-foreground"
               }`}
             >
-              {t} {t === "posts" ? `(${posts.length})` : t === "feedback" ? `(${feedback.length})` : `(${ops.length})`}
+              {t}{" "}
+              {t === "posts"
+                ? `(${posts.length})`
+                : t === "feedback"
+                  ? `(${feedback.length})`
+                  : t === "ops"
+                    ? `(${ops.length})`
+                    : t === "tools"
+                      ? `(${tools.length})`
+                      : ""}
             </button>
           ))}
         </div>
@@ -194,13 +261,25 @@ function AdminPanel() {
                   rows={3}
                   className="w-full rounded-md border border-border bg-surface/40 px-3 py-2 text-sm"
                 />
-                <textarea
-                  placeholder="Body (markdown / plain text)"
-                  value={draft.body}
-                  onChange={(e) => setDraft({ ...draft, body: e.target.value })}
-                  rows={14}
-                  className="w-full rounded-md border border-border bg-surface/40 px-3 py-2 font-mono text-xs"
-                />
+                <Suspense
+                  fallback={
+                    <textarea
+                      value={draft.body}
+                      onChange={(e) => setDraft({ ...draft, body: e.target.value })}
+                      rows={14}
+                      className="w-full rounded-md border border-border bg-surface/40 px-3 py-2 font-mono text-xs"
+                    />
+                  }
+                >
+                  <div data-color-mode={isDark ? "dark" : "light"}>
+                    <MDEditor
+                      value={draft.body}
+                      onChange={(v) => setDraft({ ...draft, body: v ?? "" })}
+                      preview="live"
+                      height={500}
+                    />
+                  </div>
+                </Suspense>
                 <label className="flex items-center gap-2 text-sm">
                   <input
                     type="checkbox"
@@ -330,6 +409,171 @@ function AdminPanel() {
                 ))}
               </tbody>
             </table>
+          </div>
+        )}
+
+        {tab === "tools" && (
+          <div className="mt-8 grid gap-2 sm:grid-cols-2">
+            {tools.length === 0 && (
+              <p className="text-sm text-muted-foreground">No tools registered yet.</p>
+            )}
+            {tools.map((tl) => (
+              <label
+                key={tl.slug}
+                className="flex items-center justify-between rounded-lg border border-border bg-surface/40 px-3 py-2 text-sm"
+              >
+                <div className="min-w-0">
+                  <div className="truncate font-medium">{tl.name}</div>
+                  <div className="truncate text-xs text-muted-foreground">/{tl.slug}</div>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={tl.enabled}
+                  onChange={async (e) => {
+                    const next = e.target.checked;
+                    setTools((rows) =>
+                      rows.map((r) => (r.slug === tl.slug ? { ...r, enabled: next } : r)),
+                    );
+                    try {
+                      await setToolEnabled({ data: { slug: tl.slug, enabled: next } });
+                      toast.success(`${tl.name} ${next ? "enabled" : "disabled"}`);
+                    } catch (err) {
+                      toast.error(err instanceof Error ? err.message : "Toggle failed");
+                      refresh();
+                    }
+                  }}
+                />
+              </label>
+            ))}
+          </div>
+        )}
+
+        {tab === "settings" && (
+          <div className="mt-8 grid gap-8 lg:grid-cols-2">
+            <section className="rounded-2xl border border-border bg-surface/40 p-5">
+              <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                Announcement banner
+              </h2>
+              <div className="mt-4 space-y-3">
+                <textarea
+                  placeholder="Announcement message"
+                  value={bannerBody}
+                  onChange={(e) => setBannerBody(e.target.value)}
+                  rows={3}
+                  className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm"
+                />
+                <div className="flex flex-wrap items-center gap-3">
+                  <label className="flex items-center gap-2 text-xs">
+                    <input
+                      type="checkbox"
+                      checked={bannerActive}
+                      onChange={(e) => setBannerActive(e.target.checked)}
+                    />
+                    Active
+                  </label>
+                  {(["info", "warning", "success"] as const).map((s) => (
+                    <label key={s} className="flex items-center gap-1 text-xs capitalize">
+                      <input
+                        type="radio"
+                        name="bannerSev"
+                        checked={bannerSeverity === s}
+                        onChange={() => setBannerSeverity(s)}
+                      />
+                      {s}
+                    </label>
+                  ))}
+                </div>
+                {bannerBody && (
+                  <div
+                    className={`rounded-md px-3 py-2 text-xs ${
+                      bannerSeverity === "warning"
+                        ? "bg-amber-500 text-black"
+                        : bannerSeverity === "success"
+                          ? "bg-emerald-500 text-black"
+                          : "bg-primary text-primary-foreground"
+                    }`}
+                  >
+                    Preview: {bannerBody}
+                  </div>
+                )}
+                <button
+                  onClick={async () => {
+                    const existing = announcements.find((a) => a.type === "banner");
+                    try {
+                      await upsertAnnouncement({
+                        data: {
+                          id: existing?.id,
+                          type: "banner",
+                          body: bannerBody || " ",
+                          severity: bannerSeverity,
+                          active: bannerActive,
+                        },
+                      });
+                      toast.success("Banner saved");
+                      refresh();
+                    } catch (e) {
+                      toast.error(e instanceof Error ? e.message : "Save failed");
+                    }
+                  }}
+                  className="rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+                >
+                  Save banner
+                </button>
+              </div>
+            </section>
+
+            <section className="rounded-2xl border border-border bg-surface/40 p-5">
+              <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                Maintenance mode
+              </h2>
+              <div className="mt-4 space-y-3">
+                <textarea
+                  placeholder="Maintenance message"
+                  value={maintBody}
+                  onChange={(e) => setMaintBody(e.target.value)}
+                  rows={3}
+                  className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm"
+                />
+                <input
+                  placeholder='ETA, e.g. "~2 hours"'
+                  value={maintEta}
+                  onChange={(e) => setMaintEta(e.target.value)}
+                  className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm"
+                />
+                <label className="flex items-center gap-2 text-sm">
+                  <input
+                    type="checkbox"
+                    checked={maintActive}
+                    onChange={(e) => setMaintActive(e.target.checked)}
+                  />
+                  Maintenance mode ON (admins still have access)
+                </label>
+                <button
+                  onClick={async () => {
+                    const existing = announcements.find((a) => a.type === "maintenance");
+                    try {
+                      await upsertAnnouncement({
+                        data: {
+                          id: existing?.id,
+                          type: "maintenance",
+                          body: maintBody,
+                          severity: "warning",
+                          active: maintActive,
+                          eta: maintEta || null,
+                        },
+                      });
+                      toast.success("Maintenance saved");
+                      refresh();
+                    } catch (e) {
+                      toast.error(e instanceof Error ? e.message : "Save failed");
+                    }
+                  }}
+                  className="rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+                >
+                  Save maintenance
+                </button>
+              </div>
+            </section>
           </div>
         )}
       </main>

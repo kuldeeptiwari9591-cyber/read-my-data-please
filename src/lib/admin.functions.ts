@@ -99,3 +99,83 @@ export const adminOpsSummary = createServerFn({ method: "GET" })
     if (error) throw new Error(error.message);
     return data ?? [];
   });
+
+// ─── Tool toggles ─────────────────────────────────────────────────────────
+
+export const adminListToolSettings = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertAdmin(context);
+    const { data, error } = await context.supabase
+      .from("tool_settings")
+      .select("slug,name,enabled,updated_at")
+      .order("name", { ascending: true });
+    if (error) throw new Error(error.message);
+    return data ?? [];
+  });
+
+export const adminSetToolEnabled = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { slug: string; enabled: boolean }) => {
+    if (!d?.slug || typeof d.enabled !== "boolean") throw new Error("Invalid input");
+    return d;
+  })
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { error } = await context.supabase
+      .from("tool_settings")
+      .update({ enabled: data.enabled, updated_at: new Date().toISOString() })
+      .eq("slug", data.slug);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+// ─── Announcements (banner + maintenance) ─────────────────────────────────
+
+export const adminListAnnouncements = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertAdmin(context);
+    const { data, error } = await context.supabase
+      .from("announcements")
+      .select("id,type,title,body,severity,active,eta,created_at")
+      .order("created_at", { ascending: false });
+    if (error) throw new Error(error.message);
+    return data ?? [];
+  });
+
+export const adminUpsertAnnouncement = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator(
+    (d: {
+      id?: string;
+      type: "banner" | "maintenance";
+      title?: string;
+      body: string;
+      severity: "info" | "warning" | "success";
+      active: boolean;
+      eta?: string | null;
+    }) => {
+      if (!["banner", "maintenance"].includes(d.type)) throw new Error("Invalid type");
+      if (!["info", "warning", "success"].includes(d.severity)) throw new Error("Invalid severity");
+      if (!d.body || d.body.length > 500) throw new Error("Invalid body");
+      return d;
+    },
+  )
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const payload = {
+      type: data.type,
+      title: data.title ?? data.body.slice(0, 80),
+      body: data.body,
+      severity: data.severity,
+      active: data.active,
+      eta: data.eta ?? null,
+    };
+    const q = data.id
+      ? context.supabase.from("announcements").update(payload).eq("id", data.id)
+      : context.supabase.from("announcements").insert(payload);
+    const { error } = await q;
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
