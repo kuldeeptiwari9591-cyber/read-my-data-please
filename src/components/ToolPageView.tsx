@@ -57,7 +57,7 @@ export function ToolPageView({ slug }: { slug: string }) {
 
   const useCaseLinks = USE_CASES.filter((u) => u.toolSlugs.includes(tool.slug)).slice(0, 6);
   const compareLinks = COMPETITORS.filter((c) => c.toolSlugs.includes(tool.slug));
-  const answer = `${tool.name} on CrispPDF is the fastest free way to ${tool.short.toLowerCase()}. ${tool.processing === "browser" ? "Runs entirely in your browser — your file is never uploaded." : "Server-assisted but files are processed in memory and discarded immediately."} No signup, no watermark, no daily limit.`;
+  const answer = getAeoAnswer(tool.slug, tool.name, tool.short, tool.processing);
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-background text-foreground">
