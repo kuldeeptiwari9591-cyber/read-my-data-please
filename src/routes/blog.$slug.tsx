@@ -94,7 +94,7 @@ function BlogPostPage() {
 }
 
 import { useState } from "react";
-import { MessageCircle, Twitter, Linkedin, Link as LinkIcon, Check } from "lucide-react";
+import { MessageCircle, Link as LinkIcon, Check, Share2 } from "lucide-react";
 import { abs as absUrl } from "@/lib/site-url";
 
 function ShareButtons({ title, slug }: { title: string; slug: string }) {
