@@ -222,7 +222,42 @@ export function ToolPageView({ slug }: { slug: string }) {
             </div>
           </div>
         )}
+
+        {useCaseLinks.length > 0 && (
+          <div className="mt-16">
+            <h2 className="font-display text-xl font-semibold">{tool.name} for…</h2>
+            <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {useCaseLinks.map((u) => (
+                <Link
+                  key={u.slug}
+                  to={`/use-cases/${tool.slug}-for-${u.slug}` as never}
+                  className="rounded-xl border border-border bg-surface/40 px-4 py-3 text-sm font-medium transition-colors hover:border-primary/60"
+                >
+                  {tool.name} for {u.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {compareLinks.length > 0 && (
+          <div className="mt-12">
+            <h2 className="font-display text-xl font-semibold">Compare {tool.name} with</h2>
+            <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
+              {compareLinks.map((c) => (
+                <Link
+                  key={c.slug}
+                  to={`/vs/${tool.slug}-vs-${c.slug}` as never}
+                  className="rounded-xl border border-border bg-surface/40 px-4 py-3 text-sm font-medium transition-colors hover:border-primary/60"
+                >
+                  {tool.name} vs {c.name}
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
       </section>
+
 
       <Footer />
     </div>
