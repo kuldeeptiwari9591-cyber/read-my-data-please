@@ -9,6 +9,7 @@ export type BlogListItem = {
   cover_image: string | null;
   author: string | null;
   published_at: string | null;
+  tags: string[];
 };
 
 export type BlogPost = BlogListItem & { body: string };
