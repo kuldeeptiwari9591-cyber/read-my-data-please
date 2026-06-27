@@ -2,6 +2,9 @@ import { TOOLS_BY_SLUG } from "@/lib/tools";
 import { getToolContent } from "@/lib/tool-content";
 import { abs, OG_DEFAULT } from "@/lib/site-url";
 import { hreflangLinks } from "@/lib/hreflang";
+import { questionLd, speakableLd } from "@/lib/seo/jsonld";
+
+const SITE_LAST_UPDATED = "2026-06-27";
 
 export function buildToolHead(slug: string) {
   const tool = TOOLS_BY_SLUG[slug];
