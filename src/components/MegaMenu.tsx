@@ -17,7 +17,7 @@ const INFO_LINKS = [
   { to: "/feedback", label: "Feedback" },
   { to: "/blog", label: "Blog" },
   { to: "/about", label: "About" },
-  { to: "/changelog", label: "Changelog" },
+  
   { to: "/contact", label: "Contact" },
 ];
 

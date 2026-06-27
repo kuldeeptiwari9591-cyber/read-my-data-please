@@ -16,6 +16,37 @@ import {
   adminListAnnouncements,
   adminUpsertAnnouncement,
 } from "@/lib/admin.functions";
+import { RELEASES } from "@/lib/changelog";
+
+function ChangelogTab() {
+  return (
+    <div className="mt-8">
+      <p className="text-sm text-muted-foreground">
+        Internal release history. Edit <code className="rounded bg-surface/60 px-1 py-0.5 font-mono text-xs">src/lib/changelog.ts</code> to add a new release.
+      </p>
+      <ol className="mt-6 space-y-6">
+        {RELEASES.map((r) => (
+          <li key={r.version} className="rounded-2xl border border-border bg-surface/40 p-5">
+            <div className="flex items-center gap-3">
+              <span className="rounded-full border border-primary/40 bg-primary/10 px-3 py-1 font-mono text-xs text-primary">
+                v{r.version}
+              </span>
+              <time className="font-mono text-xs text-muted-foreground">{r.date}</time>
+            </div>
+            <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
+              {r.highlights.map((h) => (
+                <li key={h} className="flex gap-2">
+                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                  <span>{h}</span>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </ol>
+    </div>
+  );
+}
 
 const MDEditor = lazy(() => import("@uiw/react-md-editor"));
 
@@ -89,7 +120,7 @@ function AdminPanel() {
   const listAnnouncements = useServerFn(adminListAnnouncements);
   const upsertAnnouncement = useServerFn(adminUpsertAnnouncement);
 
-  const [tab, setTab] = useState<"posts" | "feedback" | "ops" | "tools" | "settings">("posts");
+  const [tab, setTab] = useState<"posts" | "feedback" | "ops" | "tools" | "settings" | "changelog">("posts");
   const [allowed, setAllowed] = useState<boolean | null>(null);
   const [posts, setPosts] = useState<PostRow[]>([]);
   const [feedback, setFeedback] = useState<Feedback[]>([]);
@@ -214,7 +245,7 @@ function AdminPanel() {
         </div>
 
         <div className="mt-6 flex gap-2 border-b border-border">
-          {(["posts", "feedback", "ops", "tools", "settings"] as const).map((t) => (
+          {(["posts", "feedback", "ops", "tools", "settings", "changelog"] as const).map((t) => (
             <button
               key={t}
               onClick={() => setTab(t)}
@@ -566,6 +597,8 @@ function AdminPanel() {
             </section>
           </div>
         )}
+
+        {tab === "changelog" && <ChangelogTab />}
       </main>
     </div>
   );

@@ -74,7 +74,6 @@ import { Route as CompressPdfForPassportPhotoRouteImport } from './routes/compre
 import { Route as CompressPdfForEmailRouteImport } from './routes/compress-pdf-for-email'
 import { Route as CompressPdfRouteImport } from './routes/compress-pdf'
 import { Route as ComparePdfRouteImport } from './routes/compare-pdf'
-import { Route as ChangelogRouteImport } from './routes/changelog'
 import { Route as BlankPagePdfRouteImport } from './routes/blank-page-pdf'
 import { Route as Base64PdfRouteImport } from './routes/base64-pdf'
 import { Route as AuthRouteImport } from './routes/auth'
@@ -420,11 +419,6 @@ const ComparePdfRoute = ComparePdfRouteImport.update({
   path: '/compare-pdf',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ChangelogRoute = ChangelogRouteImport.update({
-  id: '/changelog',
-  path: '/changelog',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const BlankPagePdfRoute = BlankPagePdfRouteImport.update({
   id: '/blank-page-pdf',
   path: '/blank-page-pdf',
@@ -527,7 +521,6 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/base64-pdf': typeof Base64PdfRoute
   '/blank-page-pdf': typeof BlankPagePdfRoute
-  '/changelog': typeof ChangelogRoute
   '/compare-pdf': typeof ComparePdfRoute
   '/compress-pdf': typeof CompressPdfRoute
   '/compress-pdf-for-email': typeof CompressPdfForEmailRoute
@@ -612,7 +605,6 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/base64-pdf': typeof Base64PdfRoute
   '/blank-page-pdf': typeof BlankPagePdfRoute
-  '/changelog': typeof ChangelogRoute
   '/compare-pdf': typeof ComparePdfRoute
   '/compress-pdf': typeof CompressPdfRoute
   '/compress-pdf-for-email': typeof CompressPdfForEmailRoute
@@ -699,7 +691,6 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/base64-pdf': typeof Base64PdfRoute
   '/blank-page-pdf': typeof BlankPagePdfRoute
-  '/changelog': typeof ChangelogRoute
   '/compare-pdf': typeof ComparePdfRoute
   '/compress-pdf': typeof CompressPdfRoute
   '/compress-pdf-for-email': typeof CompressPdfForEmailRoute
@@ -786,7 +777,6 @@ export interface FileRouteTypes {
     | '/auth'
     | '/base64-pdf'
     | '/blank-page-pdf'
-    | '/changelog'
     | '/compare-pdf'
     | '/compress-pdf'
     | '/compress-pdf-for-email'
@@ -871,7 +861,6 @@ export interface FileRouteTypes {
     | '/auth'
     | '/base64-pdf'
     | '/blank-page-pdf'
-    | '/changelog'
     | '/compare-pdf'
     | '/compress-pdf'
     | '/compress-pdf-for-email'
@@ -957,7 +946,6 @@ export interface FileRouteTypes {
     | '/auth'
     | '/base64-pdf'
     | '/blank-page-pdf'
-    | '/changelog'
     | '/compare-pdf'
     | '/compress-pdf'
     | '/compress-pdf-for-email'
@@ -1044,7 +1032,6 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   Base64PdfRoute: typeof Base64PdfRoute
   BlankPagePdfRoute: typeof BlankPagePdfRoute
-  ChangelogRoute: typeof ChangelogRoute
   ComparePdfRoute: typeof ComparePdfRoute
   CompressPdfRoute: typeof CompressPdfRoute
   CompressPdfForEmailRoute: typeof CompressPdfForEmailRoute
@@ -1576,13 +1563,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ComparePdfRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/changelog': {
-      id: '/changelog'
-      path: '/changelog'
-      fullPath: '/changelog'
-      preLoaderRoute: typeof ChangelogRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/blank-page-pdf': {
       id: '/blank-page-pdf'
       path: '/blank-page-pdf'
@@ -1734,7 +1714,6 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   Base64PdfRoute: Base64PdfRoute,
   BlankPagePdfRoute: BlankPagePdfRoute,
-  ChangelogRoute: ChangelogRoute,
   ComparePdfRoute: ComparePdfRoute,
   CompressPdfRoute: CompressPdfRoute,
   CompressPdfForEmailRoute: CompressPdfForEmailRoute,
