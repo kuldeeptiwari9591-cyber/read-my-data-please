@@ -92,6 +92,7 @@ import { Route as ToolsSlugRouteImport } from './routes/tools.$slug'
 import { Route as ConvertSlugRouteImport } from './routes/convert.$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AuthenticatedCpCrisp7x92kRouteImport } from './routes/_authenticated/cp-crisp-7x92k'
+import { Route as ApiPublicHooksSecurityScanRouteImport } from './routes/api/public/hooks/security-scan'
 
 const WordToPdfRoute = WordToPdfRouteImport.update({
   id: '/word-to-pdf',
@@ -509,6 +510,12 @@ const AuthenticatedCpCrisp7x92kRoute =
     path: '/cp-crisp-7x92k',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const ApiPublicHooksSecurityScanRoute =
+  ApiPublicHooksSecurityScanRouteImport.update({
+    id: '/api/public/hooks/security-scan',
+    path: '/api/public/hooks/security-scan',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -593,6 +600,7 @@ export interface FileRoutesByFullPath {
   '/use-cases/$slug': typeof UseCasesSlugRoute
   '/vs/$slug': typeof VsSlugRoute
   '/blog/': typeof BlogIndexRoute
+  '/api/public/hooks/security-scan': typeof ApiPublicHooksSecurityScanRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -677,6 +685,7 @@ export interface FileRoutesByTo {
   '/use-cases/$slug': typeof UseCasesSlugRoute
   '/vs/$slug': typeof VsSlugRoute
   '/blog': typeof BlogIndexRoute
+  '/api/public/hooks/security-scan': typeof ApiPublicHooksSecurityScanRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -763,6 +772,7 @@ export interface FileRoutesById {
   '/use-cases/$slug': typeof UseCasesSlugRoute
   '/vs/$slug': typeof VsSlugRoute
   '/blog/': typeof BlogIndexRoute
+  '/api/public/hooks/security-scan': typeof ApiPublicHooksSecurityScanRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -849,6 +859,7 @@ export interface FileRouteTypes {
     | '/use-cases/$slug'
     | '/vs/$slug'
     | '/blog/'
+    | '/api/public/hooks/security-scan'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -933,6 +944,7 @@ export interface FileRouteTypes {
     | '/use-cases/$slug'
     | '/vs/$slug'
     | '/blog'
+    | '/api/public/hooks/security-scan'
   id:
     | '__root__'
     | '/'
@@ -1018,6 +1030,7 @@ export interface FileRouteTypes {
     | '/use-cases/$slug'
     | '/vs/$slug'
     | '/blog/'
+    | '/api/public/hooks/security-scan'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -1103,6 +1116,7 @@ export interface RootRouteChildren {
   UseCasesSlugRoute: typeof UseCasesSlugRoute
   VsSlugRoute: typeof VsSlugRoute
   BlogIndexRoute: typeof BlogIndexRoute
+  ApiPublicHooksSecurityScanRoute: typeof ApiPublicHooksSecurityScanRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1688,6 +1702,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCpCrisp7x92kRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/public/hooks/security-scan': {
+      id: '/api/public/hooks/security-scan'
+      path: '/api/public/hooks/security-scan'
+      fullPath: '/api/public/hooks/security-scan'
+      preLoaderRoute: typeof ApiPublicHooksSecurityScanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -1785,6 +1806,7 @@ const rootRouteChildren: RootRouteChildren = {
   UseCasesSlugRoute: UseCasesSlugRoute,
   VsSlugRoute: VsSlugRoute,
   BlogIndexRoute: BlogIndexRoute,
+  ApiPublicHooksSecurityScanRoute: ApiPublicHooksSecurityScanRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
