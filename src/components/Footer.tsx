@@ -85,6 +85,7 @@ export function Footer() {
             <span className="text-muted-foreground">Language:</span>
             {SUPPORTED_LOCALES.map((l, i) => {
               const active = mounted && lang === l.code;
+              const short = l.code === "hi" ? "हि" : l.code.toUpperCase();
               return (
                 <span key={l.code} className="flex items-center">
                   <button
@@ -94,7 +95,7 @@ export function Footer() {
                     aria-pressed={active}
                     aria-label={`Switch language to ${l.label}`}
                   >
-                    {l.short ?? l.code.toUpperCase()}
+                    {short}
                   </button>
                   {i < SUPPORTED_LOCALES.length - 1 && <span className="opacity-40">·</span>}
                 </span>
