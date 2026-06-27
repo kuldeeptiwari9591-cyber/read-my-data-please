@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Logo } from "./Logo";
 import { CATEGORY_META, TOOLS, type ToolCategory } from "@/lib/tools";
 
-const COLS: ToolCategory[] = ["organize", "convert-to", "convert-from"];
+const COLS: ToolCategory[] = ["organize", "convert-to", "convert-from", "edit", "secure"];
 
 const COMPANY = [
   { label: "About", to: "/about" },
