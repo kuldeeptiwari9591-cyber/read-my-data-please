@@ -21,17 +21,15 @@ import { ParticlesBackground } from "@/components/visuals/ParticlesBackground";
 import { GradientBlob } from "@/components/visuals/GradientBlob";
 import {
   CATEGORY_META,
-  PHASE_META,
   TOOLS,
   scoreTool,
   toolMatches,
   toolsByCategory,
   type ToolCategory,
-  type ToolPhase,
 } from "@/lib/tools";
 import { abs, OG_DEFAULT } from "@/lib/site-url";
 
-const PHASE_ORDER: ToolPhase[] = ["next", "interactive", "server"];
+
 
 export const Route = createFileRoute("/")({
   head: () => {
