@@ -70,11 +70,12 @@ const CATEGORY_ORDER: ToolCategory[] = [
 ];
 
 const STATS: Array<{ label: string; target?: number; suffix?: string; static?: string }> = [
-  { label: "Free tools", target: 40, suffix: "+" },
+  { label: "PDF tools", target: 40, suffix: "+" },
   { label: "Signups required", target: 0 },
   { label: "Watermarks added", target: 0 },
   { label: "Daily uses", static: "∞" },
 ];
+
 
 const FEATURES = [
   {
