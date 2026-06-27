@@ -68,10 +68,10 @@ export function Footer() {
       </div>
 
       <div className="border-t border-border/60">
-        <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-2 px-6 py-6 text-xs text-muted-foreground md:flex-row md:items-center">
+        <div className="mx-auto max-w-7xl px-6 py-6 text-xs text-muted-foreground">
           <p>© {new Date().getFullYear()} CrispPDF. Your files stay yours.</p>
-          <p className="font-mono">v1.3 · built with TanStack Start</p>
         </div>
+
       </div>
     </footer>
   );
