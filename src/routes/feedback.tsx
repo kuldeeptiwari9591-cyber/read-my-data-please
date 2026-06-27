@@ -75,6 +75,7 @@ function FeedbackPage() {
     setError(null);
     setBusy(true);
     try {
+      if (HCAPTCHA_SITE_KEY && !captchaToken) throw new Error("Please complete the captcha.");
       let payload: Parameters<typeof submit>[0]["data"];
       if (tab === "feedback") {
         if (!rating) throw new Error("Please pick a star rating.");
