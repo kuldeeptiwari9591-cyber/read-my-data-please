@@ -5,8 +5,9 @@ import {
   useReducedMotion,
   useSpring,
 } from "framer-motion";
-import { Upload, FileText, X, Check, Sparkles } from "lucide-react";
+import { Upload, FileText, X, Check, Sparkles, AlertCircle } from "lucide-react";
 import { loadPdfjs } from "@/lib/pdfjs";
+import { validateFile, inferExpected } from "@/utils/validateFile";
 
 interface HoloUploadZoneProps {
   multiple?: boolean;
