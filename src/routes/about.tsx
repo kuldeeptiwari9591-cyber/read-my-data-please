@@ -58,7 +58,7 @@ function About() {
         {/* Hero */}
         <section className="text-center">
           <h1 className="font-display text-4xl font-bold tracking-tight md:text-5xl">
-            Built for people who just need to get things done.
+            About CrispPDF — Privacy-first PDF toolkit built for people who just need to get things done.
           </h1>
           <p className="mx-auto mt-5 max-w-2xl text-lg text-muted-foreground">
             CrispPDF is a free, privacy-first PDF toolkit. No ads. No accounts. No nonsense.
