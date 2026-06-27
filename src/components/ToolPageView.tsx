@@ -195,15 +195,17 @@ export function ToolPageView({ slug }: { slug: string }) {
           <h2 className="mt-2 font-display text-2xl font-semibold md:text-3xl">
             {tool.name} — frequently asked questions
           </h2>
-          <div className="mt-6 grid gap-3 lg:grid-cols-2">
+          <div className="tool-faq mt-6 grid gap-3 lg:grid-cols-2">
             {content.faqs.map((f) => (
               <details
                 key={f.q}
                 className="group rounded-xl border border-border bg-surface/60 px-5 py-4 backdrop-blur-sm transition-colors hover:border-primary/60"
               >
                 <summary className="cursor-pointer list-none font-display text-sm font-medium leading-snug">
-                  <span className="mr-2 text-primary">+</span>
-                  {f.q}
+                  <h3 className="inline">
+                    <span className="mr-2 text-primary">+</span>
+                    {f.q}
+                  </h3>
                 </summary>
 
                 <p className="mt-3 pl-5 text-sm leading-relaxed text-muted-foreground">{f.a}</p>
