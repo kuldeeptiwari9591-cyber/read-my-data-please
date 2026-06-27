@@ -28,6 +28,7 @@ import {
   type ToolCategory,
 } from "@/lib/tools";
 import { abs, OG_DEFAULT } from "@/lib/site-url";
+import { PopularSpotlight } from "@/components/PopularSpotlight";
 const HOME_FAQS: Array<{ q: string; a: string }> = [
   {
     q: "Is CrispPDF really free?",
@@ -407,9 +408,8 @@ function Index() {
         )}
       </section>
 
-
-
-
+      {/* POPULAR TOOLS SPOTLIGHT */}
+      <PopularSpotlight />
 
       {/* HOW IT WORKS */}
       <section id="how" className="relative mx-auto max-w-6xl px-6 py-24">

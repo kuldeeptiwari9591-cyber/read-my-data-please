@@ -5,6 +5,7 @@ import { PDFHealthScore } from "@/components/visuals/PDFHealthScore";
 import { ShareCard } from "@/components/visuals/ShareCard";
 import { celebrate } from "@/lib/celebrate";
 import { TOOLS_BY_SLUG } from "@/lib/tools";
+import { analytics } from "@/lib/analytics";
 
 interface FileDropProps {
   multiple?: boolean;
@@ -74,12 +75,14 @@ function ShareCardSlot({ slug, title }: { slug: string; title: string }) {
       const d = (e as CustomEvent).detail as { size?: number; count?: number };
       setOriginalSize(d?.size);
       setCount(d?.count);
+      if (slug && d?.size) analytics.fileUpload(slug, d.size);
     };
     const onDown = (e: Event) => {
       const d = (e as CustomEvent).detail as { size?: number; slug?: string };
       if (d?.slug && slug && d.slug !== slug) return;
       setResultSize(d?.size);
       setDownloaded(true);
+      if (slug && d?.size) analytics.toolComplete(slug, originalSize ?? 0, d.size, 0);
     };
     window.addEventListener("crisppdf:upload", onUp);
     window.addEventListener("crisppdf:download", onDown);

@@ -25,24 +25,65 @@ import { OG_DEFAULT } from "../lib/site-url";
 
 
 function NotFoundComponent() {
+  const quick = [
+    { slug: "compress-pdf", name: "Compress PDF" },
+    { slug: "merge-pdf", name: "Merge PDF" },
+    { slug: "pdf-to-word", name: "PDF to Word" },
+    { slug: "esign-pdf", name: "eSign PDF" },
+  ];
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <div className="flex justify-center"><Logo size={64} withText={false} /></div>
-        <h1 className="mt-6 font-display text-7xl font-bold text-gradient">404</h1>
-        <h2 className="mt-4 font-display text-xl font-semibold">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
-        </p>
-        <div className="mt-6">
-          <Link
-            to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary-hover"
-          >
-            Go home
-          </Link>
-        </div>
+    <div className="flex min-h-screen flex-col items-center justify-center gap-6 bg-background px-4 py-16 text-center">
+      <h1
+        className="font-display font-bold leading-none"
+        style={{
+          fontSize: "clamp(96px, 18vw, 144px)",
+          background: "linear-gradient(135deg, #6366F1, #8B5CF6)",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+        }}
+      >
+        404
+      </h1>
+      <div className="float-icon">
+        <Logo size={56} withText={false} />
       </div>
+      <h2 className="font-display text-2xl font-semibold text-foreground">
+        This page got lost in the cloud.
+      </h2>
+      <p className="max-w-md text-base text-muted-foreground">
+        The tool you're looking for might have moved or never existed.
+      </p>
+      <div className="flex flex-col gap-3 sm:flex-row">
+        <Link
+          to="/"
+          className="rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary-hover"
+        >
+          Back to Homepage
+        </Link>
+        <Link
+          to="/"
+          hash="tools"
+          className="rounded-lg border border-border bg-surface/40 px-6 py-3 text-sm font-semibold transition-colors hover:border-primary/60"
+        >
+          Browse All Tools
+        </Link>
+      </div>
+      <div className="mt-8 grid w-full max-w-2xl grid-cols-2 gap-3 md:grid-cols-4">
+        {quick.map((q) => (
+          <Link
+            key={q.slug}
+            to={("/" + q.slug) as never}
+            className="rounded-lg border border-border bg-surface/40 px-4 py-3 text-sm font-medium transition-colors hover:border-primary/60"
+          >
+            {q.name}
+          </Link>
+        ))}
+      </div>
+      <style>{`
+        @keyframes floaty { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-14px)} }
+        .float-icon { animation: floaty 3s ease-in-out infinite; }
+        @media (prefers-reduced-motion: reduce) { .float-icon { animation: none; } }
+      `}</style>
     </div>
   );
 }
@@ -136,11 +177,21 @@ function RootShell({ children }: { children: ReactNode }) {
   // SSR renders light theme; client applies stored preference pre-paint via
   // the inline script below to prevent a flash.
   const themeBootstrap = `(function(){try{var t=localStorage.getItem('crisppdf-theme');if(t==='dark'){document.documentElement.classList.add('dark');}}catch(e){}})();`;
+  const gaId = import.meta.env.VITE_GA4_ID as string | undefined;
+  const gaBootstrap = gaId
+    ? `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${gaId}',{anonymize_ip:true,page_path:window.location.pathname});`
+    : null;
   return (
     <html lang="en">
       <head>
         <HeadContent />
         <script dangerouslySetInnerHTML={{ __html: themeBootstrap }} />
+        {gaId && (
+          <>
+            <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} />
+            <script dangerouslySetInnerHTML={{ __html: gaBootstrap! }} />
+          </>
+        )}
       </head>
       <body className="bg-background text-foreground">
         {children}

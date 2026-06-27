@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { Suspense } from "react";
-import { ArrowLeft, CheckCircle2, Loader2 } from "lucide-react";
+import { Suspense, useEffect } from "react";
+import { ArrowLeft, CheckCircle2 } from "lucide-react";
 
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -12,6 +12,9 @@ import { ComingSoonTool } from "@/components/tools/ComingSoonTool";
 import { RateLimitBanner } from "@/components/tools/RateLimitBanner";
 import { getToolContent } from "@/lib/tool-content";
 import { ToolDisabledGate } from "@/components/ToolDisabledGate";
+import { ToolPageSkeleton } from "@/components/ToolPageSkeleton";
+import { toolIconMap, categoryColorMap } from "@/lib/toolIcons";
+import { analytics } from "@/lib/analytics";
 
 export function ToolPageView({ slug }: { slug: string }) {
   const tool = TOOLS_BY_SLUG[slug];
@@ -35,10 +38,15 @@ export function ToolPageView({ slug }: { slug: string }) {
     );
   }
 
-  const Icon = tool.icon;
+  const Icon = toolIconMap[tool.slug] ?? tool.icon;
+  const iconColor = categoryColorMap[tool.category] ?? "text-primary";
   const Component = TOOL_COMPONENTS[tool.slug];
   const isReady = tool.status === "ready";
   const content = getToolContent(tool.slug, tool.name);
+
+  useEffect(() => {
+    analytics.toolView(tool.name, tool.category);
+  }, [tool.name, tool.category]);
 
   const related = TOOLS.filter(
     (t) => t.category === tool.category && t.slug !== tool.slug,
@@ -102,23 +110,14 @@ export function ToolPageView({ slug }: { slug: string }) {
 
             <ToolDisabledGate slug={tool.slug} toolName={tool.name}>
               {Component ? (
-                <Suspense
-                  fallback={
-                    <div className="flex min-h-[20rem] flex-col items-center justify-center gap-3 rounded-2xl border border-border/60 bg-surface/40 p-12 text-center">
-                      <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                      <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                        Loading {tool.name}…
-                      </p>
-                    </div>
-                  }
-                >
+                <Suspense fallback={<ToolPageSkeleton />}>
                   <Component />
                 </Suspense>
               ) : (
                 <ToolShell
                   title={tool.name}
                   description={tool.description}
-                  icon={<Icon className="h-7 w-7 text-primary" />}
+                  icon={<Icon className={`h-7 w-7 ${iconColor}`} />}
                 >
                   <ComingSoonTool
                     tool={tool}

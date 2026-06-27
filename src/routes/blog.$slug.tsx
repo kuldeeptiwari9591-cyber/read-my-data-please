@@ -86,8 +86,55 @@ function BlogPostPage() {
         <article className="mt-10 whitespace-pre-wrap font-sans text-base leading-relaxed text-foreground/90">
           {post.body}
         </article>
+        <ShareButtons title={post.title} slug={post.slug} />
       </main>
       <Footer />
+    </div>
+  );
+}
+
+import { useState } from "react";
+import { MessageCircle, Link as LinkIcon, Check, Share2 } from "lucide-react";
+import { abs as absUrl } from "@/lib/site-url";
+
+function ShareButtons({ title, slug }: { title: string; slug: string }) {
+  const url = absUrl(`/blog/${slug}`);
+  const [copied, setCopied] = useState(false);
+  const wa = `https://wa.me/?text=${encodeURIComponent(`${title} — ${url}`)}`;
+  const tw = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`;
+  const li = `https://linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
+  const onCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      /* noop */
+    }
+  };
+  const btn =
+    "inline-flex items-center gap-2 rounded-lg border border-border bg-surface px-4 py-2 text-sm font-medium transition-colors hover:border-primary";
+  return (
+    <div className="mt-10 border-t border-border pt-6">
+      <p className="mb-4 text-sm text-muted-foreground">Found this useful? Share it.</p>
+      <div className="flex flex-wrap gap-3">
+        <a href={wa} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-500">
+          <MessageCircle className="h-4 w-4" /> WhatsApp
+        </a>
+        <a href={tw} target="_blank" rel="noopener noreferrer" className={btn}>
+          <Share2 className="h-4 w-4" /> Twitter
+        </a>
+        <a href={li} target="_blank" rel="noopener noreferrer" className={btn}>
+          <Share2 className="h-4 w-4" /> LinkedIn
+        </a>
+        <button onClick={onCopy} className={btn}>
+          {copied ? (
+            <><Check className="h-4 w-4 text-green-500" /><span className="text-green-500">Copied!</span></>
+          ) : (
+            <><LinkIcon className="h-4 w-4" /> Copy link</>
+          )}
+        </button>
+      </div>
     </div>
   );
 }
