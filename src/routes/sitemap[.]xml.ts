@@ -4,9 +4,8 @@ import { TOOLS } from "@/lib/tools";
 
 import { listPublishedPosts } from "@/lib/blog.functions";
 
-// Only emit absolute URLs when VITE_SITE_URL is explicitly configured —
-// never hardcode a fallback domain.
-const BASE_URL = ((import.meta.env.VITE_SITE_URL as string | undefined) ?? "").replace(/\/$/, "");
+// Always emit absolute URLs. Falls back to crisppdf.com when VITE_SITE_URL is unset.
+const BASE_URL = ((import.meta.env.VITE_SITE_URL as string | undefined) ?? "https://crisppdf.com").replace(/\/$/, "");
 
 interface SitemapEntry {
   path: string;
