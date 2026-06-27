@@ -21,21 +21,80 @@ import { ParticlesBackground } from "@/components/visuals/ParticlesBackground";
 import { GradientBlob } from "@/components/visuals/GradientBlob";
 import {
   CATEGORY_META,
-  PHASE_META,
   TOOLS,
   scoreTool,
   toolMatches,
   toolsByCategory,
   type ToolCategory,
-  type ToolPhase,
 } from "@/lib/tools";
 import { abs, OG_DEFAULT } from "@/lib/site-url";
-
-const PHASE_ORDER: ToolPhase[] = ["next", "interactive", "server"];
+const HOME_FAQS: Array<{ q: string; a: string }> = [
+  {
+    q: "Is CrispPDF really free?",
+    a: "Yes — all 40 tools, no daily limits, no signup, no watermarks. Forever.",
+  },
+  {
+    q: "Are my files private?",
+    a: "Your files aren't stored. They're processed only to produce your output and then dropped immediately.",
+  },
+  {
+    q: "Why no signup?",
+    a: "You shouldn't need an account to merge two PDFs. Friction-free is the whole point.",
+  },
+  {
+    q: "Is there a file size limit?",
+    a: "Most tools handle PDFs up to ~100 MB comfortably. Very large files may take a few extra seconds.",
+  },
+  {
+    q: "Do you have an API?",
+    a: "Not yet. We're focused on the web app first. Tell us what you'd want and we'll prioritize.",
+  },
+  {
+    q: "Which browsers does CrispPDF support?",
+    a: "CrispPDF works on all modern browsers — Chrome, Firefox, Safari, and Edge on desktop and mobile. No plugins or extensions required. Any browser released after 2018 works fine.",
+  },
+  {
+    q: "Does CrispPDF work on mobile and tablets?",
+    a: "Yes. CrispPDF is fully responsive and touch-friendly. Every tool works on iOS Safari, Android Chrome, and tablet browsers. Upload, process, and download without a keyboard.",
+  },
+  {
+    q: "Are there watermarks on processed files?",
+    a: "Never. CrispPDF does not add any watermarks, branding, or stamps to your output. What you download is exactly what you processed — clean and unmodified.",
+  },
+  {
+    q: "Can I use CrispPDF for commercial documents?",
+    a: "Yes. CrispPDF can be used for personal and commercial documents. You retain full ownership of everything you upload and download. We never claim rights over your files.",
+  },
+  {
+    q: "How many files can I process per day?",
+    a: "There are no daily limits on CrispPDF. Process as many files as you need — free users get the same unlimited access with no throttling or paywalls.",
+  },
+  {
+    q: "What happens to my file after processing?",
+    a: "Your file is used only to generate your output and then immediately discarded. We do not store, log, analyse, or share your documents at any point.",
+  },
+  {
+    q: "Is CrispPDF safe for confidential documents?",
+    a: "Yes. Most tools process files entirely inside your browser, meaning your document never leaves your device. For tools that use a server function, files are processed in memory only and never written to disk.",
+  },
+  {
+    q: "Who built CrispPDF?",
+    a: "CrispPDF is an independent product built by developers who believe PDF tools should be free, private, and fast for everyone. No ads, no data selling, no premium upsells.",
+  },
+];
 
 export const Route = createFileRoute("/")({
   head: () => {
     const canonical = abs("/");
+    const faqLd = {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: HOME_FAQS.map((f) => ({
+        "@type": "Question",
+        name: f.q,
+        acceptedAnswer: { "@type": "Answer", text: f.a },
+      })),
+    };
     return {
       meta: [
         { title: "CrispPDF — 40 Free Online PDF Tools · No signup, no watermarks" },
@@ -56,10 +115,12 @@ export const Route = createFileRoute("/")({
         { name: "twitter:image", content: OG_DEFAULT },
       ],
       links: [{ rel: "canonical", href: canonical }],
+      scripts: [{ type: "application/ld+json", children: JSON.stringify(faqLd) }],
     };
   },
   component: Index,
 });
+
 
 const CATEGORY_ORDER: ToolCategory[] = [
   "organize",
@@ -70,11 +131,12 @@ const CATEGORY_ORDER: ToolCategory[] = [
 ];
 
 const STATS: Array<{ label: string; target?: number; suffix?: string; static?: string }> = [
-  { label: "Free tools", target: 40, suffix: "+" },
+  { label: "PDF tools", target: 40, suffix: "+" },
   { label: "Signups required", target: 0 },
   { label: "Watermarks added", target: 0 },
   { label: "Daily uses", static: "∞" },
 ];
+
 
 const FEATURES = [
   {
@@ -345,40 +407,8 @@ function Index() {
         )}
       </section>
 
-      {/* ALL-LIVE BANNER */}
-      <section id="roadmap" className="relative mx-auto max-w-5xl px-6 py-24">
-        <GlassCard glow className="p-10 text-center">
-          <p className="font-mono text-xs uppercase tracking-[0.2em] text-primary">
-            // Status
-          </p>
-          <h2 className="mt-3 font-display text-4xl font-bold tracking-tight md:text-5xl">
-            All <span className="text-gradient">40 tools</span> are live.
-          </h2>
-          <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
-            Every tool runs end-to-end today — no waitlists, no "coming soon" stubs. Most run
-            fully in your browser; a few use a privacy-respecting server function.
-          </p>
-          <div className="mt-8 grid grid-cols-3 gap-4 text-left sm:gap-6">
-            {PHASE_ORDER.map((phase, idx) => {
-              const meta = PHASE_META[phase];
-              return (
-                <div
-                  key={phase}
-                  className="rounded-xl border border-border/60 bg-surface/40 p-4"
-                >
-                  <div className="flex items-center gap-2">
-                    <span className="font-mono text-[10px] text-primary">
-                      {String(idx + 1).padStart(2, "0")}
-                    </span>
-                    <h3 className="font-display text-sm font-semibold">{meta.label}</h3>
-                  </div>
-                  <p className="mt-2 text-xs text-muted-foreground">{meta.blurb}</p>
-                </div>
-              );
-            })}
-          </div>
-        </GlassCard>
-      </section>
+
+
 
 
       {/* HOW IT WORKS */}
@@ -454,7 +484,7 @@ function Index() {
       </section>
 
       {/* FAQ */}
-      <section id="faq" className="relative mx-auto max-w-3xl px-6 py-24">
+      <section id="faq" className="relative mx-auto max-w-5xl px-6 py-24">
         <div className="text-center">
           <p className="font-mono text-xs uppercase tracking-[0.2em] text-primary">// FAQ</p>
           <h2 className="mt-3 font-display text-4xl font-bold tracking-tight md:text-5xl">
@@ -462,29 +492,8 @@ function Index() {
           </h2>
         </div>
 
-        <div className="mt-12 space-y-3">
-          {[
-            {
-              q: "Is CrispPDF really free?",
-              a: "Yes — all 40 tools, no daily limits, no signup, no watermarks. Forever.",
-            },
-            {
-              q: "Are my files private?",
-              a: "Your files aren't stored. They're processed only to produce your output and then dropped immediately.",
-            },
-            {
-              q: "Why no signup?",
-              a: "You shouldn't need an account to merge two PDFs. Friction-free is the whole point.",
-            },
-            {
-              q: "Is there a file size limit?",
-              a: "Most tools handle PDFs up to ~100 MB comfortably. Very large files may take a few extra seconds.",
-            },
-            {
-              q: "Do you have an API?",
-              a: "Not yet. We're focused on the web app first. Tell us what you'd want and we'll prioritize.",
-            },
-          ].map((f) => (
+        <div className="mt-12 grid gap-3 lg:grid-cols-2">
+          {HOME_FAQS.map((f) => (
             <details
               key={f.q}
               className="group rounded-xl border border-border bg-surface/60 px-5 py-4 backdrop-blur-sm transition-colors hover:border-primary/60"
@@ -499,6 +508,7 @@ function Index() {
         </div>
       </section>
 
+
       {/* FINAL CTA */}
       <section className="relative mx-auto max-w-5xl px-6 py-24">
         <GlassCard glow className="overflow-hidden p-12 text-center">
@@ -509,8 +519,9 @@ function Index() {
             Ready when you are.
           </h2>
           <p className="mt-4 text-muted-foreground">
-            {TOOLS.length} tools, zero setup. Pick one and go.
+            {TOOLS.length} tools. Zero setup. Always free.
           </p>
+
           <a
             href="#tools"
             className="mt-8 inline-flex items-center gap-2 rounded-md bg-gradient-to-r from-primary to-secondary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-[0_0_30px_rgba(99,102,241,0.4)] transition-transform hover:scale-[1.03]"
