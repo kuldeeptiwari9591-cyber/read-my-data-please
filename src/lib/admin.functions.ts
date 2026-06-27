@@ -80,11 +80,28 @@ export const adminListFeedback = createServerFn({ method: "GET" })
     await assertAdmin(context);
     const { data, error } = await context.supabase
       .from("feedback")
-      .select("id,tool_slug,rating,message,email,created_at")
+      .select("id,tool_slug,rating,message,email,created_at,type,status")
       .order("created_at", { ascending: false })
-      .limit(200);
+      .limit(500);
     if (error) throw new Error(error.message);
     return data ?? [];
+  });
+
+export const adminUpdateFeedbackStatus = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { id: string; status: "open" | "resolved" | "spam" }) => {
+    if (!d?.id) throw new Error("Invalid id");
+    if (!["open", "resolved", "spam"].includes(d.status)) throw new Error("Invalid status");
+    return d;
+  })
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { error } = await context.supabase
+      .from("feedback")
+      .update({ status: data.status })
+      .eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
   });
 
 export const adminOpsSummary = createServerFn({ method: "GET" })
