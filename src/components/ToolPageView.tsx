@@ -38,10 +38,15 @@ export function ToolPageView({ slug }: { slug: string }) {
     );
   }
 
-  const Icon = tool.icon;
+  const Icon = toolIconMap[tool.slug] ?? tool.icon;
+  const iconColor = categoryColorMap[tool.category] ?? "text-primary";
   const Component = TOOL_COMPONENTS[tool.slug];
   const isReady = tool.status === "ready";
   const content = getToolContent(tool.slug, tool.name);
+
+  useEffect(() => {
+    analytics.toolView(tool.name, tool.category);
+  }, [tool.name, tool.category]);
 
   const related = TOOLS.filter(
     (t) => t.category === tool.category && t.slug !== tool.slug,
