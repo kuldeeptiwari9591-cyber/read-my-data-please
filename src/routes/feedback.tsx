@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { useServerFn } from "@tanstack/react-start";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -41,6 +42,9 @@ function FeedbackPage() {
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const captchaRef = useRef<HCaptcha | null>(null);
+  const HCAPTCHA_SITE_KEY = import.meta.env.VITE_HCAPTCHA_SITE_KEY as string | undefined;
 
   // feedback
   const [rating, setRating] = useState(0);
@@ -71,6 +75,7 @@ function FeedbackPage() {
     setError(null);
     setBusy(true);
     try {
+      if (HCAPTCHA_SITE_KEY && !captchaToken) throw new Error("Please complete the captcha.");
       let payload: Parameters<typeof submit>[0]["data"];
       if (tab === "feedback") {
         if (!rating) throw new Error("Please pick a star rating.");
@@ -104,11 +109,16 @@ function FeedbackPage() {
           email: email.trim() || null,
         };
       }
+      payload = { ...payload, captchaToken };
       await submit({ data: payload });
       setDone(true);
       reset();
+      setCaptchaToken(null);
+      captchaRef.current?.resetCaptcha();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Submission failed");
+      captchaRef.current?.resetCaptcha();
+      setCaptchaToken(null);
     } finally {
       setBusy(false);
     }
@@ -233,7 +243,19 @@ function FeedbackPage() {
             </div>
           )}
 
-          <button type="submit" disabled={busy} className="w-full rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary-hover disabled:opacity-60">
+          {HCAPTCHA_SITE_KEY && (
+            <div className="flex justify-center">
+              <HCaptcha
+                ref={captchaRef}
+                sitekey={HCAPTCHA_SITE_KEY}
+                onVerify={(token) => setCaptchaToken(token)}
+                onExpire={() => setCaptchaToken(null)}
+                theme="dark"
+              />
+            </div>
+          )}
+
+          <button type="submit" disabled={busy || (!!HCAPTCHA_SITE_KEY && !captchaToken)} className="w-full rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary-hover disabled:opacity-60">
             {busy ? "Sending…" : tab === "feedback" ? "Send Feedback" : tab === "bug" ? "Report Bug" : "Request This Tool"}
           </button>
         </form>
