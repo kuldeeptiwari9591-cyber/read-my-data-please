@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { ChevronDown, Menu, X, Search } from "lucide-react";
+import { ChevronDown, Search, X } from "lucide-react";
 import { TOOLS, CATEGORY_META, type ToolCategory } from "@/lib/tools";
 
 const CATEGORIES: ToolCategory[] = [
@@ -26,9 +26,10 @@ const LEGAL_LINKS = [
   { to: "/terms", label: "Terms" },
 ];
 
+type Panel = "tools" | "more" | null;
+
 export function MegaMenu() {
-  const [open, setOpen] = useState<"tools" | "more" | null>(null);
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [open, setOpen] = useState<Panel>(null);
   const [q, setQ] = useState("");
   const wrapRef = useRef<HTMLDivElement>(null);
 
@@ -39,10 +40,7 @@ export function MegaMenu() {
       }
     };
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setOpen(null);
-        setMobileOpen(false);
-      }
+      if (e.key === "Escape") setOpen(null);
     };
     document.addEventListener("mousedown", onDoc);
     document.addEventListener("keydown", onKey);
@@ -53,11 +51,16 @@ export function MegaMenu() {
   }, []);
 
   useEffect(() => {
-    document.body.style.overflow = mobileOpen ? "hidden" : "";
+    // Lock body scroll when a panel is open on small screens
+    if (open && typeof window !== "undefined" && window.innerWidth < 768) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
     return () => {
       document.body.style.overflow = "";
     };
-  }, [mobileOpen]);
+  }, [open]);
 
   const filtered = q.trim()
     ? TOOLS.filter(
@@ -67,235 +70,178 @@ export function MegaMenu() {
       )
     : null;
 
+  const close = () => {
+    setOpen(null);
+    setQ("");
+  };
+
   return (
     <div className="relative" ref={wrapRef}>
-      {/* Desktop nav */}
-      <nav className="hidden items-center gap-1 text-sm text-muted-foreground md:flex">
+      {/* Same nav on every viewport, scrollable on mobile */}
+      <nav className="flex max-w-[60vw] items-center gap-0.5 overflow-x-auto text-sm text-muted-foreground sm:max-w-none [&::-webkit-scrollbar]:hidden">
         <button
           onClick={() => setOpen(open === "tools" ? null : "tools")}
-          className="inline-flex items-center gap-1 rounded-md px-3 py-2 transition-colors hover:bg-surface hover:text-foreground"
+          className="inline-flex shrink-0 items-center gap-1 rounded-md px-2.5 py-2 transition-colors hover:bg-surface hover:text-foreground sm:px-3"
           aria-expanded={open === "tools"}
         >
           All tools <ChevronDown className="h-3.5 w-3.5" />
         </button>
         <Link
-          to="/"
-          hash="how"
-          className="rounded-md px-3 py-2 transition-colors hover:bg-surface hover:text-foreground"
-        >
-          How it works
-        </Link>
-        <Link
           to="/why-crisppdf"
-          className="rounded-md px-3 py-2 transition-colors hover:bg-surface hover:text-foreground"
+          className="shrink-0 rounded-md px-2.5 py-2 transition-colors hover:bg-surface hover:text-foreground sm:px-3"
         >
-          Why CrispPDF
+          Why
         </Link>
         <Link
           to="/blog"
-          className="rounded-md px-3 py-2 transition-colors hover:bg-surface hover:text-foreground"
+          className="shrink-0 rounded-md px-2.5 py-2 transition-colors hover:bg-surface hover:text-foreground sm:px-3"
         >
           Blog
         </Link>
+        <Link
+          to="/faq"
+          className="shrink-0 rounded-md px-2.5 py-2 transition-colors hover:bg-surface hover:text-foreground sm:px-3"
+        >
+          FAQ
+        </Link>
         <button
           onClick={() => setOpen(open === "more" ? null : "more")}
-          className="inline-flex items-center gap-1 rounded-md px-3 py-2 transition-colors hover:bg-surface hover:text-foreground"
+          className="inline-flex shrink-0 items-center gap-1 rounded-md px-2.5 py-2 transition-colors hover:bg-surface hover:text-foreground sm:px-3"
           aria-expanded={open === "more"}
         >
           More <ChevronDown className="h-3.5 w-3.5" />
         </button>
       </nav>
 
-      {/* Mobile trigger */}
-      <button
-        onClick={() => setMobileOpen(true)}
-        className="inline-flex items-center justify-center rounded-md p-2 text-muted-foreground hover:bg-surface hover:text-foreground md:hidden"
-        aria-label="Open menu"
-      >
-        <Menu className="h-5 w-5" />
-      </button>
-
-      {/* Desktop: Tools mega panel */}
+      {/* Tools panel — fullscreen sheet on mobile, dropdown on md+ */}
       {open === "tools" && (
-        <div className="absolute left-1/2 top-full z-50 mt-2 hidden w-[min(96vw,1100px)] -translate-x-1/2 rounded-2xl border border-border/60 bg-background/95 p-5 shadow-2xl backdrop-blur-xl md:block">
-          <div className="mb-4 flex items-center gap-2 rounded-lg border border-border/60 bg-surface/50 px-3 py-2">
-            <Search className="h-4 w-4 text-muted-foreground" />
-            <input
-              autoFocus
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              placeholder="Search 40 tools…"
-              className="w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground"
-            />
-          </div>
-
-          {filtered ? (
-            <div className="grid max-h-[60vh] grid-cols-2 gap-1 overflow-auto lg:grid-cols-3">
-              {filtered.map((t) => (
-                <ToolLink key={t.slug} slug={t.slug} name={t.name} short={t.short} icon={t.icon} onClick={() => setOpen(null)} />
-              ))}
-              {filtered.length === 0 && (
-                <p className="col-span-full p-4 text-center text-sm text-muted-foreground">
-                  No tools match "{q}"
-                </p>
-              )}
-            </div>
-          ) : (
-            <div className="grid max-h-[65vh] grid-cols-2 gap-x-6 gap-y-5 overflow-auto lg:grid-cols-5">
-              {CATEGORIES.map((cat) => {
-                const items = TOOLS.filter((t) => t.category === cat);
-                return (
-                  <div key={cat}>
-                    <h3 className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-primary">
-                      {CATEGORY_META[cat].label}
-                    </h3>
-                    <ul className="space-y-0.5">
-                      {items.map((t) => (
-                        <li key={t.slug}>
-                          <ToolLink slug={t.slug} name={t.name} short={t.short} icon={t.icon} compact onClick={() => setOpen(null)} />
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Desktop: More panel */}
-      {open === "more" && (
-        <div className="absolute right-0 top-full z-50 mt-2 hidden w-64 rounded-2xl border border-border/60 bg-background/95 p-3 shadow-2xl backdrop-blur-xl md:block">
-          <div className="grid grid-cols-1 gap-0.5">
-            <p className="px-3 pb-1 pt-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Company</p>
-            {INFO_LINKS.map((l) => (
-              <Link
-                key={l.to}
-                to={l.to as never}
-                onClick={() => setOpen(null)}
-                className="rounded-md px-3 py-2 text-sm text-foreground transition-colors hover:bg-surface"
-              >
-                {l.label}
-              </Link>
-            ))}
-            <p className="px-3 pb-1 pt-3 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Legal</p>
-            {LEGAL_LINKS.map((l) => (
-              <Link
-                key={l.to}
-                to={l.to as never}
-                onClick={() => setOpen(null)}
-                className="rounded-md px-3 py-2 text-sm text-foreground transition-colors hover:bg-surface"
-              >
-                {l.label}
-              </Link>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Mobile drawer */}
-      {mobileOpen && (
-        <div className="fixed inset-0 z-[60] md:hidden">
+        <>
+          {/* Mobile backdrop */}
           <div
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-            onClick={() => setMobileOpen(false)}
+            className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm md:hidden"
+            onClick={close}
           />
-          <div className="absolute right-0 top-0 h-full w-[88vw] max-w-sm overflow-y-auto border-l border-border/60 bg-background p-5 shadow-2xl">
-            <div className="mb-4 flex items-center justify-between">
-              <span className="font-display text-lg font-semibold">Menu</span>
+          <div
+            className="fixed inset-x-0 top-16 z-50 mx-auto flex max-h-[calc(100vh-4rem)] flex-col overflow-hidden border-b border-border bg-background p-4 shadow-2xl md:absolute md:left-1/2 md:top-full md:inset-x-auto md:mt-2 md:w-[min(96vw,1100px)] md:max-h-[70vh] md:-translate-x-1/2 md:rounded-2xl md:border md:border-border/60 md:bg-background/95 md:p-5 md:backdrop-blur-xl"
+          >
+            <div className="mb-3 flex items-center gap-2">
+              <div className="flex flex-1 items-center gap-2 rounded-lg border border-border/60 bg-surface/50 px-3 py-2">
+                <Search className="h-4 w-4 text-muted-foreground" />
+                <input
+                  autoFocus
+                  value={q}
+                  onChange={(e) => setQ(e.target.value)}
+                  placeholder="Search 40 tools…"
+                  className="w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+                />
+              </div>
               <button
-                onClick={() => setMobileOpen(false)}
-                className="rounded-md p-2 hover:bg-surface"
-                aria-label="Close menu"
+                onClick={close}
+                className="rounded-md p-2 text-muted-foreground hover:bg-surface md:hidden"
+                aria-label="Close"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
 
-            <div className="mb-4 flex items-center gap-2 rounded-lg border border-border/60 bg-surface/50 px-3 py-2">
-              <Search className="h-4 w-4 text-muted-foreground" />
-              <input
-                value={q}
-                onChange={(e) => setQ(e.target.value)}
-                placeholder="Search tools…"
-                className="w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground"
-              />
-            </div>
-
-            {filtered ? (
-              <ul className="space-y-0.5">
-                {filtered.map((t) => (
-                  <li key={t.slug}>
+            <div className="flex-1 overflow-y-auto">
+              {filtered ? (
+                <div className="grid grid-cols-1 gap-1 sm:grid-cols-2 lg:grid-cols-3">
+                  {filtered.map((t) => (
                     <ToolLink
+                      key={t.slug}
                       slug={t.slug}
                       name={t.name}
                       short={t.short}
                       icon={t.icon}
-                      compact
-                      onClick={() => setMobileOpen(false)}
+                      onClick={close}
                     />
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <>
-                {CATEGORIES.map((cat) => (
-                  <div key={cat} className="mb-4">
-                    <h3 className="mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-primary">
-                      {CATEGORY_META[cat].label}
-                    </h3>
-                    <ul className="space-y-0.5">
-                      {TOOLS.filter((t) => t.category === cat).map((t) => (
-                        <li key={t.slug}>
-                          <ToolLink
-                            slug={t.slug}
-                            name={t.name}
-                            short={t.short}
-                            icon={t.icon}
-                            compact
-                            onClick={() => setMobileOpen(false)}
-                          />
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-
-                <div className="mt-2 border-t border-border/60 pt-3">
-                  <h3 className="mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Company</h3>
-                  <ul className="space-y-0.5">
-                    {INFO_LINKS.map((l) => (
-                      <li key={l.to}>
-                        <Link
-                          to={l.to as never}
-                          onClick={() => setMobileOpen(false)}
-                          className="block rounded-md px-3 py-2 text-sm hover:bg-surface"
-                        >
-                          {l.label}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                  <h3 className="mb-1.5 mt-3 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Legal</h3>
-                  <ul className="space-y-0.5">
-                    {LEGAL_LINKS.map((l) => (
-                      <li key={l.to}>
-                        <Link
-                          to={l.to as never}
-                          onClick={() => setMobileOpen(false)}
-                          className="block rounded-md px-3 py-2 text-sm hover:bg-surface"
-                        >
-                          {l.label}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
+                  ))}
+                  {filtered.length === 0 && (
+                    <p className="col-span-full p-4 text-center text-sm text-muted-foreground">
+                      No tools match "{q}"
+                    </p>
+                  )}
                 </div>
-              </>
-            )}
+              ) : (
+                <div className="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2 lg:grid-cols-5">
+                  {CATEGORIES.map((cat) => {
+                    const items = TOOLS.filter((t) => t.category === cat);
+                    return (
+                      <div key={cat}>
+                        <h3 className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-primary">
+                          {CATEGORY_META[cat].label}
+                        </h3>
+                        <ul className="space-y-0.5">
+                          {items.map((t) => (
+                            <li key={t.slug}>
+                              <ToolLink
+                                slug={t.slug}
+                                name={t.name}
+                                short={t.short}
+                                icon={t.icon}
+                                compact
+                                onClick={close}
+                              />
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
           </div>
-        </div>
+        </>
+      )}
+
+      {/* More panel */}
+      {open === "more" && (
+        <>
+          <div
+            className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm md:hidden"
+            onClick={close}
+          />
+          <div className="fixed inset-x-0 top-16 z-50 max-h-[calc(100vh-4rem)] overflow-y-auto border-b border-border bg-background p-4 shadow-2xl md:absolute md:inset-x-auto md:right-0 md:top-full md:mt-2 md:w-64 md:rounded-2xl md:border md:border-border/60 md:bg-background/95 md:p-3 md:backdrop-blur-xl">
+            <div className="mb-2 flex items-center justify-between md:hidden">
+              <span className="font-display text-base font-semibold">More</span>
+              <button
+                onClick={close}
+                className="rounded-md p-2 text-muted-foreground hover:bg-surface"
+                aria-label="Close"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <p className="px-3 pb-1 pt-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+              Company
+            </p>
+            {INFO_LINKS.map((l) => (
+              <Link
+                key={l.to}
+                to={l.to as never}
+                onClick={close}
+                className="block rounded-md px-3 py-2 text-sm text-foreground transition-colors hover:bg-surface"
+              >
+                {l.label}
+              </Link>
+            ))}
+            <p className="px-3 pb-1 pt-3 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+              Legal
+            </p>
+            {LEGAL_LINKS.map((l) => (
+              <Link
+                key={l.to}
+                to={l.to as never}
+                onClick={close}
+                className="block rounded-md px-3 py-2 text-sm text-foreground transition-colors hover:bg-surface"
+              >
+                {l.label}
+              </Link>
+            ))}
+          </div>
+        </>
       )}
     </div>
   );
@@ -326,9 +272,13 @@ function ToolLink({
         <Icon className="h-3.5 w-3.5" />
       </span>
       <span className="min-w-0 flex-1">
-        <span className="block truncate text-sm font-medium text-foreground">{name}</span>
+        <span className="block truncate text-sm font-medium text-foreground">
+          {name}
+        </span>
         {!compact && (
-          <span className="block truncate text-[11px] text-muted-foreground">{short}</span>
+          <span className="block truncate text-[11px] text-muted-foreground">
+            {short}
+          </span>
         )}
       </span>
     </Link>
