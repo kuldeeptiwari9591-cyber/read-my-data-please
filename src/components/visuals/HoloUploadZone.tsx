@@ -239,6 +239,14 @@ export function HoloUploadZone({
         </div>
       </motion.div>
 
+      {error && (
+        <div className="mt-3 flex items-start gap-2 rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2 text-xs text-destructive">
+          <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+          <span>{error}</span>
+        </div>
+      )}
+
+
       {files.length > 0 && (
         <ul className="mt-4 space-y-2">
           {files.map((f, i) => (
