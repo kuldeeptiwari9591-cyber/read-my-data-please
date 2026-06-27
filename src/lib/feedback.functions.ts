@@ -1,7 +1,21 @@
 import { createServerFn } from "@tanstack/react-start";
+import { getRequestHeader, getRequestIP } from "@tanstack/react-start/server";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { checkRateLimit } from "@/lib/server-rate-limit";
+import { logAudit } from "@/lib/audit.server";
 
 type FeedbackType = "feedback" | "bug" | "tool_request";
+
+function clientFingerprint(): { ip: string; ua: string } {
+  let ip = "unknown";
+  try {
+    ip = getRequestIP({ xForwardedFor: true }) ?? "unknown";
+  } catch {
+    /* not in request context */
+  }
+  const ua = getRequestHeader("user-agent") ?? "";
+  return { ip, ua };
+}
 
 export const submitFeedback = createServerFn({ method: "POST" })
   .inputValidator(
@@ -20,10 +34,34 @@ export const submitFeedback = createServerFn({ method: "POST" })
       if (d.email && d.email.length > 200) throw new Error("Email too long");
       if (d.rating != null && (d.rating < 1 || d.rating > 5))
         throw new Error("Invalid rating");
+      // Reject obvious URL-spam payloads (>3 links) — common abuse vector.
+      const links = (d.message.match(/https?:\/\//gi) ?? []).length;
+      if (links > 3) throw new Error("Too many links in message");
       return d;
     },
   )
   .handler(async ({ data }) => {
+    const { ip, ua } = clientFingerprint();
+
+    const rl = checkRateLimit({
+      key: `feedback:${ip}`,
+      limit: 5,
+      windowMs: 60_000,
+    });
+    if (!rl.allowed) {
+      await logAudit({
+        event: "feedback.rate_limited",
+        severity: "warn",
+        ip,
+        user_agent: ua,
+        route: "/feedback",
+        details: { retryInMs: rl.retryInMs, used: rl.used },
+      });
+      throw new Error(
+        `Too many submissions — try again in ${Math.ceil(rl.retryInMs / 1000)}s`,
+      );
+    }
+
     const { error } = await supabaseAdmin.from("feedback").insert({
       type: data.type,
       tool_slug: data.tool_slug ?? null,
@@ -32,6 +70,26 @@ export const submitFeedback = createServerFn({ method: "POST" })
       email: data.email ?? null,
       status: "open",
     });
-    if (error) throw new Error(error.message);
+    if (error) {
+      await logAudit({
+        event: "feedback.insert_failed",
+        severity: "error",
+        ip,
+        user_agent: ua,
+        route: "/feedback",
+        details: { message: error.message },
+      });
+      throw new Error(error.message);
+    }
+
+    await logAudit({
+      event: "feedback.submitted",
+      severity: "info",
+      ip,
+      user_agent: ua,
+      route: "/feedback",
+      details: { type: data.type, tool_slug: data.tool_slug ?? null },
+    });
+
     return { ok: true };
   });
