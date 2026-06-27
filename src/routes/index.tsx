@@ -275,7 +275,7 @@ function Index() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.45 }}
-            className="mt-20 grid w-full max-w-3xl grid-cols-2 gap-3 md:grid-cols-4"
+            className="mt-12 grid w-full max-w-3xl grid-cols-2 gap-3 md:grid-cols-4"
           >
             {STATS.map((s) => (
               <GlassCard key={s.label} className="px-4 py-5 text-center">
