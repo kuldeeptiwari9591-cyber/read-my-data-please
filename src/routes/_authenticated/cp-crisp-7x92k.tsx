@@ -44,6 +44,8 @@ type Feedback = {
   message: string;
   email: string | null;
   created_at: string;
+  type?: "feedback" | "bug" | "tool_request" | null;
+  status?: "open" | "resolved" | "spam" | null;
 };
 type Op = {
   id: string;
@@ -358,57 +360,44 @@ function AdminPanel() {
         )}
 
         {tab === "feedback" && (
-          <div className="mt-8 space-y-2">
-            {feedback.length === 0 && (
-              <p className="text-sm text-muted-foreground">No feedback yet.</p>
-            )}
-            {feedback.map((f) => (
-              <div key={f.id} className="rounded-lg border border-border bg-surface/40 px-4 py-3 text-sm">
-                <div className="flex justify-between text-xs text-muted-foreground">
-                  <span>
-                    {f.tool_slug ?? "general"} · {f.rating ?? "—"}/5
-                  </span>
-                  <span>{new Date(f.created_at).toLocaleString()}</span>
-                </div>
-                <p className="mt-2 whitespace-pre-wrap">{f.message}</p>
-                {f.email && <p className="mt-1 text-xs text-muted-foreground">{f.email}</p>}
-              </div>
-            ))}
-          </div>
+          <FeedbackInbox feedback={feedback} onChange={refresh} />
         )}
 
         {tab === "ops" && (
-          <div className="mt-8 overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="text-xs uppercase text-muted-foreground">
-                <tr>
-                  <th className="px-2 py-2 text-left">Tool</th>
-                  <th className="px-2 py-2 text-left">Status</th>
-                  <th className="px-2 py-2 text-right">Duration</th>
-                  <th className="px-2 py-2 text-right">Bytes in</th>
-                  <th className="px-2 py-2 text-right">When</th>
-                </tr>
-              </thead>
-              <tbody>
-                {ops.map((o) => (
-                  <tr key={o.id} className="border-t border-border">
-                    <td className="px-2 py-2">{o.tool_slug}</td>
-                    <td className="px-2 py-2">
-                      <span className={o.success ? "text-primary" : "text-destructive"}>
-                        {o.success ? "ok" : "fail"}
-                      </span>
-                    </td>
-                    <td className="px-2 py-2 text-right">{o.duration_ms ?? "—"} ms</td>
-                    <td className="px-2 py-2 text-right">
-                      {o.bytes_in ? (o.bytes_in / 1024).toFixed(1) + " KB" : "—"}
-                    </td>
-                    <td className="px-2 py-2 text-right text-xs text-muted-foreground">
-                      {new Date(o.created_at).toLocaleString()}
-                    </td>
+          <div className="mt-8 space-y-6">
+            <OpsChart ops={ops} />
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="text-xs uppercase text-muted-foreground">
+                  <tr>
+                    <th className="px-2 py-2 text-left">Tool</th>
+                    <th className="px-2 py-2 text-left">Status</th>
+                    <th className="px-2 py-2 text-right">Duration</th>
+                    <th className="px-2 py-2 text-right">Bytes in</th>
+                    <th className="px-2 py-2 text-right">When</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {ops.map((o) => (
+                    <tr key={o.id} className="border-t border-border">
+                      <td className="px-2 py-2">{o.tool_slug}</td>
+                      <td className="px-2 py-2">
+                        <span className={o.success ? "text-primary" : "text-destructive"}>
+                          {o.success ? "ok" : "fail"}
+                        </span>
+                      </td>
+                      <td className="px-2 py-2 text-right">{o.duration_ms ?? "—"} ms</td>
+                      <td className="px-2 py-2 text-right">
+                        {o.bytes_in ? (o.bytes_in / 1024).toFixed(1) + " KB" : "—"}
+                      </td>
+                      <td className="px-2 py-2 text-right text-xs text-muted-foreground">
+                        {new Date(o.created_at).toLocaleString()}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
 
