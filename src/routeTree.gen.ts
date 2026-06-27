@@ -90,6 +90,7 @@ import { Route as UseCasesSlugRouteImport } from './routes/use-cases.$slug'
 import { Route as ToolsSlugRouteImport } from './routes/tools.$slug'
 import { Route as ConvertSlugRouteImport } from './routes/convert.$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
 import { Route as AuthenticatedCpCrisp7x92kRouteImport } from './routes/_authenticated/cp-crisp-7x92k'
 import { Route as ApiPublicHooksSecurityScanRouteImport } from './routes/api/public/hooks/security-scan'
 
@@ -498,6 +499,11 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthCallbackRoute = AuthCallbackRouteImport.update({
+  id: '/callback',
+  path: '/callback',
+  getParentRoute: () => AuthRoute,
+} as any)
 const AuthenticatedCpCrisp7x92kRoute =
   AuthenticatedCpCrisp7x92kRouteImport.update({
     id: '/cp-crisp-7x92k',
@@ -518,7 +524,7 @@ export interface FileRoutesByFullPath {
   '/add-page-numbers-pdf': typeof AddPageNumbersPdfRoute
   '/add-watermark-text-pdf': typeof AddWatermarkTextPdfRoute
   '/ai.txt': typeof AiDottxtRoute
-  '/auth': typeof AuthRoute
+  '/auth': typeof AuthRouteWithChildren
   '/base64-pdf': typeof Base64PdfRoute
   '/blank-page-pdf': typeof BlankPagePdfRoute
   '/compare-pdf': typeof ComparePdfRoute
@@ -587,6 +593,7 @@ export interface FileRoutesByFullPath {
   '/why-crisppdf': typeof WhyCrisppdfRoute
   '/word-to-pdf': typeof WordToPdfRoute
   '/cp-crisp-7x92k': typeof AuthenticatedCpCrisp7x92kRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/convert/$slug': typeof ConvertSlugRoute
   '/tools/$slug': typeof ToolsSlugRoute
@@ -602,7 +609,7 @@ export interface FileRoutesByTo {
   '/add-page-numbers-pdf': typeof AddPageNumbersPdfRoute
   '/add-watermark-text-pdf': typeof AddWatermarkTextPdfRoute
   '/ai.txt': typeof AiDottxtRoute
-  '/auth': typeof AuthRoute
+  '/auth': typeof AuthRouteWithChildren
   '/base64-pdf': typeof Base64PdfRoute
   '/blank-page-pdf': typeof BlankPagePdfRoute
   '/compare-pdf': typeof ComparePdfRoute
@@ -671,6 +678,7 @@ export interface FileRoutesByTo {
   '/why-crisppdf': typeof WhyCrisppdfRoute
   '/word-to-pdf': typeof WordToPdfRoute
   '/cp-crisp-7x92k': typeof AuthenticatedCpCrisp7x92kRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/convert/$slug': typeof ConvertSlugRoute
   '/tools/$slug': typeof ToolsSlugRoute
@@ -688,7 +696,7 @@ export interface FileRoutesById {
   '/add-page-numbers-pdf': typeof AddPageNumbersPdfRoute
   '/add-watermark-text-pdf': typeof AddWatermarkTextPdfRoute
   '/ai.txt': typeof AiDottxtRoute
-  '/auth': typeof AuthRoute
+  '/auth': typeof AuthRouteWithChildren
   '/base64-pdf': typeof Base64PdfRoute
   '/blank-page-pdf': typeof BlankPagePdfRoute
   '/compare-pdf': typeof ComparePdfRoute
@@ -757,6 +765,7 @@ export interface FileRoutesById {
   '/why-crisppdf': typeof WhyCrisppdfRoute
   '/word-to-pdf': typeof WordToPdfRoute
   '/_authenticated/cp-crisp-7x92k': typeof AuthenticatedCpCrisp7x92kRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/convert/$slug': typeof ConvertSlugRoute
   '/tools/$slug': typeof ToolsSlugRoute
@@ -843,6 +852,7 @@ export interface FileRouteTypes {
     | '/why-crisppdf'
     | '/word-to-pdf'
     | '/cp-crisp-7x92k'
+    | '/auth/callback'
     | '/blog/$slug'
     | '/convert/$slug'
     | '/tools/$slug'
@@ -927,6 +937,7 @@ export interface FileRouteTypes {
     | '/why-crisppdf'
     | '/word-to-pdf'
     | '/cp-crisp-7x92k'
+    | '/auth/callback'
     | '/blog/$slug'
     | '/convert/$slug'
     | '/tools/$slug'
@@ -1012,6 +1023,7 @@ export interface FileRouteTypes {
     | '/why-crisppdf'
     | '/word-to-pdf'
     | '/_authenticated/cp-crisp-7x92k'
+    | '/auth/callback'
     | '/blog/$slug'
     | '/convert/$slug'
     | '/tools/$slug'
@@ -1029,7 +1041,7 @@ export interface RootRouteChildren {
   AddPageNumbersPdfRoute: typeof AddPageNumbersPdfRoute
   AddWatermarkTextPdfRoute: typeof AddWatermarkTextPdfRoute
   AiDottxtRoute: typeof AiDottxtRoute
-  AuthRoute: typeof AuthRoute
+  AuthRoute: typeof AuthRouteWithChildren
   Base64PdfRoute: typeof Base64PdfRoute
   BlankPagePdfRoute: typeof BlankPagePdfRoute
   ComparePdfRoute: typeof ComparePdfRoute
@@ -1675,6 +1687,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth/callback': {
+      id: '/auth/callback'
+      path: '/callback'
+      fullPath: '/auth/callback'
+      preLoaderRoute: typeof AuthCallbackRouteImport
+      parentRoute: typeof AuthRoute
+    }
     '/_authenticated/cp-crisp-7x92k': {
       id: '/_authenticated/cp-crisp-7x92k'
       path: '/cp-crisp-7x92k'
@@ -1703,6 +1722,16 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
+interface AuthRouteChildren {
+  AuthCallbackRoute: typeof AuthCallbackRoute
+}
+
+const AuthRouteChildren: AuthRouteChildren = {
+  AuthCallbackRoute: AuthCallbackRoute,
+}
+
+const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
@@ -1711,7 +1740,7 @@ const rootRouteChildren: RootRouteChildren = {
   AddPageNumbersPdfRoute: AddPageNumbersPdfRoute,
   AddWatermarkTextPdfRoute: AddWatermarkTextPdfRoute,
   AiDottxtRoute: AiDottxtRoute,
-  AuthRoute: AuthRoute,
+  AuthRoute: AuthRouteWithChildren,
   Base64PdfRoute: Base64PdfRoute,
   BlankPagePdfRoute: BlankPagePdfRoute,
   ComparePdfRoute: ComparePdfRoute,
@@ -1790,13 +1819,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
