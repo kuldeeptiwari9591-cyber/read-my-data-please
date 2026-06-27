@@ -70,6 +70,21 @@ export const Route = createFileRoute("/sitemap.xml")({
             changefreq: "monthly" as const,
             priority: "0.6",
           })),
+          ...SIZE_TARGETS.map((s) => ({
+            path: `/compress-pdf-to-${s.slug}`,
+            changefreq: "monthly" as const,
+            priority: "0.7",
+          })),
+          ...COMPRESS_USES.map((u) => ({
+            path: `/compress-pdf-for-${u}`,
+            changefreq: "monthly" as const,
+            priority: "0.7",
+          })),
+          ...ROOT_FORMAT_ALIASES.map((slug) => ({
+            path: `/${slug}`,
+            changefreq: "monthly" as const,
+            priority: "0.7",
+          })),
         ];
 
         const urls = entries.map((e) =>
