@@ -1,6 +1,4 @@
 import { Logo } from "./Logo";
-import { LanguageSwitcher } from "./LanguageSwitcher";
-import { ThemeToggle } from "./ThemeToggle";
 import { MegaMenu } from "./MegaMenu";
 
 export function Header() {
@@ -10,10 +8,6 @@ export function Header() {
         <Logo size={34} />
         <div className="flex items-center gap-1 sm:gap-2">
           <MegaMenu />
-          <ThemeToggle />
-          <div className="hidden sm:block">
-            <LanguageSwitcher />
-          </div>
         </div>
       </div>
     </header>
