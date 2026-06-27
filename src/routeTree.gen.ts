@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WordToPdfRouteImport } from './routes/word-to-pdf'
+import { Route as WebpToPdfRouteImport } from './routes/webp-to-pdf'
 import { Route as WatermarkPdfRouteImport } from './routes/watermark-pdf'
 import { Route as UnlockPdfRouteImport } from './routes/unlock-pdf'
 import { Route as TermsRouteImport } from './routes/terms'
@@ -80,6 +81,11 @@ import { Route as AuthenticatedCpCrisp7x92kRouteImport } from './routes/_authent
 const WordToPdfRoute = WordToPdfRouteImport.update({
   id: '/word-to-pdf',
   path: '/word-to-pdf',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WebpToPdfRoute = WebpToPdfRouteImport.update({
+  id: '/webp-to-pdf',
+  path: '/webp-to-pdf',
   getParentRoute: () => rootRouteImport,
 } as any)
 const WatermarkPdfRoute = WatermarkPdfRouteImport.update({
@@ -473,6 +479,7 @@ export interface FileRoutesByFullPath {
   '/terms': typeof TermsRoute
   '/unlock-pdf': typeof UnlockPdfRoute
   '/watermark-pdf': typeof WatermarkPdfRoute
+  '/webp-to-pdf': typeof WebpToPdfRoute
   '/word-to-pdf': typeof WordToPdfRoute
   '/cp-crisp-7x92k': typeof AuthenticatedCpCrisp7x92kRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -541,6 +548,7 @@ export interface FileRoutesByTo {
   '/terms': typeof TermsRoute
   '/unlock-pdf': typeof UnlockPdfRoute
   '/watermark-pdf': typeof WatermarkPdfRoute
+  '/webp-to-pdf': typeof WebpToPdfRoute
   '/word-to-pdf': typeof WordToPdfRoute
   '/cp-crisp-7x92k': typeof AuthenticatedCpCrisp7x92kRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -611,6 +619,7 @@ export interface FileRoutesById {
   '/terms': typeof TermsRoute
   '/unlock-pdf': typeof UnlockPdfRoute
   '/watermark-pdf': typeof WatermarkPdfRoute
+  '/webp-to-pdf': typeof WebpToPdfRoute
   '/word-to-pdf': typeof WordToPdfRoute
   '/_authenticated/cp-crisp-7x92k': typeof AuthenticatedCpCrisp7x92kRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -681,6 +690,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/unlock-pdf'
     | '/watermark-pdf'
+    | '/webp-to-pdf'
     | '/word-to-pdf'
     | '/cp-crisp-7x92k'
     | '/blog/$slug'
@@ -749,6 +759,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/unlock-pdf'
     | '/watermark-pdf'
+    | '/webp-to-pdf'
     | '/word-to-pdf'
     | '/cp-crisp-7x92k'
     | '/blog/$slug'
@@ -818,6 +829,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/unlock-pdf'
     | '/watermark-pdf'
+    | '/webp-to-pdf'
     | '/word-to-pdf'
     | '/_authenticated/cp-crisp-7x92k'
     | '/blog/$slug'
@@ -888,6 +900,7 @@ export interface RootRouteChildren {
   TermsRoute: typeof TermsRoute
   UnlockPdfRoute: typeof UnlockPdfRoute
   WatermarkPdfRoute: typeof WatermarkPdfRoute
+  WebpToPdfRoute: typeof WebpToPdfRoute
   WordToPdfRoute: typeof WordToPdfRoute
   ConvertSlugRoute: typeof ConvertSlugRoute
   ToolsSlugRoute: typeof ToolsSlugRoute
@@ -902,6 +915,13 @@ declare module '@tanstack/react-router' {
       path: '/word-to-pdf'
       fullPath: '/word-to-pdf'
       preLoaderRoute: typeof WordToPdfRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/webp-to-pdf': {
+      id: '/webp-to-pdf'
+      path: '/webp-to-pdf'
+      fullPath: '/webp-to-pdf'
+      preLoaderRoute: typeof WebpToPdfRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/watermark-pdf': {
@@ -1451,6 +1471,7 @@ const rootRouteChildren: RootRouteChildren = {
   TermsRoute: TermsRoute,
   UnlockPdfRoute: UnlockPdfRoute,
   WatermarkPdfRoute: WatermarkPdfRoute,
+  WebpToPdfRoute: WebpToPdfRoute,
   WordToPdfRoute: WordToPdfRoute,
   ConvertSlugRoute: ConvertSlugRoute,
   ToolsSlugRoute: ToolsSlugRoute,
