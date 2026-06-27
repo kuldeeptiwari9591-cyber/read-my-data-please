@@ -484,7 +484,7 @@ function Index() {
       </section>
 
       {/* FAQ */}
-      <section id="faq" className="relative mx-auto max-w-3xl px-6 py-24">
+      <section id="faq" className="relative mx-auto max-w-5xl px-6 py-24">
         <div className="text-center">
           <p className="font-mono text-xs uppercase tracking-[0.2em] text-primary">// FAQ</p>
           <h2 className="mt-3 font-display text-4xl font-bold tracking-tight md:text-5xl">
@@ -492,29 +492,8 @@ function Index() {
           </h2>
         </div>
 
-        <div className="mt-12 space-y-3">
-          {[
-            {
-              q: "Is CrispPDF really free?",
-              a: "Yes — all 40 tools, no daily limits, no signup, no watermarks. Forever.",
-            },
-            {
-              q: "Are my files private?",
-              a: "Your files aren't stored. They're processed only to produce your output and then dropped immediately.",
-            },
-            {
-              q: "Why no signup?",
-              a: "You shouldn't need an account to merge two PDFs. Friction-free is the whole point.",
-            },
-            {
-              q: "Is there a file size limit?",
-              a: "Most tools handle PDFs up to ~100 MB comfortably. Very large files may take a few extra seconds.",
-            },
-            {
-              q: "Do you have an API?",
-              a: "Not yet. We're focused on the web app first. Tell us what you'd want and we'll prioritize.",
-            },
-          ].map((f) => (
+        <div className="mt-12 grid gap-3 lg:grid-cols-2">
+          {HOME_FAQS.map((f) => (
             <details
               key={f.q}
               className="group rounded-xl border border-border bg-surface/60 px-5 py-4 backdrop-blur-sm transition-colors hover:border-primary/60"
@@ -528,6 +507,7 @@ function Index() {
           ))}
         </div>
       </section>
+
 
       {/* FINAL CTA */}
       <section className="relative mx-auto max-w-5xl px-6 py-24">
