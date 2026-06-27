@@ -196,7 +196,7 @@ function Index() {
       <Header />
 
       {/* HERO */}
-      <section className="relative min-h-[88vh] overflow-hidden">
+      <section className="relative overflow-hidden">
         <HeroScene />
         <ParticlesBackground className="opacity-70" />
         <GradientBlob className="-top-24 -left-24" size={520} />
@@ -207,7 +207,7 @@ function Index() {
           to="rgba(6,182,212,0.25)"
           duration={18}
         />
-        <div className="relative z-10 mx-auto flex min-h-[88vh] max-w-6xl flex-col items-center justify-center px-6 py-24 text-center">
+        <div className="relative z-10 mx-auto flex max-w-6xl flex-col items-center justify-center px-6 pt-20 pb-12 text-center md:pt-24 md:pb-16">
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
