@@ -40,6 +40,7 @@ import { Route as LlmsFullDottxtRouteImport } from './routes/llms-full[.]txt'
 import { Route as JpgToPdfRouteImport } from './routes/jpg-to-pdf'
 import { Route as InvertPdfRouteImport } from './routes/invert-pdf'
 import { Route as HtmlToPdfRouteImport } from './routes/html-to-pdf'
+import { Route as HeicToPdfRouteImport } from './routes/heic-to-pdf'
 import { Route as GrayscalePdfRouteImport } from './routes/grayscale-pdf'
 import { Route as FlattenPdfRouteImport } from './routes/flatten-pdf'
 import { Route as ExtractTextPdfRouteImport } from './routes/extract-text-pdf'
@@ -229,6 +230,11 @@ const InvertPdfRoute = InvertPdfRouteImport.update({
 const HtmlToPdfRoute = HtmlToPdfRouteImport.update({
   id: '/html-to-pdf',
   path: '/html-to-pdf',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HeicToPdfRoute = HeicToPdfRouteImport.update({
+  id: '/heic-to-pdf',
+  path: '/heic-to-pdf',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GrayscalePdfRoute = GrayscalePdfRouteImport.update({
@@ -436,6 +442,7 @@ export interface FileRoutesByFullPath {
   '/extract-text-pdf': typeof ExtractTextPdfRoute
   '/flatten-pdf': typeof FlattenPdfRoute
   '/grayscale-pdf': typeof GrayscalePdfRoute
+  '/heic-to-pdf': typeof HeicToPdfRoute
   '/html-to-pdf': typeof HtmlToPdfRoute
   '/invert-pdf': typeof InvertPdfRoute
   '/jpg-to-pdf': typeof JpgToPdfRoute
@@ -503,6 +510,7 @@ export interface FileRoutesByTo {
   '/extract-text-pdf': typeof ExtractTextPdfRoute
   '/flatten-pdf': typeof FlattenPdfRoute
   '/grayscale-pdf': typeof GrayscalePdfRoute
+  '/heic-to-pdf': typeof HeicToPdfRoute
   '/html-to-pdf': typeof HtmlToPdfRoute
   '/invert-pdf': typeof InvertPdfRoute
   '/jpg-to-pdf': typeof JpgToPdfRoute
@@ -572,6 +580,7 @@ export interface FileRoutesById {
   '/extract-text-pdf': typeof ExtractTextPdfRoute
   '/flatten-pdf': typeof FlattenPdfRoute
   '/grayscale-pdf': typeof GrayscalePdfRoute
+  '/heic-to-pdf': typeof HeicToPdfRoute
   '/html-to-pdf': typeof HtmlToPdfRoute
   '/invert-pdf': typeof InvertPdfRoute
   '/jpg-to-pdf': typeof JpgToPdfRoute
@@ -641,6 +650,7 @@ export interface FileRouteTypes {
     | '/extract-text-pdf'
     | '/flatten-pdf'
     | '/grayscale-pdf'
+    | '/heic-to-pdf'
     | '/html-to-pdf'
     | '/invert-pdf'
     | '/jpg-to-pdf'
@@ -708,6 +718,7 @@ export interface FileRouteTypes {
     | '/extract-text-pdf'
     | '/flatten-pdf'
     | '/grayscale-pdf'
+    | '/heic-to-pdf'
     | '/html-to-pdf'
     | '/invert-pdf'
     | '/jpg-to-pdf'
@@ -776,6 +787,7 @@ export interface FileRouteTypes {
     | '/extract-text-pdf'
     | '/flatten-pdf'
     | '/grayscale-pdf'
+    | '/heic-to-pdf'
     | '/html-to-pdf'
     | '/invert-pdf'
     | '/jpg-to-pdf'
@@ -845,6 +857,7 @@ export interface RootRouteChildren {
   ExtractTextPdfRoute: typeof ExtractTextPdfRoute
   FlattenPdfRoute: typeof FlattenPdfRoute
   GrayscalePdfRoute: typeof GrayscalePdfRoute
+  HeicToPdfRoute: typeof HeicToPdfRoute
   HtmlToPdfRoute: typeof HtmlToPdfRoute
   InvertPdfRoute: typeof InvertPdfRoute
   JpgToPdfRoute: typeof JpgToPdfRoute
@@ -1099,6 +1112,13 @@ declare module '@tanstack/react-router' {
       path: '/html-to-pdf'
       fullPath: '/html-to-pdf'
       preLoaderRoute: typeof HtmlToPdfRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/heic-to-pdf': {
+      id: '/heic-to-pdf'
+      path: '/heic-to-pdf'
+      fullPath: '/heic-to-pdf'
+      preLoaderRoute: typeof HeicToPdfRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/grayscale-pdf': {
@@ -1400,6 +1420,7 @@ const rootRouteChildren: RootRouteChildren = {
   ExtractTextPdfRoute: ExtractTextPdfRoute,
   FlattenPdfRoute: FlattenPdfRoute,
   GrayscalePdfRoute: GrayscalePdfRoute,
+  HeicToPdfRoute: HeicToPdfRoute,
   HtmlToPdfRoute: HtmlToPdfRoute,
   InvertPdfRoute: InvertPdfRoute,
   JpgToPdfRoute: JpgToPdfRoute,
