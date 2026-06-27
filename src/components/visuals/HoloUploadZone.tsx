@@ -51,9 +51,9 @@ export function HoloUploadZone({
     : { scale: [1, 1.02, 1], opacity: [0.85, 1, 0.85] };
 
   const handleFiles = useCallback(
-    (list: FileList | null) => {
+    async (list: FileList | null) => {
       if (!list) return;
-      const arr = Array.from(list).filter((f) =>
+      const candidates = Array.from(list).filter((f) =>
         accept.split(",").some((a) => {
           const ax = a.trim().toLowerCase();
           if (ax.startsWith(".")) return f.name.toLowerCase().endsWith(ax);
@@ -63,10 +63,34 @@ export function HoloUploadZone({
           );
         }),
       );
-      if (arr.length === 0) return;
-      onFiles(multiple ? [...files, ...arr] : arr.slice(0, 1));
+      if (candidates.length === 0) {
+        setError("Unsupported file type for this tool.");
+        return;
+      }
+      // Magic-bytes + size validation
+      const expected = inferExpected(accept);
+      const validated: File[] = [];
+      for (const f of candidates) {
+        const r = await validateFile(f, expected);
+        if (!r.valid) {
+          setError(r.error ?? "Invalid file.");
+          return;
+        }
+        validated.push(f);
+      }
+      setError(null);
+      onFiles(multiple ? [...files, ...validated] : validated.slice(0, 1));
       setFlash(true);
       window.setTimeout(() => setFlash(false), 400);
+      // Broadcast for ToolShell ShareCard context
+      try {
+        const total = validated.reduce((a, b) => a + b.size, 0);
+        window.dispatchEvent(
+          new CustomEvent("crisppdf:upload", { detail: { size: total, count: validated.length } }),
+        );
+      } catch {
+        /* noop */
+      }
     },
     [accept, files, multiple, onFiles],
   );
