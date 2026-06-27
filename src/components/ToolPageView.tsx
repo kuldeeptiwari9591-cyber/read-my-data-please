@@ -181,7 +181,7 @@ export function ToolPageView({ slug }: { slug: string }) {
           <h2 className="mt-2 font-display text-2xl font-semibold md:text-3xl">
             {tool.name} — frequently asked questions
           </h2>
-          <div className="mt-6 grid gap-3 sm:grid-cols-2 md:grid-cols-3">
+          <div className="mt-6 grid gap-3 lg:grid-cols-2">
             {content.faqs.map((f) => (
               <details
                 key={f.q}
@@ -191,6 +191,7 @@ export function ToolPageView({ slug }: { slug: string }) {
                   <span className="mr-2 text-primary">+</span>
                   {f.q}
                 </summary>
+
                 <p className="mt-3 pl-5 text-sm leading-relaxed text-muted-foreground">{f.a}</p>
               </details>
             ))}
