@@ -569,3 +569,171 @@ function AdminPanel() {
     </div>
   );
 }
+
+// ---------- Feedback inbox with type filter + status actions ----------
+function FeedbackInbox({ feedback, onChange }: { feedback: Feedback[]; onChange: () => void }) {
+  const updateStatus = useServerFn(adminUpdateFeedbackStatus);
+  const [filter, setFilter] = useState<"all" | "feedback" | "bug" | "tool_request">("all");
+  const filtered = feedback.filter((f) => filter === "all" || (f.type ?? "feedback") === filter);
+  const counts = {
+    all: feedback.length,
+    feedback: feedback.filter((f) => (f.type ?? "feedback") === "feedback").length,
+    bug: feedback.filter((f) => f.type === "bug").length,
+    tool_request: feedback.filter((f) => f.type === "tool_request").length,
+  };
+  const setStatus = async (id: string, status: "resolved" | "spam") => {
+    try {
+      await updateStatus({ data: { id, status } });
+      toast.success(status === "resolved" ? "Marked resolved" : "Marked as spam");
+      onChange();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Update failed");
+    }
+  };
+  const tabs: { id: typeof filter; label: string }[] = [
+    { id: "all", label: `All (${counts.all})` },
+    { id: "feedback", label: `Feedback (${counts.feedback})` },
+    { id: "bug", label: `Bug Reports (${counts.bug})` },
+    { id: "tool_request", label: `Tool Requests (${counts.tool_request})` },
+  ];
+  const renderMessage = (raw: string) => {
+    try {
+      const obj = JSON.parse(raw);
+      return (
+        <div className="space-y-1 text-sm">
+          {Object.entries(obj).map(([k, v]) =>
+            v ? (
+              <div key={k}>
+                <span className="font-medium capitalize text-foreground">{k}:</span>{" "}
+                <span className="text-muted-foreground">{String(v)}</span>
+              </div>
+            ) : null,
+          )}
+        </div>
+      );
+    } catch {
+      return <p className="whitespace-pre-wrap text-sm">{raw}</p>;
+    }
+  };
+  const typeBadge = (t?: string | null) => {
+    const v = t ?? "feedback";
+    const cls =
+      v === "bug"
+        ? "bg-destructive/10 text-destructive border-destructive/30"
+        : v === "tool_request"
+          ? "bg-secondary/10 text-secondary border-secondary/30"
+          : "bg-primary/10 text-primary border-primary/30";
+    return <span className={`rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider ${cls}`}>{v.replace("_", " ")}</span>;
+  };
+  return (
+    <div className="mt-8">
+      <div className="flex flex-wrap gap-1.5 rounded-xl border border-border bg-surface/30 p-1">
+        {tabs.map((t) => (
+          <button
+            key={t.id}
+            onClick={() => setFilter(t.id)}
+            className={`rounded-lg px-3 py-1.5 text-xs font-medium ${filter === t.id ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
+      <div className="mt-4 space-y-2">
+        {filtered.length === 0 && <p className="text-sm text-muted-foreground">No items.</p>}
+        {filtered.map((f) => (
+          <div key={f.id} className={`rounded-lg border border-border bg-surface/40 px-4 py-3 ${f.status === "resolved" ? "opacity-60" : ""}`}>
+            <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-muted-foreground">
+              <div className="flex items-center gap-2">
+                {typeBadge(f.type)}
+                <span>{f.tool_slug ?? "general"}</span>
+                {f.rating != null && <span>· {f.rating}/5</span>}
+                {f.status && f.status !== "open" && (
+                  <span className="rounded bg-muted px-1.5 py-0.5 text-[10px] uppercase">{f.status}</span>
+                )}
+              </div>
+              <span>{new Date(f.created_at).toLocaleString()}</span>
+            </div>
+            <div className="mt-2">{renderMessage(f.message)}</div>
+            {f.email && <p className="mt-1 text-xs text-muted-foreground">↩︎ {f.email}</p>}
+            {f.status === "open" && (
+              <div className="mt-3 flex gap-2">
+                <button onClick={() => setStatus(f.id, "resolved")} className="rounded bg-primary/15 px-2.5 py-1 text-xs font-medium text-primary hover:bg-primary/25">
+                  Resolve
+                </button>
+                <button onClick={() => setStatus(f.id, "spam")} className="rounded bg-destructive/15 px-2.5 py-1 text-xs font-medium text-destructive hover:bg-destructive/25">
+                  Spam
+                </button>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ---------- Top tools bar chart ----------
+function OpsChart({ ops }: { ops: Op[] }) {
+  const data = (() => {
+    const map = new Map<string, number>();
+    for (const o of ops) map.set(o.tool_slug, (map.get(o.tool_slug) ?? 0) + 1);
+    return [...map.entries()]
+      .map(([tool, count]) => ({ tool, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 10);
+  })();
+
+  if (ops.length === 0) {
+    return (
+      <div className="rounded-2xl border border-border bg-surface/40 p-6 text-sm text-muted-foreground">
+        No data yet.
+      </div>
+    );
+  }
+
+  return (
+    <div className="rounded-2xl border border-border bg-surface/40 p-5">
+      <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+        Top tools (last 100 operations)
+      </h3>
+      <div className="mt-4 h-64">
+        <Suspense fallback={<div className="h-full animate-pulse rounded-lg bg-muted/40" />}>
+          <LazyBarChart data={data} />
+        </Suspense>
+      </div>
+    </div>
+  );
+}
+
+const LazyBarChart = lazy(async () => {
+  const recharts = await import("recharts");
+  const { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } = recharts;
+  return {
+    default: ({ data }: { data: { tool: string; count: number }[] }) => (
+      <ResponsiveContainer width="100%" height="100%">
+        <BarChart data={data} margin={{ top: 5, right: 16, left: 0, bottom: 40 }}>
+          <CartesianGrid strokeDasharray="3 3" stroke="rgba(127,127,127,0.15)" vertical={false} />
+          <XAxis
+            dataKey="tool"
+            angle={-30}
+            textAnchor="end"
+            height={60}
+            interval={0}
+            tick={{ fill: "#6B7280", fontSize: 11 }}
+          />
+          <YAxis tick={{ fill: "#6B7280", fontSize: 11 }} allowDecimals={false} />
+          <Tooltip
+            contentStyle={{
+              background: "transparent",
+              border: "1px solid rgba(99,102,241,0.4)",
+              borderRadius: 8,
+              color: "#E5E7EB",
+            }}
+            cursor={{ fill: "rgba(99,102,241,0.08)" }}
+          />
+          <Bar dataKey="count" fill="#6366F1" radius={[4, 4, 0, 0]} />
+        </BarChart>
+      </ResponsiveContainer>
+    ),
+  };
+});
