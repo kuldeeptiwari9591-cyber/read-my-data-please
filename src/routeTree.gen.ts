@@ -75,7 +75,6 @@ import { Route as CompressPdfForEmailRouteImport } from './routes/compress-pdf-f
 import { Route as CompressPdfRouteImport } from './routes/compress-pdf'
 import { Route as ComparePdfRouteImport } from './routes/compare-pdf'
 import { Route as ChangelogRouteImport } from './routes/changelog'
-import { Route as BlogRouteImport } from './routes/blog'
 import { Route as BlankPagePdfRouteImport } from './routes/blank-page-pdf'
 import { Route as Base64PdfRouteImport } from './routes/base64-pdf'
 import { Route as AuthRouteImport } from './routes/auth'
@@ -86,12 +85,14 @@ import { Route as AboutCrisppdfRouteImport } from './routes/about-crisppdf'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as VsSlugRouteImport } from './routes/vs.$slug'
 import { Route as UseCasesSlugRouteImport } from './routes/use-cases.$slug'
 import { Route as ToolsSlugRouteImport } from './routes/tools.$slug'
 import { Route as ConvertSlugRouteImport } from './routes/convert.$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AuthenticatedCpCrisp7x92kRouteImport } from './routes/_authenticated/cp-crisp-7x92k'
+import { Route as ApiPublicHooksSecurityScanRouteImport } from './routes/api/public/hooks/security-scan'
 
 const WordToPdfRoute = WordToPdfRouteImport.update({
   id: '/word-to-pdf',
@@ -424,11 +425,6 @@ const ChangelogRoute = ChangelogRouteImport.update({
   path: '/changelog',
   getParentRoute: () => rootRouteImport,
 } as any)
-const BlogRoute = BlogRouteImport.update({
-  id: '/blog',
-  path: '/blog',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const BlankPagePdfRoute = BlankPagePdfRouteImport.update({
   id: '/blank-page-pdf',
   path: '/blank-page-pdf',
@@ -478,6 +474,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/blog/',
+  path: '/blog/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const VsSlugRoute = VsSlugRouteImport.update({
   id: '/vs/$slug',
   path: '/vs/$slug',
@@ -499,15 +500,21 @@ const ConvertSlugRoute = ConvertSlugRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogSlugRoute = BlogSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => BlogRoute,
+  id: '/blog/$slug',
+  path: '/blog/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedCpCrisp7x92kRoute =
   AuthenticatedCpCrisp7x92kRouteImport.update({
     id: '/cp-crisp-7x92k',
     path: '/cp-crisp-7x92k',
     getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const ApiPublicHooksSecurityScanRoute =
+  ApiPublicHooksSecurityScanRouteImport.update({
+    id: '/api/public/hooks/security-scan',
+    path: '/api/public/hooks/security-scan',
+    getParentRoute: () => rootRouteImport,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -520,7 +527,6 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/base64-pdf': typeof Base64PdfRoute
   '/blank-page-pdf': typeof BlankPagePdfRoute
-  '/blog': typeof BlogRouteWithChildren
   '/changelog': typeof ChangelogRoute
   '/compare-pdf': typeof ComparePdfRoute
   '/compress-pdf': typeof CompressPdfRoute
@@ -593,6 +599,8 @@ export interface FileRoutesByFullPath {
   '/tools/$slug': typeof ToolsSlugRoute
   '/use-cases/$slug': typeof UseCasesSlugRoute
   '/vs/$slug': typeof VsSlugRoute
+  '/blog/': typeof BlogIndexRoute
+  '/api/public/hooks/security-scan': typeof ApiPublicHooksSecurityScanRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -604,7 +612,6 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/base64-pdf': typeof Base64PdfRoute
   '/blank-page-pdf': typeof BlankPagePdfRoute
-  '/blog': typeof BlogRouteWithChildren
   '/changelog': typeof ChangelogRoute
   '/compare-pdf': typeof ComparePdfRoute
   '/compress-pdf': typeof CompressPdfRoute
@@ -677,6 +684,8 @@ export interface FileRoutesByTo {
   '/tools/$slug': typeof ToolsSlugRoute
   '/use-cases/$slug': typeof UseCasesSlugRoute
   '/vs/$slug': typeof VsSlugRoute
+  '/blog': typeof BlogIndexRoute
+  '/api/public/hooks/security-scan': typeof ApiPublicHooksSecurityScanRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -690,7 +699,6 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/base64-pdf': typeof Base64PdfRoute
   '/blank-page-pdf': typeof BlankPagePdfRoute
-  '/blog': typeof BlogRouteWithChildren
   '/changelog': typeof ChangelogRoute
   '/compare-pdf': typeof ComparePdfRoute
   '/compress-pdf': typeof CompressPdfRoute
@@ -763,6 +771,8 @@ export interface FileRoutesById {
   '/tools/$slug': typeof ToolsSlugRoute
   '/use-cases/$slug': typeof UseCasesSlugRoute
   '/vs/$slug': typeof VsSlugRoute
+  '/blog/': typeof BlogIndexRoute
+  '/api/public/hooks/security-scan': typeof ApiPublicHooksSecurityScanRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -776,7 +786,6 @@ export interface FileRouteTypes {
     | '/auth'
     | '/base64-pdf'
     | '/blank-page-pdf'
-    | '/blog'
     | '/changelog'
     | '/compare-pdf'
     | '/compress-pdf'
@@ -849,6 +858,8 @@ export interface FileRouteTypes {
     | '/tools/$slug'
     | '/use-cases/$slug'
     | '/vs/$slug'
+    | '/blog/'
+    | '/api/public/hooks/security-scan'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -860,7 +871,6 @@ export interface FileRouteTypes {
     | '/auth'
     | '/base64-pdf'
     | '/blank-page-pdf'
-    | '/blog'
     | '/changelog'
     | '/compare-pdf'
     | '/compress-pdf'
@@ -933,6 +943,8 @@ export interface FileRouteTypes {
     | '/tools/$slug'
     | '/use-cases/$slug'
     | '/vs/$slug'
+    | '/blog'
+    | '/api/public/hooks/security-scan'
   id:
     | '__root__'
     | '/'
@@ -945,7 +957,6 @@ export interface FileRouteTypes {
     | '/auth'
     | '/base64-pdf'
     | '/blank-page-pdf'
-    | '/blog'
     | '/changelog'
     | '/compare-pdf'
     | '/compress-pdf'
@@ -1018,6 +1029,8 @@ export interface FileRouteTypes {
     | '/tools/$slug'
     | '/use-cases/$slug'
     | '/vs/$slug'
+    | '/blog/'
+    | '/api/public/hooks/security-scan'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -1031,7 +1044,6 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   Base64PdfRoute: typeof Base64PdfRoute
   BlankPagePdfRoute: typeof BlankPagePdfRoute
-  BlogRoute: typeof BlogRouteWithChildren
   ChangelogRoute: typeof ChangelogRoute
   ComparePdfRoute: typeof ComparePdfRoute
   CompressPdfRoute: typeof CompressPdfRoute
@@ -1098,10 +1110,13 @@ export interface RootRouteChildren {
   WebpToPdfRoute: typeof WebpToPdfRoute
   WhyCrisppdfRoute: typeof WhyCrisppdfRoute
   WordToPdfRoute: typeof WordToPdfRoute
+  BlogSlugRoute: typeof BlogSlugRoute
   ConvertSlugRoute: typeof ConvertSlugRoute
   ToolsSlugRoute: typeof ToolsSlugRoute
   UseCasesSlugRoute: typeof UseCasesSlugRoute
   VsSlugRoute: typeof VsSlugRoute
+  BlogIndexRoute: typeof BlogIndexRoute
+  ApiPublicHooksSecurityScanRoute: typeof ApiPublicHooksSecurityScanRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1568,13 +1583,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ChangelogRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/blog': {
-      id: '/blog'
-      path: '/blog'
-      fullPath: '/blog'
-      preLoaderRoute: typeof BlogRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/blank-page-pdf': {
       id: '/blank-page-pdf'
       path: '/blank-page-pdf'
@@ -1645,6 +1653,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blog/': {
+      id: '/blog/'
+      path: '/blog'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/vs/$slug': {
       id: '/vs/$slug'
       path: '/vs/$slug'
@@ -1675,10 +1690,10 @@ declare module '@tanstack/react-router' {
     }
     '/blog/$slug': {
       id: '/blog/$slug'
-      path: '/$slug'
+      path: '/blog/$slug'
       fullPath: '/blog/$slug'
       preLoaderRoute: typeof BlogSlugRouteImport
-      parentRoute: typeof BlogRoute
+      parentRoute: typeof rootRouteImport
     }
     '/_authenticated/cp-crisp-7x92k': {
       id: '/_authenticated/cp-crisp-7x92k'
@@ -1686,6 +1701,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/cp-crisp-7x92k'
       preLoaderRoute: typeof AuthenticatedCpCrisp7x92kRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/api/public/hooks/security-scan': {
+      id: '/api/public/hooks/security-scan'
+      path: '/api/public/hooks/security-scan'
+      fullPath: '/api/public/hooks/security-scan'
+      preLoaderRoute: typeof ApiPublicHooksSecurityScanRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
 }
@@ -1701,16 +1723,6 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
-interface BlogRouteChildren {
-  BlogSlugRoute: typeof BlogSlugRoute
-}
-
-const BlogRouteChildren: BlogRouteChildren = {
-  BlogSlugRoute: BlogSlugRoute,
-}
-
-const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
@@ -1722,7 +1734,6 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   Base64PdfRoute: Base64PdfRoute,
   BlankPagePdfRoute: BlankPagePdfRoute,
-  BlogRoute: BlogRouteWithChildren,
   ChangelogRoute: ChangelogRoute,
   ComparePdfRoute: ComparePdfRoute,
   CompressPdfRoute: CompressPdfRoute,
@@ -1789,21 +1800,14 @@ const rootRouteChildren: RootRouteChildren = {
   WebpToPdfRoute: WebpToPdfRoute,
   WhyCrisppdfRoute: WhyCrisppdfRoute,
   WordToPdfRoute: WordToPdfRoute,
+  BlogSlugRoute: BlogSlugRoute,
   ConvertSlugRoute: ConvertSlugRoute,
   ToolsSlugRoute: ToolsSlugRoute,
   UseCasesSlugRoute: UseCasesSlugRoute,
   VsSlugRoute: VsSlugRoute,
+  BlogIndexRoute: BlogIndexRoute,
+  ApiPublicHooksSecurityScanRoute: ApiPublicHooksSecurityScanRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
