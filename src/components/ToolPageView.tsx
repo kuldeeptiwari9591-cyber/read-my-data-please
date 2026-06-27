@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { Suspense } from "react";
-import { ArrowLeft, CheckCircle2, Loader2 } from "lucide-react";
+import { Suspense, useEffect } from "react";
+import { ArrowLeft, CheckCircle2 } from "lucide-react";
 
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -12,6 +12,9 @@ import { ComingSoonTool } from "@/components/tools/ComingSoonTool";
 import { RateLimitBanner } from "@/components/tools/RateLimitBanner";
 import { getToolContent } from "@/lib/tool-content";
 import { ToolDisabledGate } from "@/components/ToolDisabledGate";
+import { ToolPageSkeleton } from "@/components/ToolPageSkeleton";
+import { toolIconMap, categoryColorMap } from "@/lib/toolIcons";
+import { analytics } from "@/lib/analytics";
 
 export function ToolPageView({ slug }: { slug: string }) {
   const tool = TOOLS_BY_SLUG[slug];
