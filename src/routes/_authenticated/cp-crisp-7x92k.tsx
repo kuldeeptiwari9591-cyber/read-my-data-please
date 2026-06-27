@@ -63,27 +63,79 @@ const blank = {
   published: false,
 };
 
+type ToolRow = { slug: string; name: string; enabled: boolean };
+type Announcement = {
+  id: string;
+  type: string;
+  title: string | null;
+  body: string;
+  severity: string;
+  active: boolean;
+  eta: string | null;
+  created_at: string;
+};
+
 function AdminPanel() {
   const listPosts = useServerFn(adminListPosts);
   const upsertPost = useServerFn(adminUpsertPost);
   const deletePost = useServerFn(adminDeletePost);
   const listFeedback = useServerFn(adminListFeedback);
   const listOps = useServerFn(adminOpsSummary);
+  const listTools = useServerFn(adminListToolSettings);
+  const setToolEnabled = useServerFn(adminSetToolEnabled);
+  const listAnnouncements = useServerFn(adminListAnnouncements);
+  const upsertAnnouncement = useServerFn(adminUpsertAnnouncement);
 
-  const [tab, setTab] = useState<"posts" | "feedback" | "ops">("posts");
+  const [tab, setTab] = useState<"posts" | "feedback" | "ops" | "tools" | "settings">("posts");
   const [allowed, setAllowed] = useState<boolean | null>(null);
   const [posts, setPosts] = useState<PostRow[]>([]);
   const [feedback, setFeedback] = useState<Feedback[]>([]);
   const [ops, setOps] = useState<Op[]>([]);
+  const [tools, setTools] = useState<ToolRow[]>([]);
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [draft, setDraft] = useState(blank);
   const [busy, setBusy] = useState(false);
+  const [isDark, setIsDark] = useState(false);
+
+  // banner & maintenance drafts
+  const [bannerBody, setBannerBody] = useState("");
+  const [bannerSeverity, setBannerSeverity] = useState<"info" | "warning" | "success">("info");
+  const [bannerActive, setBannerActive] = useState(false);
+  const [maintBody, setMaintBody] = useState("We're making CrispPDF better. Back shortly!");
+  const [maintEta, setMaintEta] = useState("");
+  const [maintActive, setMaintActive] = useState(false);
+
+  useEffect(() => {
+    setIsDark(document.documentElement.classList.contains("dark"));
+  }, []);
 
   const refresh = async () => {
     try {
-      const [p, f, o] = await Promise.all([listPosts(), listFeedback(), listOps()]);
+      const [p, f, o, t, a] = await Promise.all([
+        listPosts(),
+        listFeedback(),
+        listOps(),
+        listTools(),
+        listAnnouncements(),
+      ]);
       setPosts(p as PostRow[]);
       setFeedback(f as Feedback[]);
       setOps(o as Op[]);
+      setTools(t as ToolRow[]);
+      const ann = a as Announcement[];
+      setAnnouncements(ann);
+      const b = ann.find((x) => x.type === "banner");
+      if (b) {
+        setBannerBody(b.body);
+        setBannerSeverity((b.severity as "info" | "warning" | "success") ?? "info");
+        setBannerActive(b.active);
+      }
+      const m = ann.find((x) => x.type === "maintenance");
+      if (m) {
+        setMaintBody(m.body);
+        setMaintEta(m.eta ?? "");
+        setMaintActive(m.active);
+      }
       setAllowed(true);
     } catch (e) {
       setAllowed(false);
