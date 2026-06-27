@@ -53,6 +53,7 @@ import { Route as EditPdfRouteImport } from './routes/edit-pdf'
 import { Route as EditMetadataPdfRouteImport } from './routes/edit-metadata-pdf'
 import { Route as DuplicatePagesPdfRouteImport } from './routes/duplicate-pages-pdf'
 import { Route as DeletePdfPagesRouteImport } from './routes/delete-pdf-pages'
+import { Route as CsvToPdfRouteImport } from './routes/csv-to-pdf'
 import { Route as CropPdfRouteImport } from './routes/crop-pdf'
 import { Route as ConvertPdfRouteImport } from './routes/convert-pdf'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -298,6 +299,11 @@ const DeletePdfPagesRoute = DeletePdfPagesRouteImport.update({
   path: '/delete-pdf-pages',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CsvToPdfRoute = CsvToPdfRouteImport.update({
+  id: '/csv-to-pdf',
+  path: '/csv-to-pdf',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CropPdfRoute = CropPdfRouteImport.update({
   id: '/crop-pdf',
   path: '/crop-pdf',
@@ -437,6 +443,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/convert-pdf': typeof ConvertPdfRoute
   '/crop-pdf': typeof CropPdfRoute
+  '/csv-to-pdf': typeof CsvToPdfRoute
   '/delete-pdf-pages': typeof DeletePdfPagesRoute
   '/duplicate-pages-pdf': typeof DuplicatePagesPdfRoute
   '/edit-metadata-pdf': typeof EditMetadataPdfRoute
@@ -506,6 +513,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/convert-pdf': typeof ConvertPdfRoute
   '/crop-pdf': typeof CropPdfRoute
+  '/csv-to-pdf': typeof CsvToPdfRoute
   '/delete-pdf-pages': typeof DeletePdfPagesRoute
   '/duplicate-pages-pdf': typeof DuplicatePagesPdfRoute
   '/edit-metadata-pdf': typeof EditMetadataPdfRoute
@@ -577,6 +585,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/convert-pdf': typeof ConvertPdfRoute
   '/crop-pdf': typeof CropPdfRoute
+  '/csv-to-pdf': typeof CsvToPdfRoute
   '/delete-pdf-pages': typeof DeletePdfPagesRoute
   '/duplicate-pages-pdf': typeof DuplicatePagesPdfRoute
   '/edit-metadata-pdf': typeof EditMetadataPdfRoute
@@ -648,6 +657,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/convert-pdf'
     | '/crop-pdf'
+    | '/csv-to-pdf'
     | '/delete-pdf-pages'
     | '/duplicate-pages-pdf'
     | '/edit-metadata-pdf'
@@ -717,6 +727,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/convert-pdf'
     | '/crop-pdf'
+    | '/csv-to-pdf'
     | '/delete-pdf-pages'
     | '/duplicate-pages-pdf'
     | '/edit-metadata-pdf'
@@ -787,6 +798,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/convert-pdf'
     | '/crop-pdf'
+    | '/csv-to-pdf'
     | '/delete-pdf-pages'
     | '/duplicate-pages-pdf'
     | '/edit-metadata-pdf'
@@ -858,6 +870,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   ConvertPdfRoute: typeof ConvertPdfRoute
   CropPdfRoute: typeof CropPdfRoute
+  CsvToPdfRoute: typeof CsvToPdfRoute
   DeletePdfPagesRoute: typeof DeletePdfPagesRoute
   DuplicatePagesPdfRoute: typeof DuplicatePagesPdfRoute
   EditMetadataPdfRoute: typeof EditMetadataPdfRoute
@@ -1218,6 +1231,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DeletePdfPagesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/csv-to-pdf': {
+      id: '/csv-to-pdf'
+      path: '/csv-to-pdf'
+      fullPath: '/csv-to-pdf'
+      preLoaderRoute: typeof CsvToPdfRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/crop-pdf': {
       id: '/crop-pdf'
       path: '/crop-pdf'
@@ -1429,6 +1449,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   ConvertPdfRoute: ConvertPdfRoute,
   CropPdfRoute: CropPdfRoute,
+  CsvToPdfRoute: CsvToPdfRoute,
   DeletePdfPagesRoute: DeletePdfPagesRoute,
   DuplicatePagesPdfRoute: DuplicatePagesPdfRoute,
   EditMetadataPdfRoute: EditMetadataPdfRoute,
