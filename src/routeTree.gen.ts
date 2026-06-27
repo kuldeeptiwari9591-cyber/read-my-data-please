@@ -46,6 +46,8 @@ import { Route as HtmlToPdfRouteImport } from './routes/html-to-pdf'
 import { Route as HeicToPdfRouteImport } from './routes/heic-to-pdf'
 import { Route as GrayscalePdfRouteImport } from './routes/grayscale-pdf'
 import { Route as FlattenPdfRouteImport } from './routes/flatten-pdf'
+import { Route as FeedbackRouteImport } from './routes/feedback'
+import { Route as FaqRouteImport } from './routes/faq'
 import { Route as ExtractTextPdfRouteImport } from './routes/extract-text-pdf'
 import { Route as ExtractPdfPagesRouteImport } from './routes/extract-pdf-pages'
 import { Route as ExtractImagesPdfRouteImport } from './routes/extract-images-pdf'
@@ -274,6 +276,16 @@ const GrayscalePdfRoute = GrayscalePdfRouteImport.update({
 const FlattenPdfRoute = FlattenPdfRouteImport.update({
   id: '/flatten-pdf',
   path: '/flatten-pdf',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FeedbackRoute = FeedbackRouteImport.update({
+  id: '/feedback',
+  path: '/feedback',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ExtractTextPdfRoute = ExtractTextPdfRouteImport.update({
@@ -536,6 +548,8 @@ export interface FileRoutesByFullPath {
   '/extract-images-pdf': typeof ExtractImagesPdfRoute
   '/extract-pdf-pages': typeof ExtractPdfPagesRoute
   '/extract-text-pdf': typeof ExtractTextPdfRoute
+  '/faq': typeof FaqRoute
+  '/feedback': typeof FeedbackRoute
   '/flatten-pdf': typeof FlattenPdfRoute
   '/grayscale-pdf': typeof GrayscalePdfRoute
   '/heic-to-pdf': typeof HeicToPdfRoute
@@ -618,6 +632,8 @@ export interface FileRoutesByTo {
   '/extract-images-pdf': typeof ExtractImagesPdfRoute
   '/extract-pdf-pages': typeof ExtractPdfPagesRoute
   '/extract-text-pdf': typeof ExtractTextPdfRoute
+  '/faq': typeof FaqRoute
+  '/feedback': typeof FeedbackRoute
   '/flatten-pdf': typeof FlattenPdfRoute
   '/grayscale-pdf': typeof GrayscalePdfRoute
   '/heic-to-pdf': typeof HeicToPdfRoute
@@ -702,6 +718,8 @@ export interface FileRoutesById {
   '/extract-images-pdf': typeof ExtractImagesPdfRoute
   '/extract-pdf-pages': typeof ExtractPdfPagesRoute
   '/extract-text-pdf': typeof ExtractTextPdfRoute
+  '/faq': typeof FaqRoute
+  '/feedback': typeof FeedbackRoute
   '/flatten-pdf': typeof FlattenPdfRoute
   '/grayscale-pdf': typeof GrayscalePdfRoute
   '/heic-to-pdf': typeof HeicToPdfRoute
@@ -786,6 +804,8 @@ export interface FileRouteTypes {
     | '/extract-images-pdf'
     | '/extract-pdf-pages'
     | '/extract-text-pdf'
+    | '/faq'
+    | '/feedback'
     | '/flatten-pdf'
     | '/grayscale-pdf'
     | '/heic-to-pdf'
@@ -868,6 +888,8 @@ export interface FileRouteTypes {
     | '/extract-images-pdf'
     | '/extract-pdf-pages'
     | '/extract-text-pdf'
+    | '/faq'
+    | '/feedback'
     | '/flatten-pdf'
     | '/grayscale-pdf'
     | '/heic-to-pdf'
@@ -951,6 +973,8 @@ export interface FileRouteTypes {
     | '/extract-images-pdf'
     | '/extract-pdf-pages'
     | '/extract-text-pdf'
+    | '/faq'
+    | '/feedback'
     | '/flatten-pdf'
     | '/grayscale-pdf'
     | '/heic-to-pdf'
@@ -1035,6 +1059,8 @@ export interface RootRouteChildren {
   ExtractImagesPdfRoute: typeof ExtractImagesPdfRoute
   ExtractPdfPagesRoute: typeof ExtractPdfPagesRoute
   ExtractTextPdfRoute: typeof ExtractTextPdfRoute
+  FaqRoute: typeof FaqRoute
+  FeedbackRoute: typeof FeedbackRoute
   FlattenPdfRoute: typeof FlattenPdfRoute
   GrayscalePdfRoute: typeof GrayscalePdfRoute
   HeicToPdfRoute: typeof HeicToPdfRoute
@@ -1337,6 +1363,20 @@ declare module '@tanstack/react-router' {
       path: '/flatten-pdf'
       fullPath: '/flatten-pdf'
       preLoaderRoute: typeof FlattenPdfRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/feedback': {
+      id: '/feedback'
+      path: '/feedback'
+      fullPath: '/feedback'
+      preLoaderRoute: typeof FeedbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/extract-text-pdf': {
@@ -1710,6 +1750,8 @@ const rootRouteChildren: RootRouteChildren = {
   ExtractImagesPdfRoute: ExtractImagesPdfRoute,
   ExtractPdfPagesRoute: ExtractPdfPagesRoute,
   ExtractTextPdfRoute: ExtractTextPdfRoute,
+  FaqRoute: FaqRoute,
+  FeedbackRoute: FeedbackRoute,
   FlattenPdfRoute: FlattenPdfRoute,
   GrayscalePdfRoute: GrayscalePdfRoute,
   HeicToPdfRoute: HeicToPdfRoute,
