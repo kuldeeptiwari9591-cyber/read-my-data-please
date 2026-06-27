@@ -109,11 +109,16 @@ function FeedbackPage() {
           email: email.trim() || null,
         };
       }
+      payload = { ...payload, captchaToken };
       await submit({ data: payload });
       setDone(true);
       reset();
+      setCaptchaToken(null);
+      captchaRef.current?.resetCaptcha();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Submission failed");
+      captchaRef.current?.resetCaptcha();
+      setCaptchaToken(null);
     } finally {
       setBusy(false);
     }
