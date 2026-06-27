@@ -15,6 +15,19 @@ interface Group { title: string; faqs: FAQ[] }
 
 const GROUPS: Group[] = [
   {
+    title: "About CrispPDF",
+    faqs: [
+      { q: "What is CrispPDF?", a: "CrispPDF is a free, privacy-first online PDF toolkit with 40 tools — merge, split, compress, convert, OCR, eSign, redact and more. 30 tools run entirely in your browser so your files never leave your device. The other 10 use stateless edge functions that hold files in memory for the duration of a single request and then discard them." },
+      { q: "Who is CrispPDF for?", a: "Anyone who works with PDFs — students preparing assignments, professionals compressing contracts for email, government applicants hitting strict size limits, lawyers redacting sensitive documents, and developers extracting data. No account, no install, no payment required." },
+      { q: "Is CrispPDF really 100% free?", a: "Yes. All 40 tools are free with no daily limits, no file count caps, no premium tier, and no watermarks on output. There is no Pro plan that unlocks features. Soft rate-limits exist only to prevent automated abuse and won't affect normal use." },
+      { q: "How does CrispPDF stay free?", a: "It's currently funded out of pocket by the founders. Future revenue may come from an optional developer API and a self-hosted enterprise version. The free consumer tools at crisppdf.com will always remain free with no feature paywalls." },
+      { q: "Why should I trust CrispPDF with my files?", a: "Because for 30 of 40 tools you don't have to — the file never leaves your browser. Open DevTools → Network tab while using Merge, Split, Compress, or Redact and you'll see zero upload requests. For server tools, files exist in RAM for one HTTP request and are gone before you can refresh the page." },
+      { q: "Does CrispPDF require me to sign up?", a: "No. There is no account system for the public tools — every operation works anonymously. An account is only required if you opt into saving a history of past operations (a future feature). Without an account, nothing about your session is retained after you close the tab." },
+      { q: "What browsers does CrispPDF support?", a: "Chrome, Edge, Firefox, Safari, Brave, Opera, and Arc on desktop (latest 2 major versions). Mobile Safari (iOS 14+) and Chrome on Android (last 3 years of devices). Older browsers without WebAssembly support won't work for OCR but most other tools degrade gracefully." },
+      { q: "How is CrispPDF different from iLovePDF or Smallpdf?", a: "Three big differences: (1) every tool is free with no daily limits — they paywall most features. (2) 30 tools run in your browser so files never upload — their tools upload everything. (3) No accounts, no watermarks, no upsell popups. Trade-off: we don't yet have a desktop app or team workspace." },
+    ],
+  },
+  {
     title: "Privacy & Security",
     faqs: [
       { q: "Does CrispPDF upload my files to the internet?", a: "For 30 of CrispPDF's 40 tools, no file ever leaves your device — all processing happens locally in your browser using JavaScript. For the 10 tools that require server processing (Office conversion, OCR on large scans, HTML to PDF), the file is sent over an encrypted HTTPS connection, processed in memory, and discarded. We never store uploaded files." },
@@ -139,7 +152,7 @@ function FAQPage() {
       <main className="mx-auto max-w-3xl px-6 py-16">
         <header>
           <h1 className="font-display text-4xl font-bold tracking-tight md:text-5xl">Frequently Asked Questions</h1>
-          <p className="mt-3 text-base text-muted-foreground">50 deep answers about how CrispPDF works, what's safe, what's supported, and what's specific to India.</p>
+          <p className="mt-3 text-base text-muted-foreground">58 deep answers about CrispPDF itself, how it works, what's safe, what's supported, and what's specific to India.</p>
         </header>
 
         <div className="mt-12 space-y-10">
