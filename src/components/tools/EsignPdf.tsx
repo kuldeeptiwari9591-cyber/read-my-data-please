@@ -174,7 +174,7 @@ export function EsignPdf() {
                     <span>{signature ? "Click to place signature" : "Capture a signature first →"}</span>
                   </div>
                   <div
-                    className="relative cursor-crosshair overflow-hidden rounded-xl border border-border bg-white shadow-sm"
+                    className="relative cursor-crosshair overflow-hidden rounded-xl border border-border bg-background shadow-sm"
                     onClick={(e) => placeOnPage(i, e)}
                   >
                     <img src={src} alt={`Page ${i + 1}`} className="block w-full" />
@@ -218,7 +218,7 @@ export function EsignPdf() {
             <div className="mb-2 text-sm font-semibold">Your signature</div>
             <canvas
               ref={padRef}
-              className="h-40 w-full rounded-md border border-border bg-white"
+              className="h-40 w-full rounded-md border border-border bg-background"
             />
             <div className="mt-3 flex gap-2">
               <button
@@ -235,7 +235,7 @@ export function EsignPdf() {
               </button>
             </div>
             {signature && (
-              <div className="mt-3 rounded-md border border-border bg-white p-2">
+              <div className="mt-3 rounded-md border border-border bg-background p-2">
                 <img src={signature} alt="signature preview" className="block h-12 w-full object-contain" />
               </div>
             )}
