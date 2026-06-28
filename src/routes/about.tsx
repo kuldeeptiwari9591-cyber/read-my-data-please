@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { SeoAccordion } from "@/components/seo/SeoAccordion";
+import { buildFaqJsonLd } from "@/lib/seo/faq-jsonld";
 import {
   Laptop,
   Server,

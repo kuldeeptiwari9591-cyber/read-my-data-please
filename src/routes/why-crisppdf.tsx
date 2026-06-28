@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SeoAccordion } from "@/components/seo/SeoAccordion";
+import { buildFaqJsonLd } from "@/lib/seo/faq-jsonld";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { AnswerBlock } from "@/components/seo/AnswerBlock";
