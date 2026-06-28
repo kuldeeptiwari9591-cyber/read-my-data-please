@@ -22,7 +22,7 @@ export function Logo({ size = 32, withText = true, asLink = true, className = ""
         style={{ width: size, height: size }}
       />
       {withText && (
-        <span className="font-display text-lg font-semibold tracking-tight">
+        <span className="hidden font-display text-lg font-semibold tracking-tight xs:inline sm:inline">
           Crisp<span className="text-gradient">PDF</span>
         </span>
       )}
