@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { SeoAccordion } from "@/components/seo/SeoAccordion";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { AnswerBlock } from "@/components/seo/AnswerBlock";
@@ -238,14 +238,7 @@ function WhyCrispPDF() {
         {/* FAQ */}
         <section className="mt-16">
           <h2 className="font-display text-3xl font-bold tracking-tight">Questions about CrispPDF</h2>
-          <Accordion type="single" collapsible className="mt-6 rounded-2xl border border-border bg-surface/40 px-4">
-            {FAQS.map((f, i) => (
-              <AccordionItem key={i} value={`q${i}`} className="border-border last:border-0">
-                <AccordionTrigger className="text-left text-base font-medium">{f.q}</AccordionTrigger>
-                <AccordionContent className="text-sm leading-relaxed text-muted-foreground" data-speakable="true">{f.a}</AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
+          <SeoAccordion items={FAQS} className="mt-6 divide-y divide-border rounded-2xl border border-border bg-surface/40" />
         </section>
 
         {/* CTA */}

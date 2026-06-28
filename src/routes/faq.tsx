@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { SeoAccordion } from "@/components/seo/SeoAccordion";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { abs, OG_DEFAULT } from "@/lib/site-url";
@@ -159,14 +159,7 @@ function FAQPage() {
           {GROUPS.map((g) => (
             <section key={g.title}>
               <h2 className="font-display text-2xl font-semibold tracking-tight text-foreground">{g.title}</h2>
-              <Accordion type="single" collapsible className="mt-4 rounded-2xl border border-border bg-surface/40 px-4">
-                {g.faqs.map((f, i) => (
-                  <AccordionItem key={i} value={`${g.title}-${i}`} className="border-border last:border-0">
-                    <AccordionTrigger className="text-left text-base font-medium">{f.q}</AccordionTrigger>
-                    <AccordionContent className="text-sm leading-relaxed text-muted-foreground" data-speakable="true">{f.a}</AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
+              <SeoAccordion items={g.faqs} />
             </section>
           ))}
         </div>
