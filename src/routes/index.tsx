@@ -297,15 +297,15 @@ function Index() {
 
       {/* ALL TOOLS GRID */}
       <section id="tools" className="relative mx-auto max-w-7xl px-6 pt-10 pb-24 md:pt-14">
-        <div className="mx-auto max-w-2xl text-center">
+        <div className="mx-auto max-w-3xl text-center">
           <p className="font-mono text-xs uppercase tracking-[0.2em] text-primary">
             // The full toolkit
           </p>
           <h2 className="mt-3 font-display text-4xl font-bold tracking-tight md:text-5xl">
-            40 tools. One crisp app.
+            Free PDF Compressor, Merger, Converter & 37 more tools
           </h2>
           <p className="mt-4 text-muted-foreground">
-            Five categories, every PDF workflow covered.
+            Online PDF tools to compress, merge, split, convert PDF to Word, JPG to PDF, sign, protect and edit — all free, all in your browser.
           </p>
         </div>
 
@@ -418,7 +418,7 @@ function Index() {
             // How it works
           </p>
           <h2 className="mt-3 font-display text-4xl font-bold tracking-tight md:text-5xl">
-            Three steps. Zero friction.
+            How to compress, merge or convert a PDF online
           </h2>
         </div>
 
@@ -452,7 +452,7 @@ function Index() {
             // Why CrispPDF
           </p>
           <h2 className="mt-3 font-display text-4xl font-bold tracking-tight md:text-5xl">
-            Built different.
+            The free PDF editor that respects your privacy
           </h2>
           <p className="mt-4 text-muted-foreground">
             Most PDF sites are slow, ad-stuffed, and watermark your files. We don't.
