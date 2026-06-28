@@ -310,6 +310,16 @@ function FeedbackPage() {
             {busy ? "Sending…" : tab === "feedback" ? "Send Feedback" : tab === "bug" ? "Report Bug" : "Request This Tool"}
           </button>
         </form>
+
+        <section className="mt-16" aria-labelledby="feedback-faq">
+          <h2 id="feedback-faq" className="font-display text-2xl font-semibold tracking-tight md:text-3xl">
+            Questions about feedback
+          </h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Quick answers about how submissions, bug reports, and tool requests are handled.
+          </p>
+          <SeoAccordion items={FEEDBACK_FAQS} />
+        </section>
       </main>
       <Footer />
       <style>{`
