@@ -405,6 +405,9 @@ function Index() {
       {/* POPULAR TOOLS SPOTLIGHT */}
       <PopularSpotlight />
 
+      {/* FEEDBACK / REQUESTS */}
+      <FeedbackCTA />
+
       {/* HOW IT WORKS */}
       <section id="how" className="relative mx-auto max-w-6xl px-6 py-24">
         <div className="mx-auto max-w-2xl text-center">
