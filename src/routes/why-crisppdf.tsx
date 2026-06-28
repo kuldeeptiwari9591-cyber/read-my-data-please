@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { SeoAccordion } from "@/components/seo/SeoAccordion";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { AnswerBlock } from "@/components/seo/AnswerBlock";
@@ -195,7 +195,16 @@ function WhyCrispPDF() {
             <p><strong className="text-foreground">Professionals:</strong> Signing contracts without Adobe Acrobat, redacting sensitive information before sharing documents, converting Word files to PDF for client delivery.</p>
             <p><strong className="text-foreground">Small businesses:</strong> Invoicing (Excel to PDF), document archiving (PDF/A conversion), protecting sensitive documents with passwords, OCR-ing scanned receipts.</p>
             <p><strong className="text-foreground">Developers:</strong> HTML to PDF conversion for receipt generation, PDF metadata editing, extract-text for document processing pipelines.</p>
-            <p><strong className="text-foreground">Everyone:</strong> Removing that Aadhaar PDF password you always forget (it's your date of birth: DDMMYYYY — we built a dedicated page for this at <Link to={"/unlock-pdf" as never} className="text-primary hover:underline">/unlock-pdf</Link>).</p>
+            <p>
+              <strong className="text-foreground">Everyone:</strong> Removing that Aadhaar PDF password you always forget (it's your date of birth, DDMMYYYY). We built a dedicated page for it — see{" "}
+              <Link
+                to={"/unlock-pdf" as never}
+                className="text-primary underline-offset-2 hover:underline"
+              >
+                Unlock PDF
+              </Link>
+              .
+            </p>
           </div>
         </section>
 
@@ -229,14 +238,7 @@ function WhyCrispPDF() {
         {/* FAQ */}
         <section className="mt-16">
           <h2 className="font-display text-3xl font-bold tracking-tight">Questions about CrispPDF</h2>
-          <Accordion type="single" collapsible className="mt-6 rounded-2xl border border-border bg-surface/40 px-4">
-            {FAQS.map((f, i) => (
-              <AccordionItem key={i} value={`q${i}`} className="border-border last:border-0">
-                <AccordionTrigger className="text-left text-base font-medium">{f.q}</AccordionTrigger>
-                <AccordionContent className="text-sm leading-relaxed text-muted-foreground" data-speakable="true">{f.a}</AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
+          <SeoAccordion items={FAQS} className="mt-6 divide-y divide-border rounded-2xl border border-border bg-surface/40" />
         </section>
 
         {/* CTA */}

@@ -1,7 +1,7 @@
 // Centralised absolute-URL helper for SEO tags and the sitemap.
-// VITE_SITE_URL is set in .env (default https://crisppdf.com).
+// VITE_SITE_URL is set in .env (default https://crisppdf.in).
 
-const RAW = (import.meta.env.VITE_SITE_URL as string | undefined) ?? "https://crisppdf.com";
+const RAW = (import.meta.env.VITE_SITE_URL as string | undefined) ?? "https://crisppdf.in";
 
 export const SITE_URL: string = RAW.replace(/\/$/, "");
 

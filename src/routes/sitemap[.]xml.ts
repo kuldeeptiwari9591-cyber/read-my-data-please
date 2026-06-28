@@ -11,8 +11,8 @@ import { listPublishedPosts } from "@/lib/blog.functions";
 const COMPRESS_USES = ["whatsapp", "email", "passport-photo"];
 const ROOT_FORMAT_ALIASES = ["png-to-pdf", "heic-to-pdf", "webp-to-pdf", "csv-to-pdf", "txt-to-pdf"];
 
-// Always emit absolute URLs. Falls back to crisppdf.com when VITE_SITE_URL is unset.
-const BASE_URL = ((import.meta.env.VITE_SITE_URL as string | undefined) ?? "https://crisppdf.com").replace(/\/$/, "");
+// Always emit absolute URLs. Falls back to crisppdf.in when VITE_SITE_URL is unset.
+const BASE_URL = ((import.meta.env.VITE_SITE_URL as string | undefined) ?? "https://crisppdf.in").replace(/\/$/, "");
 
 interface SitemapEntry {
   path: string;

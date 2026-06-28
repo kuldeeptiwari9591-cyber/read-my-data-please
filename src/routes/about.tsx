@@ -1,12 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import { SeoAccordion } from "@/components/seo/SeoAccordion";
 import {
   Laptop,
   Server,
@@ -342,26 +337,10 @@ function About() {
             Common questions about who we are, how we operate, and what makes
             CrispPDF different.
           </p>
-          <Accordion
-            type="single"
-            collapsible
-            className="mt-6 rounded-2xl border border-border bg-surface/40 px-4"
-          >
-            {ABOUT_FAQS.map((f, i) => (
-              <AccordionItem
-                key={i}
-                value={`about-${i}`}
-                className="border-border last:border-0"
-              >
-                <AccordionTrigger className="text-left text-base font-medium">
-                  {f.q}
-                </AccordionTrigger>
-                <AccordionContent className="text-sm leading-relaxed text-muted-foreground">
-                  {f.a}
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
+          <SeoAccordion
+            items={ABOUT_FAQS}
+            className="mt-6 divide-y divide-border rounded-2xl border border-border bg-surface/40"
+          />
           <p className="mt-4 text-sm text-muted-foreground">
             Looking for tool-specific answers?{" "}
             <Link to="/faq" className="text-primary hover:underline">

@@ -88,6 +88,7 @@ import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as VsSlugRouteImport } from './routes/vs.$slug'
 import { Route as UseCasesSlugRouteImport } from './routes/use-cases.$slug'
 import { Route as ToolsSlugRouteImport } from './routes/tools.$slug'
+import { Route as OgSlugRouteImport } from './routes/og.$slug'
 import { Route as ConvertSlugRouteImport } from './routes/convert.$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
@@ -489,6 +490,11 @@ const ToolsSlugRoute = ToolsSlugRouteImport.update({
   path: '/tools/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OgSlugRoute = OgSlugRouteImport.update({
+  id: '/og/$slug',
+  path: '/og/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ConvertSlugRoute = ConvertSlugRouteImport.update({
   id: '/convert/$slug',
   path: '/convert/$slug',
@@ -596,6 +602,7 @@ export interface FileRoutesByFullPath {
   '/auth/callback': typeof AuthCallbackRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/convert/$slug': typeof ConvertSlugRoute
+  '/og/$slug': typeof OgSlugRoute
   '/tools/$slug': typeof ToolsSlugRoute
   '/use-cases/$slug': typeof UseCasesSlugRoute
   '/vs/$slug': typeof VsSlugRoute
@@ -681,6 +688,7 @@ export interface FileRoutesByTo {
   '/auth/callback': typeof AuthCallbackRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/convert/$slug': typeof ConvertSlugRoute
+  '/og/$slug': typeof OgSlugRoute
   '/tools/$slug': typeof ToolsSlugRoute
   '/use-cases/$slug': typeof UseCasesSlugRoute
   '/vs/$slug': typeof VsSlugRoute
@@ -768,6 +776,7 @@ export interface FileRoutesById {
   '/auth/callback': typeof AuthCallbackRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/convert/$slug': typeof ConvertSlugRoute
+  '/og/$slug': typeof OgSlugRoute
   '/tools/$slug': typeof ToolsSlugRoute
   '/use-cases/$slug': typeof UseCasesSlugRoute
   '/vs/$slug': typeof VsSlugRoute
@@ -855,6 +864,7 @@ export interface FileRouteTypes {
     | '/auth/callback'
     | '/blog/$slug'
     | '/convert/$slug'
+    | '/og/$slug'
     | '/tools/$slug'
     | '/use-cases/$slug'
     | '/vs/$slug'
@@ -940,6 +950,7 @@ export interface FileRouteTypes {
     | '/auth/callback'
     | '/blog/$slug'
     | '/convert/$slug'
+    | '/og/$slug'
     | '/tools/$slug'
     | '/use-cases/$slug'
     | '/vs/$slug'
@@ -1026,6 +1037,7 @@ export interface FileRouteTypes {
     | '/auth/callback'
     | '/blog/$slug'
     | '/convert/$slug'
+    | '/og/$slug'
     | '/tools/$slug'
     | '/use-cases/$slug'
     | '/vs/$slug'
@@ -1111,6 +1123,7 @@ export interface RootRouteChildren {
   WordToPdfRoute: typeof WordToPdfRoute
   BlogSlugRoute: typeof BlogSlugRoute
   ConvertSlugRoute: typeof ConvertSlugRoute
+  OgSlugRoute: typeof OgSlugRoute
   ToolsSlugRoute: typeof ToolsSlugRoute
   UseCasesSlugRoute: typeof UseCasesSlugRoute
   VsSlugRoute: typeof VsSlugRoute
@@ -1673,6 +1686,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ToolsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/og/$slug': {
+      id: '/og/$slug'
+      path: '/og/$slug'
+      fullPath: '/og/$slug'
+      preLoaderRoute: typeof OgSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/convert/$slug': {
       id: '/convert/$slug'
       path: '/convert/$slug'
@@ -1810,6 +1830,7 @@ const rootRouteChildren: RootRouteChildren = {
   WordToPdfRoute: WordToPdfRoute,
   BlogSlugRoute: BlogSlugRoute,
   ConvertSlugRoute: ConvertSlugRoute,
+  OgSlugRoute: OgSlugRoute,
   ToolsSlugRoute: ToolsSlugRoute,
   UseCasesSlugRoute: UseCasesSlugRoute,
   VsSlugRoute: VsSlugRoute,
