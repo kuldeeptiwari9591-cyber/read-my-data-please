@@ -341,13 +341,6 @@ function About() {
             items={ABOUT_FAQS}
             className="mt-6 divide-y divide-border rounded-2xl border border-border bg-surface/40"
           />
-                </AccordionTrigger>
-                <AccordionContent className="text-sm leading-relaxed text-muted-foreground">
-                  {f.a}
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
           <p className="mt-4 text-sm text-muted-foreground">
             Looking for tool-specific answers?{" "}
             <Link to="/faq" className="text-primary hover:underline">
