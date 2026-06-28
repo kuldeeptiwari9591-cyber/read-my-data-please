@@ -17,6 +17,9 @@ export function buildToolHead(slug: string) {
     content.seoTitle ?? `${tool.name} — Free Online ${tool.name} Tool · CrispPDF`;
   const description = content.seoDescription ?? tool.description;
   const canonical = abs(path);
+  // Per-tool dynamic OG image so every tool has a distinct social preview.
+  const ogImage = abs(`/og/${tool.slug}.svg`);
+  void OG_DEFAULT;
 
   const webApp = {
     "@context": "https://schema.org",
@@ -72,11 +75,13 @@ export function buildToolHead(slug: string) {
       { property: "og:description", content: description },
       { property: "og:url", content: canonical },
       { property: "og:type", content: "website" },
-      { property: "og:image", content: OG_DEFAULT },
+      { property: "og:image", content: ogImage },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: title },
       { name: "twitter:description", content: description },
-      { name: "twitter:image", content: OG_DEFAULT },
+      { name: "twitter:image", content: ogImage },
     ],
     links: [{ rel: "canonical", href: canonical }, ...hreflangLinks(path)],
     scripts: [
