@@ -50,4 +50,4 @@ Allow: /
 User-agent: cohere-ai
 Allow: /
 
-Sitemap: https://crisppdf.com/sitemap.xml
+Sitemap: https://crisppdf.in/sitemap.xml
