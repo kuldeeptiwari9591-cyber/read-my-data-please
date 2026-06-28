@@ -78,7 +78,7 @@ export function MegaMenu() {
   return (
     <div className="relative" ref={wrapRef}>
       {/* Same nav on every viewport, scrollable on mobile */}
-      <nav className="flex max-w-[60vw] items-center gap-0.5 overflow-x-auto text-sm text-muted-foreground sm:max-w-none [&::-webkit-scrollbar]:hidden">
+      <nav className="flex w-full items-center gap-0.5 overflow-x-auto text-sm text-muted-foreground sm:max-w-none [&::-webkit-scrollbar]:hidden">
         <button
           onClick={() => setOpen(open === "tools" ? null : "tools")}
           className="inline-flex shrink-0 items-center gap-1 rounded-md px-2.5 py-2 transition-colors hover:bg-surface hover:text-foreground sm:px-3"
