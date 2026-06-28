@@ -1,10 +1,5 @@
-// Vercel-target Vite config. Used ONLY when self-hosting on Vercel.
-// Activate by renaming this file to `vite.config.ts` AFTER moving off Lovable.
-//
-// The Lovable preset `@lovable.dev/vite-tanstack-config` defaults nitro to
-// Cloudflare Workers, which Vercel cannot run. This file uses the official
-// TanStack Start plugin chain with nitro preset = "vercel".
-
+// Vercel-target Vite config for TanStack Start.
+// nitro preset = "vercel" so build emits .vercel/output (Vercel auto-detects).
 import { defineConfig } from "vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact from "@vitejs/plugin-react";
@@ -21,7 +16,10 @@ export default defineConfig({
     tsConfigPaths(),
     tailwindcss(),
     tanstackStart({
-      server: { entry: "server" },
+      server: {
+        entry: "server",
+        preset: "vercel",
+      },
     }),
     viteReact(),
   ],
