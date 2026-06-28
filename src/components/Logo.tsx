@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import logoAsset from "@/assets/crisppdf-logo.png.asset.json";
+const logoAsset = { url: "/crisppdf-logo.png" };
 
 interface LogoProps {
   size?: number;

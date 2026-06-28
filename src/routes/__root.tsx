@@ -17,7 +17,7 @@ import { CookieBanner } from "../components/CookieBanner";
 import { SiteBanner } from "../components/SiteBanner";
 import { MaintenanceGate } from "../components/MaintenanceGate";
 import { Logo } from "../components/Logo";
-import logoAsset from "../assets/crisppdf-logo.png.asset.json";
+const logoAsset = { url: "/crisppdf-logo.png" };
 import { OG_DEFAULT } from "../lib/site-url";
 import { organizationLd, websiteLd } from "../lib/seo/jsonld";
 import { initPostHog } from "../lib/posthog";
