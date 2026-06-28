@@ -9,10 +9,55 @@ import { submitFeedback } from "@/lib/feedback.functions";
 import { abs, OG_DEFAULT } from "@/lib/site-url";
 import { hreflangLinks } from "@/lib/hreflang";
 import { Star, CheckCircle2, Bug, MessageSquare, Wrench, AlertTriangle } from "lucide-react";
+import { SeoAccordion, type SeoFAQ } from "@/components/seo/SeoAccordion";
+import { buildFaqJsonLd } from "@/lib/seo/faq-jsonld";
 
 const CANONICAL = abs("/feedback");
 const TITLE = "Feedback & Feature Requests — CrispPDF";
 const DESC = "Send feedback, report a bug, or request a new PDF tool. We read every submission.";
+
+const FEEDBACK_FAQS: SeoFAQ[] = [
+  {
+    q: "Does CrispPDF actually read every feedback submission?",
+    a: "Yes. Every feedback, bug report, and tool request lands in a shared inbox that the team triages weekly. High-impact bugs are usually acknowledged within 48 hours.",
+  },
+  {
+    q: "Do I need an account to send feedback?",
+    a: "No. Feedback, bugs, and tool requests are open to everyone — no signup, no login. Leave an email only if you want a personal reply.",
+  },
+  {
+    q: "What's the difference between feedback, a bug report, and a tool request?",
+    a: "Feedback is general impressions or ratings. A bug report is something that's clearly broken — wrong output, a crash, or unexpected behaviour. A tool request is asking us to add a brand-new PDF capability that doesn't exist on CrispPDF yet.",
+  },
+  {
+    q: "How long does it take for a requested tool to get built?",
+    a: "Popular requests usually ship within 2–6 weeks. Niche or technically complex tools take longer. We prioritise requests that solve clear, recurring problems for many users.",
+  },
+  {
+    q: "Will my feedback be made public?",
+    a: "No. Submissions are private. We may quote anonymised feedback in our changelog or marketing, but we never publish your email or any identifying details without explicit permission.",
+  },
+  {
+    q: "Can I attach a file or screenshot to a bug report?",
+    a: "Not directly in the form (to keep submissions private and lightweight). If a screenshot is critical, mention it in the bug description and leave an email — we'll reply and you can send it back.",
+  },
+  {
+    q: "What information should I include in a bug report?",
+    a: "The tool you used, the steps you took, what you expected, what actually happened, and your browser + device if you have it. The more specific you are, the faster we can reproduce and fix the issue.",
+  },
+  {
+    q: "Why do I have to solve a captcha?",
+    a: "The captcha blocks spam and automated submissions so real feedback isn't drowned out. It runs locally on hCaptcha and we don't track you with it.",
+  },
+  {
+    q: "What if my feedback is critical or negative?",
+    a: "Send it. We'd rather hear what's broken than ship something users quietly hate. Negative, specific feedback is the fastest way to make CrispPDF better.",
+  },
+  {
+    q: "Can I follow up on a request I already sent?",
+    a: "Yes — re-submit with the same email and reference your earlier message. Or contact us via the Contact page if you want a direct thread.",
+  },
+];
 
 export const Route = createFileRoute("/feedback")({
   head: () => ({
@@ -27,6 +72,12 @@ export const Route = createFileRoute("/feedback")({
       { name: "twitter:image", content: OG_DEFAULT },
     ],
     links: [{ rel: "canonical", href: CANONICAL }, ...hreflangLinks("/feedback")],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify(buildFaqJsonLd(FEEDBACK_FAQS)),
+      },
+    ],
   }),
   component: FeedbackPage,
 });
@@ -259,6 +310,16 @@ function FeedbackPage() {
             {busy ? "Sending…" : tab === "feedback" ? "Send Feedback" : tab === "bug" ? "Report Bug" : "Request This Tool"}
           </button>
         </form>
+
+        <section className="mt-16" aria-labelledby="feedback-faq">
+          <h2 id="feedback-faq" className="font-display text-2xl font-semibold tracking-tight md:text-3xl">
+            Questions about feedback
+          </h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Quick answers about how submissions, bug reports, and tool requests are handled.
+          </p>
+          <SeoAccordion items={FEEDBACK_FAQS} />
+        </section>
       </main>
       <Footer />
       <style>{`

@@ -30,6 +30,7 @@ import {
 import { abs, OG_DEFAULT } from "@/lib/site-url";
 import { buildFaqJsonLd } from "@/lib/seo/faq-jsonld";
 import { PopularSpotlight } from "@/components/PopularSpotlight";
+import { FeedbackCTA } from "@/components/FeedbackCTA";
 const HOME_FAQS: Array<{ q: string; a: string }> = [
   {
     q: "Is CrispPDF really free?",
@@ -403,6 +404,9 @@ function Index() {
 
       {/* POPULAR TOOLS SPOTLIGHT */}
       <PopularSpotlight />
+
+      {/* FEEDBACK / REQUESTS */}
+      <FeedbackCTA />
 
       {/* HOW IT WORKS */}
       <section id="how" className="relative mx-auto max-w-6xl px-6 py-24">
