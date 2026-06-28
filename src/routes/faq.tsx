@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SeoAccordion } from "@/components/seo/SeoAccordion";
+import { buildFaqJsonLd } from "@/lib/seo/faq-jsonld";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { abs, OG_DEFAULT } from "@/lib/site-url";
@@ -128,14 +129,7 @@ export const Route = createFileRoute("/faq")({
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@graph": [
-            {
-              "@type": "FAQPage",
-              mainEntity: ALL_FAQS.map((f) => ({
-                "@type": "Question",
-                name: f.q,
-                acceptedAnswer: { "@type": "Answer", text: f.a },
-              })),
-            },
+            { ...buildFaqJsonLd(ALL_FAQS), "@context": undefined },
             { "@type": "SpeakableSpecification", cssSelector: ["[data-speakable='true']"] },
           ],
         }),

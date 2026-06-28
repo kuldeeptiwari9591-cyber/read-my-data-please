@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { SeoAccordion } from "@/components/seo/SeoAccordion";
+import { buildFaqJsonLd } from "@/lib/seo/faq-jsonld";
 import {
   Laptop,
   Server,
@@ -40,15 +41,7 @@ export const Route = createFileRoute("/about")({
       scripts: [
         {
           type: "application/ld+json",
-          children: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            mainEntity: ABOUT_FAQS.map((f) => ({
-              "@type": "Question",
-              name: f.q,
-              acceptedAnswer: { "@type": "Answer", text: f.a },
-            })),
-          }),
+          children: JSON.stringify(buildFaqJsonLd(ABOUT_FAQS)),
         },
       ],
     };

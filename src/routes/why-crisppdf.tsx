@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SeoAccordion } from "@/components/seo/SeoAccordion";
+import { buildFaqJsonLd } from "@/lib/seo/faq-jsonld";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { AnswerBlock } from "@/components/seo/AnswerBlock";
@@ -82,14 +83,7 @@ export const Route = createFileRoute("/why-crisppdf")({
               mainEntityOfPage: CANONICAL,
               image: OG_DEFAULT,
             },
-            {
-              "@type": "FAQPage",
-              mainEntity: FAQS.map((f) => ({
-                "@type": "Question",
-                name: f.q,
-                acceptedAnswer: { "@type": "Answer", text: f.a },
-              })),
-            },
+            { ...buildFaqJsonLd(FAQS), "@context": undefined },
             {
               "@type": "SpeakableSpecification",
               cssSelector: ["[data-speakable='true']"],
