@@ -1,5 +1,7 @@
 // Vercel-target Vite config for TanStack Start.
-// nitro preset = "vercel" so build emits .vercel/output (Vercel auto-detects).
+// Set NITRO_PRESET=vercel at config load so the bundled nitro emits .vercel/output.
+process.env.NITRO_PRESET = process.env.NITRO_PRESET || "vercel";
+
 import { defineConfig } from "vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact from "@vitejs/plugin-react";
@@ -16,10 +18,7 @@ export default defineConfig({
     tsConfigPaths(),
     tailwindcss(),
     tanstackStart({
-      server: {
-        entry: "server",
-        preset: "vercel",
-      },
+      server: { entry: "server" },
     }),
     viteReact(),
   ],
