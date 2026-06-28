@@ -1,147 +1,90 @@
-# CrispPDF — Migration from Lovable to Vercel / Netlify
+# CrispPDF → Vercel + Self-Owned Supabase Migration Runbook
 
-Authoritative migration guide. Mirrors `.lovable/plan.md`.
-
-Pre-built assets in this folder:
-- `schema.sql` — consolidated DB schema (paste into new Supabase SQL editor)
-- `MIGRATION.md` — this file
-
-Honest constraint up front: on the Supabase free plan, **auth user passwords cannot be exported**. Users will reset on first sign-in. Everything else transfers cleanly.
+End state: frontend + SSR on **Vercel**, database/auth/storage/cron on a **new Supabase project you own**, custom domain `crisppdf.in` flipped over with ~15 min downtime.
 
 ---
 
-## Phase 0 — Pre-flight (30 min)
+## Phase 0 — Pre-flight
 
-1. Push the repo to your own GitHub.
-2. Pick host: **Vercel** (recommended) or Netlify.
-3. Buy / confirm final domain. Keep `*.lovable.app` alive until cutover.
-4. Google Cloud Console → Credentials → OAuth client ID (Web app). Save Client ID + Secret.
-5. Accounts: Supabase, Vercel, hCaptcha (reuse existing keys), PostHog, Sentry.
+1. Push repo to GitHub (Lovable editor → Plus (+) → GitHub → Create Repository). `.env` is gitignored.
+2. Gather what you'll paste into Vercel later:
+   - `VITE_SUPABASE_URL` + `SUPABASE_URL` (new project URL)
+   - `VITE_SUPABASE_PUBLISHABLE_KEY` + `SUPABASE_PUBLISHABLE_KEY` (anon key)
+   - `SUPABASE_SERVICE_ROLE_KEY` (server-only)
+   - `VITE_SUPABASE_PROJECT_ID`
+   - `VITE_SITE_URL=https://crisppdf.in`
+   - `VITE_HCAPTCHA_SITE_KEY`, `HCAPTCHA_SECRET`
+   - `VITE_POSTHOG_KEY`, `VITE_SENTRY_DSN`, `VITE_GA4_ID`
 
-## Phase 1 — New Supabase project (1 hr)
+## Phase 1 — New Supabase project
 
-1. supabase.com → New Project. Region close to users (India: Mumbai/Singapore).
-2. Save: Project URL, anon key, service_role key, DB password, project ref.
-3. SQL Editor → paste all of `schema.sql` → Run. Creates 7 tables, RLS, GRANTs, `has_role`, `app_role` enum.
-4. Database → Extensions → enable `pg_cron`, `pg_net`.
-5. Auth → Providers:
-   - Email: ON. Enable "Confirm email" and "Leaked password protection (HIBP)".
-   - Google: ON. Paste Client ID + Secret. Copy Supabase callback URL (`https://<ref>.supabase.co/auth/v1/callback`) into Google Cloud Authorized redirect URIs.
-6. Auth → URL Configuration → Site URL = final domain. Redirect URLs: `https://<final-domain>/auth/callback`, `http://localhost:8080`.
+1. Create a new Supabase project (region: Mumbai `ap-south-1` recommended).
+2. SQL Editor → run `migration-export/schema.sql`. Creates: enums, tables, RLS policies, GRANTs, `has_role` function, audit log, triggers.
+3. Export data from Lovable Cloud (Cloud → Database → Tables → Export CSV) for:
+   `blog_posts`, `feedback`, `announcements`, `tool_settings`, `user_roles`, `operations`, `security_audit_log`.
+4. Import each CSV into the matching table on the new project (Table Editor → Import).
+5. Recreate `pg_cron`: in the new project's SQL editor, re-schedule the daily security scan. Update the URL to `https://crisppdf.in/api/public/hooks/security-scan` and use the new project's anon key in the `apikey` header.
+6. Auth users — passwords cannot be exported. Either:
+   - Use Supabase Auth Admin API to bulk-invite (sends magic-link reset), OR
+   - Tell users to use "Forgot password" on first login.
+7. Google OAuth: Google Cloud Console → add `https://<new-project-ref>.supabase.co/auth/v1/callback` to authorized redirect URIs. In Supabase: Auth → Providers → Google → paste Client ID + Secret → enable.
 
-## Phase 2 — Code changes (one commit, do NOT deploy on Lovable)
+## Phase 2 — Code portability changes
 
-CrispPDF has no `lovable.auth` calls today — verified. Code changes needed are minimal:
+These are already done in this repo where possible. Verify before deploy:
 
-1. `/auth/callback` route — already added at `src/routes/auth.callback.tsx`. Reads `sessionStorage.post_auth_redirect` for the intended destination.
-2. If you want Google sign-in on the new host, add a button to `src/routes/auth.tsx`:
-   ```ts
-   await supabase.auth.signInWithOAuth({
-     provider: "google",
-     options: { redirectTo: `${window.location.origin}/auth/callback` },
-   });
-   ```
-   Set `sessionStorage.setItem("post_auth_redirect", search.redirect ?? "/")` before calling, so the callback knows where to land.
-3. Regenerate types against new project:
-   ```bash
-   npx supabase login
-   npx supabase gen types typescript --project-id <new-ref> > src/integrations/supabase/types.ts
-   ```
-4. Verify `src/integrations/supabase/client.ts` and `client.server.ts` use env names Vercel will provide (`VITE_SUPABASE_URL`, `SUPABASE_URL`, etc.). Usually no change needed.
-5. Commit on a `migration` branch. Do NOT publish on Lovable from this branch.
+- [x] `/auth/callback` route exists (`src/routes/auth.callback.tsx`) and uses raw `supabase.auth`.
+- [x] No `lovable.auth.signInWithOAuth` usage anywhere in `src/`.
+- [x] `vercel.json` exists at repo root with security headers.
+- [x] `vite.config.vercel.ts` ships a Vercel-targeted config (nitro preset = `vercel`).
 
-## Phase 3 — Deploy frontend to Vercel (45 min)
+**Action required just before deploying to Vercel:**
 
-1. vercel.com → Add New Project → import repo → `migration` branch.
-2. Framework: Vite (auto). Build: `bun run build`. Output: `.output/` (TanStack Start default).
-3. Project Settings → Environment Variables (Production + Preview + Development):
+```bash
+mv vite.config.ts vite.config.lovable.ts
+mv vite.config.vercel.ts vite.config.ts
+bun add -D @tanstack/react-start @vitejs/plugin-react @tailwindcss/vite vite-tsconfig-paths
+```
 
-   | Name | Value |
-   |---|---|
-   | `VITE_SUPABASE_URL` | new project URL |
-   | `VITE_SUPABASE_PUBLISHABLE_KEY` | new anon key |
-   | `VITE_SUPABASE_PROJECT_ID` | new project ref |
-   | `SUPABASE_URL` | new project URL |
-   | `SUPABASE_PUBLISHABLE_KEY` | new anon key |
-   | `SUPABASE_SERVICE_ROLE_KEY` | new service role key |
-   | `VITE_SITE_URL` | https://your-final-domain.com |
-   | `VITE_GA4_ID` | G-XXXX |
-   | `VITE_POSTHOG_KEY` | phc_… |
-   | `VITE_SENTRY_DSN` | https://…ingest.sentry.io/… |
-   | `VITE_HCAPTCHA_SITE_KEY` | hCaptcha site key |
-   | `HCAPTCHA_SECRET` | hCaptcha secret |
+The Lovable preset auto-includes plugins; the Vercel config installs them directly.
 
-4. Deploy. Smoke-test on `*.vercel.app`: home, compress-pdf, merge-pdf, sign in, feedback (hCaptcha), blog, `/sitemap.xml`.
-5. Settings → Domains → add custom domain. Update DNS at registrar (A `76.76.21.21` or CNAME per Vercel).
-6. Once domain is live, set `VITE_SITE_URL` to final domain → redeploy so canonicals/sitemap absolutize.
+## Phase 3 — Vercel setup
 
-### Netlify variant
-Same steps. `netlify.toml` already exists in the repo. Env vars under Site Settings → Environment.
+1. Vercel → New Project → import GitHub repo.
+2. Framework preset: **Other**.
+3. Build command: `bun run build` (or `npm run build`).
+4. Output directory: `.output/public` (auto-set by nitro Vercel preset).
+5. Settings → Environment Variables → paste everything from Phase 0 for Production + Preview.
+6. Deploy. Test the `*.vercel.app` URL end-to-end.
 
-## Phase 4 — Data migration (cutover day, 30–60 min)
+## Phase 4 — DNS cutover (≈15 min downtime)
 
-1. Freeze writes on Lovable: set `tool_settings.maintenance_mode = true` or push an `announcements` banner.
-2. Export CSVs from Lovable Cloud → Database → Tables, in this order:
-   1. `tool_settings`
-   2. `announcements`
-   3. `blog_posts`
-   4. `feedback`
-   5. `operations`
-   6. `security_audit_log`
-   7. `user_roles` (LAST)
-3. Auth users: Cloud → Users → export emails CSV. Password hashes NOT exportable on free plan.
-4. Import CSVs into new Supabase (Table Editor → Import CSV), same order.
-5. Auth → Users → bulk invite (uploads emails CSV, sends password-reset to each).
-6. Re-create your admin role after signing in:
-   ```sql
-   INSERT INTO user_roles(user_id, role)
-   VALUES ((SELECT id FROM auth.users WHERE email='you@example.com'), 'admin');
-   ```
-7. Re-create daily security-scan cron:
-   ```sql
-   SELECT cron.schedule(
-     'daily-security-scan', '0 3 * * *',
-     $$ SELECT net.http_post(
-       url := 'https://your-final-domain.com/api/public/hooks/security-scan',
-       headers := '{"Content-Type":"application/json"}'::jsonb
-     ); $$
-   );
-   ```
+1. Enable maintenance banner on Lovable site (optional).
+2. Delta-export any new rows from Lovable DB since Phase 1 → import to new Supabase.
+3. Domain registrar DNS:
+   - Delete `A @ 185.158.133.1` (Lovable)
+   - Add `A @ 76.76.21.21` (Vercel)
+   - Add `CNAME www cname.vercel-dns.com`
+4. Vercel → Project → Settings → Domains → add `crisppdf.in` and `www.crisppdf.in`. SSL auto-provisions.
+5. Update Google OAuth authorized origins to include the new Supabase URL.
+6. Unpublish the Lovable project once Vercel is serving traffic.
 
-## Phase 5 — DNS flip & verification (15 min)
+## Phase 5 — Post-migration
 
-1. Registrar → change DNS to Vercel (remove Lovable A record).
-2. Wait 5–30 min. Verify with `dig your-domain.com`.
-3. Vercel auto-issues SSL.
-4. Smoke-test live URL (same 6 flows as Phase 3).
-5. Submit new `https://your-domain.com/sitemap.xml` to Google Search Console + Bing Webmaster.
-
-## Phase 6 — Post-cutover (first 7 days)
-
-1. Watch Sentry + PostHog for 48 h.
-2. Keep Lovable project alive 7 days as fallback.
-3. Email users to reset password on next sign-in (if you have a list).
-4. Day 8: delete Lovable project.
+1. Verify live: `/sitemap.xml`, `/robots.txt`, `/llms.txt`, `/og/compress-pdf`, blog list + detail, feedback + hCaptcha, Google sign-in, admin panel at `/cp-crisp-7x92k`.
+2. Run `node scripts/ssr-check.mjs https://crisppdf.in`.
+3. Resubmit sitemap in Google Search Console.
+4. Email users a password reset (if any auth users exist).
+5. Monitor PostHog + Sentry for 24h.
 
 ---
 
-## What you lose
+## What only YOU can do
 
-- Auth passwords (free Supabase plan limit — users reset).
-- Realtime subscribers during DNS flip (CrispPDF doesn't use realtime; impact = zero).
-- Lovable AI Gateway, Lovable connectors — not used in CrispPDF, no action.
+- Create the Supabase project (your account)
+- Add env vars in Vercel
+- Update DNS at registrar
+- Update Google OAuth redirect URIs
+- Re-invite auth users
 
-## What stays identical
-
-- All 40 PDF tools (browser-side, zero server dependency).
-- SEO infra: sitemap, robots, llms.txt, ai.txt, JSON-LD, pSEO routes.
-- Schema, RLS, audit log, rate limiting, hCaptcha, PostHog, Sentry, web-vitals.
-- Admin at `/_authenticated/cp-crisp-7x92k`.
-
-## Tables exported
-
-`announcements`, `blog_posts`, `feedback`, `operations`, `security_audit_log`, `tool_settings`, `user_roles`.
-
-## DB functions
-
-`has_role(uuid, app_role)` — SECURITY DEFINER, EXECUTE granted to anon + authenticated (required by RLS policies that check role for unauthenticated blog reads).
+Total active hands-on time: ~3 hours. Downtime: ~15 minutes at DNS flip.
