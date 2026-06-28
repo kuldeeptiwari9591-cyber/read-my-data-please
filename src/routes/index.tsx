@@ -28,6 +28,7 @@ import {
   type ToolCategory,
 } from "@/lib/tools";
 import { abs, OG_DEFAULT } from "@/lib/site-url";
+import { buildFaqJsonLd } from "@/lib/seo/faq-jsonld";
 import { PopularSpotlight } from "@/components/PopularSpotlight";
 const HOME_FAQS: Array<{ q: string; a: string }> = [
   {
@@ -87,15 +88,7 @@ const HOME_FAQS: Array<{ q: string; a: string }> = [
 export const Route = createFileRoute("/")({
   head: () => {
     const canonical = abs("/");
-    const faqLd = {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      mainEntity: HOME_FAQS.map((f) => ({
-        "@type": "Question",
-        name: f.q,
-        acceptedAnswer: { "@type": "Answer", text: f.a },
-      })),
-    };
+    const faqLd = buildFaqJsonLd(HOME_FAQS);
     return {
       meta: [
         { title: "CrispPDF — 40 Free Online PDF Tools · No Signup" },
