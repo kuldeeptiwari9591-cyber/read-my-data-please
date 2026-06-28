@@ -3,7 +3,9 @@
   "buildCommand": "bun run build",
   "outputDirectory": "dist/client",
   "framework": null,
-  "build": { "env": { "NITRO_PRESET": "vercel" } },
+  "rewrites": [
+    { "source": "/((?!_build/|assets/|.*\\.\\w+$).*)", "destination": "/index.html" }
+  ],
   "headers": [
     {
       "source": "/(.*)",
@@ -22,10 +24,6 @@
         { "key": "X-Robots-Tag", "value": "noindex, nofollow" },
         { "key": "Cache-Control", "value": "no-store" }
       ]
-    },
-    {
-      "source": "/api/(.*)",
-      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
     }
   ]
 }
