@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
-    "build:vercel": "vite build && test -d .vercel/output && test -d .vercel/output/static && test -d .vercel/output/functions",
+    "build:vercel": "NITRO_PRESET=vercel vite build",
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "lint": "eslint .",
