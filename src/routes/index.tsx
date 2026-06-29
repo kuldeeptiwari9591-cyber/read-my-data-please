@@ -96,12 +96,13 @@ export const Route = createFileRoute("/")({
         {
           name: "description",
           content:
-            "Merge, split, compress, convert, sign, and protect PDFs. 40 free tools. No signup. No watermarks. Privacy-first.",
+            "Merge, split, compress, convert, edit, sign, and protect PDFs online free. 40 privacy-first browser tools — no signup, no watermarks, no file uploads. Works on phone, tablet, and desktop.",
         },
-        { property: "og:title", content: "CrispPDF — 40 Free Online PDF Tools" },
+        { property: "og:title", content: "CrispPDF — 40 Free Online PDF Tools · No Signup" },
         {
           property: "og:description",
-          content: "Every PDF tool you need. Free, crisp, and fast. No signup, no watermarks.",
+          content:
+            "Merge, split, compress, convert, edit, sign, and protect PDFs online free. 40 privacy-first browser tools — no signup, no watermarks, no file uploads.",
         },
         { property: "og:url", content: canonical },
         { property: "og:type", content: "website" },
