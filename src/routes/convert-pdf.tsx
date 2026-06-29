@@ -7,7 +7,7 @@ import { AnswerBlock } from "@/components/seo/AnswerBlock";
 import { abs, OG_DEFAULT } from "@/lib/site-url";
 import { breadcrumbLd } from "@/lib/seo/jsonld";
 
-const TITLE = "Convert PDF — Word, Excel, JPG, PNG, HTML & More | CrispPDF";
+const TITLE = "Convert PDF — Word, Excel, JPG, PNG & More | CrispPDF";
 const DESC = "Free PDF converters: PDF to Word, Excel, JPG, PNG, PPT. Also Word, Excel, JPG, and HTML to PDF. No signup, no watermark, no file upload required.";
 
 export const Route = createFileRoute("/convert-pdf")({
