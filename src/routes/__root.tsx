@@ -133,6 +133,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      {
+        name: "google-site-verification",
+        content: "TrimKeUgP8gQUpomFVv6ApyFZD7Z3oyEcol8Y0FkdRs",
+      },
       { title: "CrispPDF — 40 Free Online PDF Tools" },
       {
         name: "description",
