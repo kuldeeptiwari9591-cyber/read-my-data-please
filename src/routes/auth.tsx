@@ -29,11 +29,30 @@ function AuthPage() {
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
 
+  const resolveDestination = async (): Promise<string> => {
+    if (search.redirect && typeof search.redirect === "string" && search.redirect.startsWith("/")) {
+      return search.redirect;
+    }
+    const { data: userData } = await supabase.auth.getUser();
+    if (userData.user) {
+      const { data: isAdmin } = await supabase.rpc("has_role", {
+        _user_id: userData.user.id,
+        _role: "admin",
+      });
+      if (isAdmin) return "/cp-crisp-7x92k";
+    }
+    return "/";
+  };
+
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
-      if (data.user) navigate({ to: (search.redirect as any) ?? "/" });
+    supabase.auth.getUser().then(async ({ data }) => {
+      if (data.user) {
+        const dest = await resolveDestination();
+        navigate({ to: dest as any });
+      }
     });
-  }, [navigate, search.redirect]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [navigate]);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,7 +61,8 @@ function AuthPage() {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw error;
       toast.success("Signed in");
-      navigate({ to: (search.redirect as any) ?? "/" });
+      const dest = await resolveDestination();
+      navigate({ to: dest as any });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Sign-in failed");
     } finally {
