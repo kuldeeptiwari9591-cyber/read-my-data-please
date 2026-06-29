@@ -10,7 +10,8 @@ export const Route = createFileRoute("/convert/$slug")({
     const f = FORMAT_PAIRS_BY_SLUG[params.slug];
     if (!f) return { meta: [{ title: "Not found — CrispPDF" }] };
     const title = `${f.from} to ${f.to} Online Free — No Signup | CrispPDF`;
-    const description = `Convert ${f.from} to ${f.to} free online. Runs in your browser — no upload, no signup, no watermark. ${f.blurb}`;
+    const rawDesc = `Convert ${f.from} to ${f.to} free online. Runs in your browser — no upload, no signup, no watermark. ${f.blurb}`;
+    const description = rawDesc.length > 158 ? rawDesc.slice(0, 155).replace(/\s+\S*$/, "") + "…" : rawDesc;
     const path = `/convert/${params.slug}`;
     const canonical = abs(path);
     return {

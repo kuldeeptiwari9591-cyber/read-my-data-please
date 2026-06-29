@@ -9,7 +9,7 @@ import { hreflangLinks } from "@/lib/hreflang";
 import { CheckCircle2, Shield, Zap, Sparkles, Users, Globe } from "lucide-react";
 
 const CANONICAL = abs("/why-crisppdf");
-const TITLE = "Why CrispPDF — Private, Free PDF Tools That Run in Your Browser";
+const TITLE = "Why CrispPDF — Private, Free PDF Tools In Your Browser";
 const DESC =
   "CrispPDF processes PDFs in your browser — files never touch our servers. No signup, no watermarks, no ads. 40 free tools built for speed and privacy.";
 

@@ -12,10 +12,10 @@ export const Route = createFileRoute("/contact")({
     const canonical = abs("/contact");
     return {
       meta: [
-        { title: "Contact — CrispPDF" },
-        { name: "description", content: "Get in touch with the CrispPDF team — feedback, bug reports, and feature requests." },
-        { property: "og:title", content: "Contact — CrispPDF" },
-        { property: "og:description", content: "Send feedback, report a bug, or request a feature." },
+        { title: "Contact CrispPDF — Feedback, Bug Reports & Support" },
+        { name: "description", content: "Get in touch with the CrispPDF team — send feedback, report a bug, request a new PDF tool, or ask a question. We read every message." },
+        { property: "og:title", content: "Contact CrispPDF — Feedback, Bug Reports & Support" },
+        { property: "og:description", content: "Send feedback, report a bug, request a new PDF tool, or ask a question. We read every message." },
         { property: "og:url", content: canonical },
         { property: "og:type", content: "website" },
         { property: "og:image", content: OG_DEFAULT },

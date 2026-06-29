@@ -22,7 +22,7 @@ export const Route = createFileRoute("/about")({
     const canonical = abs("/about");
     const title = "About CrispPDF — How It Works & Why It's Free";
     const description =
-      "How CrispPDF processes PDFs in your browser, why it's 100% free, and what makes it different. 40 privacy-first PDF tools — no signup, no watermarks, no ads.";
+      "How CrispPDF processes PDFs in your browser, why it's 100% free, and what sets it apart. 40 privacy-first tools — no signup, no watermarks, no ads.";
     return {
       meta: [
         { title },

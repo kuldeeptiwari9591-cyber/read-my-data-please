@@ -13,14 +13,18 @@ export const Route = createFileRoute("/blog/")({
     const canonical = abs("/blog");
     return {
       meta: [
-        { title: "Blog — CrispPDF" },
+        { title: "PDF Tips & Guides — CrispPDF Blog" },
         {
           name: "description",
           content:
+            "Plain-English guides on working with PDFs: compression, conversion, OCR, privacy, and what actually works in the browser. Updated regularly.",
+        },
+        { property: "og:title", content: "PDF Tips & Guides — CrispPDF Blog" },
+        {
+          property: "og:description",
+          content:
             "Plain-English guides on working with PDFs: compression, conversion, OCR, privacy, and what actually works in the browser.",
         },
-        { property: "og:title", content: "CrispPDF Blog" },
-        { property: "og:description", content: "Honest guides on PDFs — privacy, compression, conversion." },
         { property: "og:url", content: canonical },
         { property: "og:type", content: "website" },
         { property: "og:image", content: OG_DEFAULT },

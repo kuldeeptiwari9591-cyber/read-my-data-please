@@ -3,7 +3,7 @@ import { CategoryHub } from "@/components/seo/CategoryHub";
 import { abs, OG_DEFAULT } from "@/lib/site-url";
 import { breadcrumbLd } from "@/lib/seo/jsonld";
 
-const TITLE = "Organize PDF — Merge, Split, Compress & Reorder Pages | CrispPDF";
+const TITLE = "Organize PDF — Merge, Split, Compress & Reorder | CrispPDF";
 const DESC = "Free online tools to organize PDF files: merge, split, compress, rotate, reorder, delete, and extract pages. Browser-based, no signup, no watermark.";
 
 export const Route = createFileRoute("/organize-pdf")({
