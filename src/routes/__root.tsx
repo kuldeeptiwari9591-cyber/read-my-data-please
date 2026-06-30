@@ -276,6 +276,8 @@ function RootComponent() {
       </MaintenanceGate>
       <Toaster />
       <CookieBanner />
+      <Analytics />
+      <SpeedInsights />
     </QueryClientProvider>
   );
 }
