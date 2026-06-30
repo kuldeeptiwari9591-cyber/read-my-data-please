@@ -397,6 +397,7 @@ function AdminPanel() {
 
         {tab === "ops" && (
           <div className="mt-8 space-y-6">
+            <OpsStats ops={ops} />
             <OpsChart ops={ops} />
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
