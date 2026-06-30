@@ -207,12 +207,63 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const router = useRouter();
 
   useEffect(() => {
     initSentry();
     initPostHog();
     startWebVitals();
     void startAxeAudit();
+  }, []);
+
+  // SPA page_view tracking on every route change (GA4 config fires only once)
+  useEffect(() => {
+    const send = () => {
+      const w = window as unknown as { gtag?: (...a: unknown[]) => void };
+      if (typeof w.gtag !== "function") return;
+      w.gtag("event", "page_view", {
+        page_path: window.location.pathname + window.location.search,
+        page_location: window.location.href,
+        page_title: document.title,
+      });
+    };
+    const unsub = router.subscribe("onResolved", send);
+    return () => unsub();
+  }, [router]);
+
+  // SEO actions: outbound link clicks + 90% scroll depth
+  useEffect(() => {
+    const w = window as unknown as { gtag?: (...a: unknown[]) => void };
+    const onClick = (e: MouseEvent) => {
+      const a = (e.target as HTMLElement)?.closest?.("a") as HTMLAnchorElement | null;
+      if (!a || !a.href) return;
+      try {
+        const u = new URL(a.href);
+        if (u.host && u.host !== window.location.host && typeof w.gtag === "function") {
+          w.gtag("event", "outbound_click", {
+            link_url: a.href,
+            link_domain: u.host,
+            link_text: (a.textContent || "").trim().slice(0, 80),
+          });
+        }
+      } catch {}
+    };
+    let fired = false;
+    const onScroll = () => {
+      if (fired) return;
+      const h = document.documentElement;
+      const pct = (h.scrollTop + window.innerHeight) / h.scrollHeight;
+      if (pct >= 0.9 && typeof w.gtag === "function") {
+        fired = true;
+        w.gtag("event", "scroll_depth", { percent: 90, page_path: location.pathname });
+      }
+    };
+    document.addEventListener("click", onClick, { capture: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      document.removeEventListener("click", onClick, { capture: true } as EventListenerOptions);
+      window.removeEventListener("scroll", onScroll);
+    };
   }, []);
 
   return (
