@@ -71,10 +71,12 @@ function ShareCardSlot({ slug, title }: { slug: string; title: string }) {
   const [count, setCount] = useState<number | undefined>();
 
   useEffect(() => {
+    let startedAt = 0;
     const onUp = (e: Event) => {
       const d = (e as CustomEvent).detail as { size?: number; count?: number };
       setOriginalSize(d?.size);
       setCount(d?.count);
+      startedAt = performance.now();
       if (slug && d?.size) analytics.fileUpload(slug, d.size);
     };
     const onDown = (e: Event) => {
@@ -82,7 +84,19 @@ function ShareCardSlot({ slug, title }: { slug: string; title: string }) {
       if (d?.slug && slug && d.slug !== slug) return;
       setResultSize(d?.size);
       setDownloaded(true);
-      if (slug && d?.size) analytics.toolComplete(slug, originalSize ?? 0, d.size, 0);
+      const ms = startedAt ? Math.round(performance.now() - startedAt) : undefined;
+      if (slug && d?.size) analytics.toolComplete(slug, originalSize ?? 0, d.size, ms ?? 0);
+      if (slug) {
+        void import("@/lib/ops-log").then(({ logOperation }) =>
+          logOperation({
+            toolSlug: slug,
+            bytesIn: originalSize,
+            durationMs: ms,
+            fileCount: count,
+            success: true,
+          }),
+        );
+      }
     };
     window.addEventListener("crisppdf:upload", onUp);
     window.addEventListener("crisppdf:download", onDown);
@@ -90,7 +104,7 @@ function ShareCardSlot({ slug, title }: { slug: string; title: string }) {
       window.removeEventListener("crisppdf:upload", onUp);
       window.removeEventListener("crisppdf:download", onDown);
     };
-  }, [slug]);
+  }, [slug, originalSize, count]);
 
   if (!downloaded || !slug) return null;
 
