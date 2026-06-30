@@ -23,6 +23,8 @@ import { organizationLd, websiteLd } from "../lib/seo/jsonld";
 import { initPostHog } from "../lib/posthog";
 import { initSentry } from "../lib/sentry";
 import { startWebVitals } from "../lib/web-vitals";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import { startAxeAudit } from "../lib/a11y-dev";
 
 
