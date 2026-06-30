@@ -194,12 +194,8 @@ function RootShell({ children }: { children: ReactNode }) {
       <head>
         <HeadContent />
         <script dangerouslySetInnerHTML={{ __html: themeBootstrap }} />
-        {gaId && (
-          <>
-            <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} />
-            <script dangerouslySetInnerHTML={{ __html: gaBootstrap! }} />
-          </>
-        )}
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} />
+        <script dangerouslySetInnerHTML={{ __html: gaBootstrap }} />
       </head>
       <body className="bg-background text-foreground">
         {children}
