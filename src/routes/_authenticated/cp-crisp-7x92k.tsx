@@ -708,6 +708,41 @@ function FeedbackInbox({ feedback, onChange }: { feedback: Feedback[]; onChange:
 }
 
 // ---------- Top tools bar chart ----------
+function OpsStats({ ops }: { ops: Op[] }) {
+  const now = Date.now();
+  const last24h = ops.filter((o) => now - new Date(o.created_at).getTime() < 86_400_000);
+  const last1h = ops.filter((o) => now - new Date(o.created_at).getTime() < 3_600_000);
+  const successful = ops.filter((o) => o.success).length;
+  const successRate = ops.length ? Math.round((successful / ops.length) * 100) : 100;
+  const durations = ops.map((o) => o.duration_ms).filter((d): d is number => typeof d === "number" && d > 0);
+  const avgMs = durations.length ? Math.round(durations.reduce((a, b) => a + b, 0) / durations.length) : 0;
+  const counts = new Map<string, number>();
+  for (const o of ops) counts.set(o.tool_slug, (counts.get(o.tool_slug) ?? 0) + 1);
+  const topTool = [...counts.entries()].sort((a, b) => b[1] - a[1])[0];
+  const lastUsed = ops[0] ? new Date(ops[0].created_at).toLocaleString() : "—";
+
+  const cards = [
+    { label: "Last hour", value: String(last1h.length) },
+    { label: "Last 24 hours", value: String(last24h.length) },
+    { label: "Total tracked", value: String(ops.length) },
+    { label: "Success rate", value: `${successRate}%` },
+    { label: "Avg duration", value: avgMs ? `${avgMs} ms` : "—" },
+    { label: "Most used", value: topTool ? `${topTool[0]} (${topTool[1]})` : "—" },
+    { label: "Last operation", value: lastUsed },
+  ];
+
+  return (
+    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      {cards.map((c) => (
+        <div key={c.label} className="rounded-2xl border border-border bg-surface/40 p-4">
+          <div className="text-xs uppercase tracking-wider text-muted-foreground">{c.label}</div>
+          <div className="mt-1 truncate font-display text-lg font-semibold">{c.value}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function OpsChart({ ops }: { ops: Op[] }) {
   const data = (() => {
     const map = new Map<string, number>();
