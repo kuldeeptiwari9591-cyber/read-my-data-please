@@ -23,25 +23,23 @@ Last updated: 2026-07-02
 
 ## 1. Core pages
 
-### /
+### / (homepage)
 - **File:** `src/routes/index.tsx`
 - **Title:** CrispPDF — 40 Free Online PDF Tools · No Signup
-- **Description:** ,
-          content:
-            
+- **Description:** Merge, split, compress, convert, edit, sign, and protect PDFs online free. 40 privacy-first browser tools — no signup, no watermarks, no file uploads. Works on phone, tablet, and desktop.
+- **OG image:** /og-default.svg
+- **JSON-LD:** FAQPage (13 questions), WebSite, Organization
 - **Canonical:** https://crisppdf.in/
 
 ### /about
 - **File:** `src/routes/about.tsx`
-- **Title:** 1. You pick a file
+- **Title:** About CrispPDF — How It Works & Why It's Free
 - **Description:** How CrispPDF processes PDFs in your browser, why it's 100% free, and what sets it apart. 40 privacy-first tools — no signup, no watermarks, no ads.
 - **Canonical:** https://crisppdf.in/about
 
 ### /about-crisppdf
 - **File:** `src/routes/about-crisppdf.tsx`
-- **Title:** _(dynamic)_
-- **Description:** _(dynamic)_
-- **Canonical:** https://crisppdf.in/about-crisppdf
+- **Status:** 301 redirect → /why-crisppdf
 
 ### /why-crisppdf
 - **File:** `src/routes/why-crisppdf.tsx`
@@ -53,30 +51,32 @@ Last updated: 2026-07-02
 - **File:** `src/routes/faq.tsx`
 - **Title:** FAQ — Frequently Asked Questions | CrispPDF
 - **Description:** Answers to the most common questions about CrispPDF PDF tools. Privacy, file safety, supported formats, limits, and more.
+- **JSON-LD:** FAQPage (50+ questions)
 - **Canonical:** https://crisppdf.in/faq
 
 ### /contact
 - **File:** `src/routes/contact.tsx`
 - **Title:** Contact CrispPDF — Feedback, Bug Reports & Support
-- **Description:** , content: 
+- **Description:** Get in touch with the CrispPDF team — send feedback, report a bug, request a new PDF tool, or ask a question. We read every message.
 - **Canonical:** https://crisppdf.in/contact
 
 ### /feedback
 - **File:** `src/routes/feedback.tsx`
 - **Title:** Feedback & Feature Requests — CrispPDF
 - **Description:** Send feedback, report a bug, or request a new PDF tool. We read every submission.
+- **JSON-LD:** FAQPage (10 questions)
 - **Canonical:** https://crisppdf.in/feedback
 
 ### /privacy
 - **File:** `src/routes/privacy.tsx`
 - **Title:** Privacy Policy — CrispPDF
-- **Description:** , content: 
+- **Description:** How CrispPDF handles your files and personal data. Short version: we don't store them.
 - **Canonical:** https://crisppdf.in/privacy
 
 ### /terms
 - **File:** `src/routes/terms.tsx`
 - **Title:** Terms of Service — CrispPDF
-- **Description:** , content: 
+- **Description:** The rules for using CrispPDF. Short, plain-English, no surprises.
 - **Canonical:** https://crisppdf.in/terms
 
 ### /blog
