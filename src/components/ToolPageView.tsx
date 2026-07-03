@@ -147,6 +147,14 @@ export function ToolPageView({ slug }: { slug: string }) {
           Updated 2026 · Maintained by the CrispPDF team
         </p>
 
+        {content.body && (
+          <div className="mt-12 space-y-4 text-[15px] leading-relaxed text-muted-foreground">
+            {content.body.split(/\n\n+/).map((para, i) => (
+              <p key={i}>{para}</p>
+            ))}
+          </div>
+        )}
+
 
 
         <div className="mt-16">
