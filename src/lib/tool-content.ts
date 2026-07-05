@@ -1463,13 +1463,16 @@ Because processing happens in your browser, your files stay private. After rever
 // EXPORTS
 // ─────────────────────────────────────────────────────────────────────────────
 
+import { TOOL_HOWTO } from "@/lib/tool-howto";
+
 export function getToolContent(slug: string, name: string): ToolContent {
   const o = OVERRIDES[slug] ?? {};
   // When we have override FAQs from keyword research, use them as-is (6 verified questions).
   // Otherwise fall back to generic defaults.
   const faqs = o.faqs && o.faqs.length > 0 ? o.faqs : DEFAULT_FAQS(name);
+  const howTo = o.howTo ?? TOOL_HOWTO[slug] ?? DEFAULT_HOWTO(name);
   return {
-    howTo: o.howTo ?? DEFAULT_HOWTO(name),
+    howTo,
     faqs,
     why: o.why ?? DEFAULT_WHY,
     body: o.body,
