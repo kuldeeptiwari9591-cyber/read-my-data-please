@@ -10,7 +10,7 @@ async function checkMagic(file: File, type: keyof typeof MAGIC_BYTES) {
   return MAGIC_BYTES[type].every((b, i) => bytes[i] === b);
 }
 
-const MAX_SIZE = 25 * 1024 * 1024; // 25 MB
+const MAX_SIZE = 100 * 1024 * 1024; // 100 MB — matches the advertised limit
 
 export type ExpectedType = "pdf" | "image" | "office" | "any";
 
@@ -20,7 +20,7 @@ export async function validateFile(
 ): Promise<{ valid: boolean; error?: string }> {
   if (file.size === 0) return { valid: false, error: "File is empty. Please upload a valid file." };
   if (file.size > MAX_SIZE)
-    return { valid: false, error: "File exceeds the 25 MB size limit." };
+    return { valid: false, error: "File exceeds the 100 MB size limit." };
 
   if (expectedType === "pdf") {
     const ok =
