@@ -1,551 +1,375 @@
-# CrispPDF SEO Reference
+# CrispPDF — SEO Ledger
 
-Complete SEO metadata (title, meta description, keywords, structured data) for every page on https://crisppdf.in.
+_Regenerated automatically from `src/lib/tools.ts` + `src/lib/tool-content.ts`._ 
+_Last update: 2026-07-05._
 
-Last updated: 2026-07-02
+## How SEO is wired
 
----
+- **Root defaults** live in `src/routes/__root.tsx` (viewport, charset, favicon, default OG image `/og-default.svg`).
+- **Per-tool head** is built by `buildToolHead(slug)` in `src/lib/tool-head.ts`, which pulls title/description/keywords/body/FAQs from `src/lib/tool-content.ts` and per-tool howTo steps from `src/lib/tool-howto.ts`.
+- **JSON-LD emitted per tool page**: WebApplication, HowTo, FAQPage, BreadcrumbList, SpeakableSpecification, plus a Question node for the top 3 FAQs.
+- **OG image**: `/og/{slug}.svg` (dynamic per tool), 1200×630.
+- **Canonical + hreflang**: absolute URL from `abs(path)`; hreflang links added via `hreflangLinks()`.
+- **Sitemap**: `src/routes/sitemap[.]xml.ts` enumerates every route; `public/robots.txt` allows all.
+- **AI/LLM discovery**: `src/routes/ai[.]txt.ts`, `llms[.]txt.ts`, `llms-full[.]txt.ts`.
 
-## Site-wide defaults (src/routes/__root.tsx)
+## Static / marketing routes
 
-- **Site name:** CrispPDF
-- **Domain:** https://crisppdf.in
-- **Default OG image:** /og-default.svg (per-tool dynamic SVG at /og/{slug}.svg)
-- **Twitter card:** summary_large_image
-- **Robots:** index, follow (admin/auth routes noindex)
-- **Analytics:** GA4 (G-0YDJKTV4F2), Vercel Analytics, Vercel Speed Insights, PostHog, Sentry
-- **Structured data (root):** Organization + WebSite JSON-LD
-- **AI crawler manifests:** /llms.txt, /llms-full.txt, /ai.txt
-- **Sitemap:** /sitemap.xml (196 URLs)
-- **Robots.txt:** /robots.txt
-
----
-
-## 1. Core pages
-
-### / (homepage)
-- **File:** `src/routes/index.tsx`
-- **Title:** CrispPDF — 40 Free Online PDF Tools · No Signup
-- **Description:** Merge, split, compress, convert, edit, sign, and protect PDFs online free. 40 privacy-first browser tools — no signup, no watermarks, no file uploads. Works on phone, tablet, and desktop.
-- **OG image:** /og-default.svg
-- **JSON-LD:** FAQPage (13 questions), WebSite, Organization
-- **Canonical:** https://crisppdf.in/
-
-### /about
-- **File:** `src/routes/about.tsx`
-- **Title:** About CrispPDF — How It Works & Why It's Free
-- **Description:** How CrispPDF processes PDFs in your browser, why it's 100% free, and what sets it apart. 40 privacy-first tools — no signup, no watermarks, no ads.
-- **Canonical:** https://crisppdf.in/about
-
-### /about-crisppdf
-- **File:** `src/routes/about-crisppdf.tsx`
-- **Status:** 301 redirect → /why-crisppdf
-
-### /why-crisppdf
-- **File:** `src/routes/why-crisppdf.tsx`
-- **Title:** Why CrispPDF — Private, Free PDF Tools In Your Browser
-- **Description:** CrispPDF processes PDFs in your browser — files never touch our servers. No signup, no watermarks, no ads. 40 free tools built for speed and privacy.
-- **Canonical:** https://crisppdf.in/why-crisppdf
-
-### /faq
-- **File:** `src/routes/faq.tsx`
-- **Title:** FAQ — Frequently Asked Questions | CrispPDF
-- **Description:** Answers to the most common questions about CrispPDF PDF tools. Privacy, file safety, supported formats, limits, and more.
-- **JSON-LD:** FAQPage (50+ questions)
-- **Canonical:** https://crisppdf.in/faq
-
-### /contact
-- **File:** `src/routes/contact.tsx`
-- **Title:** Contact CrispPDF — Feedback, Bug Reports & Support
-- **Description:** Get in touch with the CrispPDF team — send feedback, report a bug, request a new PDF tool, or ask a question. We read every message.
-- **Canonical:** https://crisppdf.in/contact
-
-### /feedback
-- **File:** `src/routes/feedback.tsx`
-- **Title:** Feedback & Feature Requests — CrispPDF
-- **Description:** Send feedback, report a bug, or request a new PDF tool. We read every submission.
-- **JSON-LD:** FAQPage (10 questions)
-- **Canonical:** https://crisppdf.in/feedback
-
-### /privacy
-- **File:** `src/routes/privacy.tsx`
-- **Title:** Privacy Policy — CrispPDF
-- **Description:** How CrispPDF handles your files and personal data. Short version: we don't store them.
-- **Canonical:** https://crisppdf.in/privacy
-
-### /terms
-- **File:** `src/routes/terms.tsx`
-- **Title:** Terms of Service — CrispPDF
-- **Description:** The rules for using CrispPDF. Short, plain-English, no surprises.
-- **Canonical:** https://crisppdf.in/terms
-
-### /blog
-- **File:** `src/routes/blog.index.tsx`
-- **Title:** PDF Tips & Guides — CrispPDF Blog
-- **Description:** ,
-          content:
-            
-- **Canonical:** https://crisppdf.in/blog
-
----
-
-## 2. Category hub pages
-
-### /organize-pdf
-- **Title:** Organize PDF — Merge, Split, Compress & Reorder | CrispPDF
-- **Description:** Free online tools to organize PDF files: merge, split, compress, rotate, reorder, delete, and extract pages. Browser-based, no signup, no watermark.
-- **Canonical:** https://crisppdf.in/organize-pdf
-
-### /convert-pdf
-- **Title:** Convert PDF — Word, Excel, JPG, PNG & More | CrispPDF
-- **Description:** Free PDF converters: PDF to Word, Excel, JPG, PNG, PPT. Also Word, Excel, JPG, and HTML to PDF. No signup, no watermark, no file upload required.
-- **Canonical:** https://crisppdf.in/convert-pdf
-
-### /edit-pdf
-- **Title:** Edit PDF — Crop, Watermark, Sign, OCR, Numbers | CrispPDF
-- **Description:** Edit PDFs free online: crop, add watermarks, sign, OCR, page numbers, extract images, edit metadata, and more. Browser-based, no signup.
-- **Canonical:** https://crisppdf.in/edit-pdf
-
-### /secure-pdf
-- **Title:** Secure PDF — Protect, Unlock, Redact, Flatten | CrispPDF
-- **Description:** Free tools to secure PDF files: password-protect, unlock, redact, flatten, and PDF/A archive. No signup, no upload — your confidential files stay local.
-- **Canonical:** https://crisppdf.in/secure-pdf
-
----
-
-## 3. Tool pages (40 tools)
-
-Each tool page includes: title, meta description, keywords, OG tags, Twitter card, canonical, hreflang, and 6 JSON-LD blocks (WebApplication, HowTo, FAQPage, BreadcrumbList, Speakable, Question×3).
-
-Metadata generator: `src/lib/tool-head.ts` → `buildToolHead(slug)`
-Content source: `src/lib/tool-content.ts`
-
-### /merge-pdf — Merge PDF
-- **Title:** Merge PDF Online Free — Combine Files In Browser | CrispPDF
-- **Description:** Merge PDF files online free. Combine unlimited PDFs in your browser — no upload, no signup, no watermark. Works on phone, tablet, desktop.
-- **Keywords:** merge pdf, combine pdf, pdf merger, how to merge pdf files, merge pdf online free, join pdf files
-- **Canonical:** https://crisppdf.in/merge-pdf
-- **OG image:** https://crisppdf.in/og/merge-pdf.svg
-- **JSON-LD:** WebApplication · HowTo · FAQPage · BreadcrumbList · Speakable · Question×3
-
-### /split-pdf — Split PDF
-- **Title:** Split PDF Online — Extract Pages or Split by Range
-- **Description:** Split a PDF into separate files by page, range, or every N pages. Free, no signup, runs locally in your browser. Keeps original quality.
-- **Keywords:** split pdf, pdf splitter, pdf split, how to split pdf into multiple files, split pdf by page range, extract pages from pdf
-- **Canonical:** https://crisppdf.in/split-pdf
-- **OG image:** https://crisppdf.in/og/split-pdf.svg
-- **JSON-LD:** WebApplication · HowTo · FAQPage · BreadcrumbList · Speakable · Question×3
-
-### /compress-pdf — Compress PDF
-- **Title:** Compress PDF Online Free — Shrink to 100KB, 200KB, 1MB
-- **Description:** Compress PDF instantly in your browser. Hit 100KB, 200KB or any size target — perfect for email, WhatsApp, or government forms. No watermark.
-- **Keywords:** compress pdf, pdf compressor, reduce pdf size, compress pdf to 100kb, compress pdf to 200kb, compress pdf without losing quality, shrink pdf
-- **Canonical:** https://crisppdf.in/compress-pdf
-- **OG image:** https://crisppdf.in/og/compress-pdf.svg
-- **JSON-LD:** WebApplication · HowTo · FAQPage · BreadcrumbList · Speakable · Question×3
-
-### /pdf-to-word — PDF to Word
-- **Title:** PDF to Word Converter Free — No Watermark, No Signup
-- **Description:** Convert PDF to editable Word (.docx) free online. Keeps formatting, tables, images. No watermark, no email gate — opens in MS Word and Google Docs.
-- **Keywords:** pdf to word, convert pdf to word, pdf to docx, pdf to word converter free, how to convert pdf to word, pdf to word no watermark
-- **Canonical:** https://crisppdf.in/pdf-to-word
-- **OG image:** https://crisppdf.in/og/pdf-to-word.svg
-- **JSON-LD:** WebApplication · HowTo · FAQPage · BreadcrumbList · Speakable · Question×3
-
-### /pdf-to-excel — PDF to Excel
-- **Title:** PDF to Excel — Extract Tables to XLSX Free | CrispPDF
-- **Description:** Pull tables out of any PDF into Excel (.xlsx) — keeps rows and columns intact. Free, no signup, no watermark. Ideal for invoices and statements.
-- **Keywords:** pdf to excel, convert pdf to excel, pdf to xls, pdf table to excel, pdf bank statement to excel, extract tables from pdf
-- **Canonical:** https://crisppdf.in/pdf-to-excel
-- **OG image:** https://crisppdf.in/og/pdf-to-excel.svg
-- **JSON-LD:** WebApplication · HowTo · FAQPage · BreadcrumbList · Speakable · Question×3
-
-### /pdf-to-ppt — PDF to PowerPoint
-- **Title:** PDF to PowerPoint — Convert PDF to PPTX Free Online
-- **Description:** Turn any PDF into an editable PowerPoint deck (.pptx). Preserves layout. Free, no signup, no watermark.
-- **Keywords:** pdf to powerpoint, pdf to pptx, convert pdf to slides, pdf to ppt converter free
-- **Canonical:** https://crisppdf.in/pdf-to-ppt
-- **OG image:** https://crisppdf.in/og/pdf-to-ppt.svg
-- **JSON-LD:** WebApplication · HowTo · FAQPage · BreadcrumbList · Speakable · Question×3
-
-### /pdf-to-jpg — PDF to JPG
-- **Title:** PDF to JPG Free — High-Quality Image Export In Browser
-- **Description:** Convert every page of a PDF into JPG images at up to 300 DPI. Download individually or as a ZIP. Free, no signup, runs in your browser.
-- **Keywords:** pdf to jpg, pdf to jpeg, pdf to image, pdf to jpg converter free, pdf to jpg high quality, convert pdf pages to jpg
-- **Canonical:** https://crisppdf.in/pdf-to-jpg
-- **OG image:** https://crisppdf.in/og/pdf-to-jpg.svg
-- **JSON-LD:** WebApplication · HowTo · FAQPage · BreadcrumbList · Speakable · Question×3
-
-### /pdf-to-png — PDF to PNG
-- **Title:** PDF to PNG — High-Quality Image Export Free
-- **Description:** Convert PDF pages to PNG images at up to 300 DPI. Download as ZIP. Free, no signup, runs in your browser.
-- **Keywords:** pdf to png, save pdf as png, pdf to transparent png, convert pdf png high quality
-- **Canonical:** https://crisppdf.in/pdf-to-png
-- **OG image:** https://crisppdf.in/og/pdf-to-png.svg
-- **JSON-LD:** WebApplication · HowTo · FAQPage · BreadcrumbList · Speakable · Question×3
-
-### /word-to-pdf — Word to PDF
-- **Title:** Word to PDF Converter Free — Keeps Formatting Intact
-- **Description:** Convert DOCX or DOC to PDF online free. Preserves fonts, tables, images, and headers. No signup, no watermark, no upload — done in seconds.
-- **Keywords:** word to pdf, docx to pdf, doc to pdf, convert word to pdf free, word to pdf no watermark, save word as pdf
-- **Canonical:** https://crisppdf.in/word-to-pdf
-- **OG image:** https://crisppdf.in/og/word-to-pdf.svg
-- **JSON-LD:** WebApplication · HowTo · FAQPage · BreadcrumbList · Speakable · Question×3
-
-### /excel-to-pdf — Excel to PDF
-- **Title:** Excel to PDF Free — Convert XLSX with Layout Intact
-- **Description:** Convert Excel (.xlsx, .xls) to PDF online free. Sheet-per-page layout, no watermark, no signup. Runs in your browser.
-- **Keywords:** excel to pdf, xlsx to pdf, convert excel to pdf free, spreadsheet to pdf
-- **Canonical:** https://crisppdf.in/excel-to-pdf
-- **OG image:** https://crisppdf.in/og/excel-to-pdf.svg
-- **JSON-LD:** WebApplication · HowTo · FAQPage · BreadcrumbList · Speakable · Question×3
-
-### /jpg-to-pdf — JPG to PDF
-- **Title:** JPG to PDF — Convert Images to PDF Free | CrispPDF
-- **Description:** Turn JPG, PNG, WebP or HEIC images into one PDF. Drag-and-drop, reorder, set page size. Free forever, no upload to any server.
-- **Keywords:** jpg to pdf, image to pdf, jpeg to pdf, convert jpg to pdf free, multiple jpg to one pdf, jpg to pdf passport size
-- **Canonical:** https://crisppdf.in/jpg-to-pdf
-- **OG image:** https://crisppdf.in/og/jpg-to-pdf.svg
-- **JSON-LD:** WebApplication · HowTo · FAQPage · BreadcrumbList · Speakable · Question×3
-
-### /html-to-pdf — HTML to PDF
-- **Title:** HTML to PDF — Convert Web Page or HTML File Free
-- **Description:** Convert HTML files or live URLs into PDF. Keeps CSS layout. Free, no signup — perfect for archiving web pages.
-- **Keywords:** html to pdf, webpage to pdf, save website as pdf, html file to pdf
-- **Canonical:** https://crisppdf.in/html-to-pdf
-- **OG image:** https://crisppdf.in/og/html-to-pdf.svg
-- **JSON-LD:** WebApplication · HowTo · FAQPage · BreadcrumbList · Speakable · Question×3
-
-### /rotate-pdf — Rotate PDF
-- **Title:** Rotate PDF Online — Fix Sideways Pages In Seconds
-- **Description:** Rotate one page or every page in a PDF — 90°, 180°, 270°. Saves permanently, no watermark. Free, no signup, runs in your browser.
-- **Keywords:** rotate pdf, pdf rotate, rotate pdf and save permanently, rotate specific pages in pdf, rotate pdf online free
-- **Canonical:** https://crisppdf.in/rotate-pdf
-- **OG image:** https://crisppdf.in/og/rotate-pdf.svg
-- **JSON-LD:** WebApplication · HowTo · FAQPage · BreadcrumbList · Speakable · Question×3
-
-### /reorder-pdf-pages — Reorder Pages
-- **Title:** Reorder PDF Pages — Drag & Drop Reordering Free
-- **Description:** Drag and drop to reorder PDF pages. Live thumbnails, instant download. Free, no signup, runs in your browser.
-- **Keywords:** rearrange pdf pages, reorder pdf pages, drag pages pdf, sort pdf pages
-- **Canonical:** https://crisppdf.in/reorder-pdf-pages
-- **OG image:** https://crisppdf.in/og/reorder-pdf-pages.svg
-- **JSON-LD:** WebApplication · HowTo · FAQPage · BreadcrumbList · Speakable · Question×3
-
-### /delete-pdf-pages — Delete Pages
-- **Title:** Delete PDF Pages Free — Remove Pages In Browser
-- **Description:** Remove unwanted pages from any PDF. Visual preview, batch delete, instant download. Free, no signup, no watermark.
-- **Keywords:** delete pages from pdf, remove pages from pdf, delete blank pages pdf, remove specific pdf pages
-- **Canonical:** https://crisppdf.in/delete-pdf-pages
-- **OG image:** https://crisppdf.in/og/delete-pdf-pages.svg
-- **JSON-LD:** WebApplication · HowTo · FAQPage · BreadcrumbList · Speakable · Question×3
-
-### /extract-pdf-pages — Extract Pages
-- **Title:** Extract PDF Pages — Save Pages as Separate PDF
-- **Description:** Pick any pages from a PDF and save them as a new file. Free, no signup, no watermark — runs entirely in your browser.
-- **Keywords:** extract pages from pdf, pull pages out of pdf, save pdf page as new pdf, extract chapter pdf
-- **Canonical:** https://crisppdf.in/extract-pdf-pages
-- **OG image:** https://crisppdf.in/og/extract-pdf-pages.svg
-- **JSON-LD:** WebApplication · HowTo · FAQPage · BreadcrumbList · Speakable · Question×3
-
-### /crop-pdf — Crop PDF
-- **Title:** Crop PDF Online — Trim Margins, Visible Drag Crop
-- **Description:** Crop PDF pages visually — drag a box, apply to one page or all. Free, no signup, no watermark.
-- **Keywords:** crop pdf, crop pdf pages, trim pdf margins, pdf cropper
-- **Canonical:** https://crisppdf.in/crop-pdf
-- **OG image:** https://crisppdf.in/og/crop-pdf.svg
-- **JSON-LD:** WebApplication · HowTo · FAQPage · BreadcrumbList · Speakable · Question×3
-
-### /repair-pdf — Repair PDF
-- **Title:** Repair PDF Online — Fix Corrupted Files Free
-- **Description:** Try to recover and reopen a corrupted PDF. Runs in your browser, free, no signup. Works on most damaged files.
-- **Keywords:** repair pdf, fix corrupted pdf, recover pdf file, pdf file damaged repair
-- **Canonical:** https://crisppdf.in/repair-pdf
-- **OG image:** https://crisppdf.in/og/repair-pdf.svg
-- **JSON-LD:** WebApplication · HowTo · FAQPage · BreadcrumbList · Speakable · Question×3
-
-### /flatten-pdf — Flatten PDF
-- **Title:** Flatten PDF — Lock Forms & Annotations Free
-- **Description:** Flatten forms, annotations, and signatures into a final read-only PDF. Free, no signup, no watermark.
-- **Keywords:** flatten pdf, flatten pdf form, merge layers pdf, flatten annotations pdf
-- **Canonical:** https://crisppdf.in/flatten-pdf
-- **OG image:** https://crisppdf.in/og/flatten-pdf.svg
-- **JSON-LD:** WebApplication · HowTo · FAQPage · BreadcrumbList · Speakable · Question×3
-
-### /pdf-to-pdfa — PDF to PDF/A
-- **Title:** Convert PDF to PDF/A — Archival ISO Format Free
-- **Description:** Convert any PDF to PDF/A-1b or PDF/A-2b for long-term archival. Free, no signup, browser-based.
-- **Keywords:** pdf to pdfa, convert pdf to pdf/a, archival pdf, pdf/a-1b converter
-- **Canonical:** https://crisppdf.in/pdf-to-pdfa
-- **OG image:** https://crisppdf.in/og/pdf-to-pdfa.svg
-- **JSON-LD:** WebApplication · HowTo · FAQPage · BreadcrumbList · Speakable · Question×3
-
-### /grayscale-pdf — Grayscale PDF
-- **Title:** Grayscale PDF — Black & White Convert Free
-- **Description:** Convert color PDF to grayscale to save ink and reduce file size before printing. Free, no signup.
-- **Keywords:** grayscale pdf, convert pdf to black and white, pdf color to grayscale, save ink print pdf
-- **Canonical:** https://crisppdf.in/grayscale-pdf
-- **OG image:** https://crisppdf.in/og/grayscale-pdf.svg
-- **JSON-LD:** WebApplication · HowTo · FAQPage · BreadcrumbList · Speakable · Question×3
-
-### /protect-pdf — Protect PDF
-- **Title:** Password Protect PDF Online — AES-256 Encryption Free
-- **Description:** Add a password to any PDF in your browser. AES-256 encryption, no upload, no signup. Lock from opening, editing, copying, or printing — all free.
-- **Keywords:** protect pdf, password protect pdf, how to password protect a pdf, encrypt pdf online, add password to pdf, lock pdf from editing
-- **Canonical:** https://crisppdf.in/protect-pdf
-- **OG image:** https://crisppdf.in/og/protect-pdf.svg
-- **JSON-LD:** WebApplication · HowTo · FAQPage · BreadcrumbList · Speakable · Question×3
-
-### /unlock-pdf — Unlock PDF
-- **Title:** Unlock PDF Free — Remove Password From PDF In Browser
-- **Description:** Remove password protection from PDF files you own. Works in your browser — file never leaves your device. Free, no signup, no quota.
-- **Keywords:** unlock pdf, remove password from pdf, pdf unlocker, how to remove password from pdf, unlock pdf without password, decrypt pdf online
-- **Canonical:** https://crisppdf.in/unlock-pdf
-- **OG image:** https://crisppdf.in/og/unlock-pdf.svg
-- **JSON-LD:** WebApplication · HowTo · FAQPage · BreadcrumbList · Speakable · Question×3
-
-### /redact-pdf — Redact PDF
-- **Title:** Redact PDF — Black Out Sensitive Info Free
-- **Description:** Permanently black out names, numbers, or any content in a PDF. Local-only — file never uploaded. Free, no signup.
-- **Keywords:** redact pdf, black out text in pdf, censor pdf, hide sensitive info pdf
-- **Canonical:** https://crisppdf.in/redact-pdf
-- **OG image:** https://crisppdf.in/og/redact-pdf.svg
-- **JSON-LD:** WebApplication · HowTo · FAQPage · BreadcrumbList · Speakable · Question×3
-
-### /esign-pdf — eSign PDF
-- **Title:** Sign PDF Online Free — Draw, Type or Upload Signature
-- **Description:** Add a legally valid e-signature to any PDF. Draw, type, or upload — done in your browser. No DocuSign account, no email gate, no watermark.
-- **Keywords:** sign pdf, esign pdf, electronic signature pdf, sign pdf without adobe, add signature to pdf free, digital signature pdf online
-- **Canonical:** https://crisppdf.in/esign-pdf
-- **OG image:** https://crisppdf.in/og/esign-pdf.svg
-- **JSON-LD:** WebApplication · HowTo · FAQPage · BreadcrumbList · Speakable · Question×3
-
-### /watermark-pdf — Watermark PDF
-- **Title:** Add Watermark to PDF — Text or Logo, Free | CrispPDF
-- **Description:** Add text or image watermarks to any PDF. Choose font, opacity, position, rotation. Free, no signup — file never leaves your browser.
-- **Keywords:** watermark pdf, add watermark to pdf, how to make watermark on pdf, add draft watermark to pdf, watermark pdf with logo, confidential watermark pdf
-- **Canonical:** https://crisppdf.in/watermark-pdf
-- **OG image:** https://crisppdf.in/og/watermark-pdf.svg
-- **JSON-LD:** WebApplication · HowTo · FAQPage · BreadcrumbList · Speakable · Question×3
-
-### /ocr-pdf — OCR PDF
-- **Title:** OCR PDF Online — Make Scanned PDFs Searchable Free
-- **Description:** Turn scanned PDFs into searchable, copyable text using browser OCR. Works on receipts, lecture notes, ID scans. Free, no signup, multilingual.
-- **Keywords:** ocr pdf, pdf to text, make pdf searchable, how to ocr a pdf, convert scanned pdf to text, searchable pdf from scan
-- **Canonical:** https://crisppdf.in/ocr-pdf
-- **OG image:** https://crisppdf.in/og/ocr-pdf.svg
-- **JSON-LD:** WebApplication · HowTo · FAQPage · BreadcrumbList · Speakable · Question×3
-
-### /add-page-numbers-pdf — Add Page Numbers
-- **Title:** Add Page Numbers to PDF — Customize Position & Style
-- **Description:** Add page numbers to any PDF — custom font, position, format. Free, no signup, no watermark.
-- **Keywords:** add page numbers to pdf, pdf page numbering, number pdf pages, insert page numbers pdf
-- **Canonical:** https://crisppdf.in/add-page-numbers-pdf
-- **OG image:** https://crisppdf.in/og/add-page-numbers-pdf.svg
-- **JSON-LD:** WebApplication · HowTo · FAQPage · BreadcrumbList · Speakable · Question×3
-
-### /add-watermark-text-pdf — Add Watermark Text
-- **Title:** Add Text Watermark to PDF — Draft, Confidential, Logo
-- **Description:** Add CONFIDENTIAL, DRAFT, or any text watermark to PDF. Custom angle, opacity, color. Free, no signup.
-- **Keywords:** text watermark pdf, confidential text watermark pdf, draft stamp pdf, add text watermark online
-- **Canonical:** https://crisppdf.in/add-watermark-text-pdf
-- **OG image:** https://crisppdf.in/og/add-watermark-text-pdf.svg
-- **JSON-LD:** WebApplication · HowTo · FAQPage · BreadcrumbList · Speakable · Question×3
-
-### /extract-images-pdf — Extract Images
-- **Title:** Extract Images From PDF — Save All Pictures Free
-- **Description:** Pull every image out of a PDF and download as a ZIP. Original resolution preserved. Free, no signup.
-- **Keywords:** extract images from pdf, pdf to images, get all images from pdf, save pictures from pdf
-- **Canonical:** https://crisppdf.in/extract-images-pdf
-- **OG image:** https://crisppdf.in/og/extract-images-pdf.svg
-- **JSON-LD:** WebApplication · HowTo · FAQPage · BreadcrumbList · Speakable · Question×3
-
-### /invert-pdf — Invert Colors PDF
-- **Title:** Invert PDF Colors — Dark Mode for Any PDF Free
-- **Description:** Flip PDF colors for night-time reading or printer ink savings. Free, no signup, runs in your browser.
-- **Keywords:** invert pdf colors, dark mode pdf, negative pdf colors, invert pdf white text
-- **Canonical:** https://crisppdf.in/invert-pdf
-- **OG image:** https://crisppdf.in/og/invert-pdf.svg
-- **JSON-LD:** WebApplication · HowTo · FAQPage · BreadcrumbList · Speakable · Question×3
-
-### /resize-pdf — Resize PDF
-- **Title:** Resize PDF — Change Page Size to A4, Letter, Custom
-- **Description:** Resize PDF pages to A4, Letter, A5, or custom dimensions. Free, no signup, perfect for print or email.
-- **Keywords:** resize pdf, change pdf page size, pdf a4 to letter, custom pdf dimensions
-- **Canonical:** https://crisppdf.in/resize-pdf
-- **OG image:** https://crisppdf.in/og/resize-pdf.svg
-- **JSON-LD:** WebApplication · HowTo · FAQPage · BreadcrumbList · Speakable · Question×3
-
-### /n-up-pdf — N-up PDF
-- **Title:** N-up PDF — Multiple Pages Per Sheet for Printing
-- **Description:** Combine 2, 4, 6, or 8 PDF pages onto one sheet to save paper and ink. Free, no signup, perfect for printing handouts.
-- **Keywords:** multiple pages per sheet pdf, 2 pages per sheet pdf, 4 up pdf printing, pdf booklet layout
-- **Canonical:** https://crisppdf.in/n-up-pdf
-- **OG image:** https://crisppdf.in/og/n-up-pdf.svg
-- **JSON-LD:** WebApplication · HowTo · FAQPage · BreadcrumbList · Speakable · Question×3
-
-### /blank-page-pdf — Insert Blank Pages
-- **Title:** Add Blank Pages to PDF — Insert Empty Pages Free
-- **Description:** Insert blank pages anywhere in a PDF. Choose A4, Letter, or match source size. Free, no signup, no watermark.
-- **Keywords:** add blank page to pdf, insert blank page pdf, add empty page pdf, pdf insert page
-- **Canonical:** https://crisppdf.in/blank-page-pdf
-- **OG image:** https://crisppdf.in/og/blank-page-pdf.svg
-- **JSON-LD:** WebApplication · HowTo · FAQPage · BreadcrumbList · Speakable · Question×3
-
-### /duplicate-pages-pdf — Duplicate Pages
-- **Title:** Duplicate PDF Pages — Copy Any Page In Place Free
-- **Description:** Duplicate any page in a PDF — clones land right after the original. Free, no signup, runs in your browser.
-- **Keywords:** duplicate pdf page, copy pdf page, clone page pdf, duplicate a page in pdf
-- **Canonical:** https://crisppdf.in/duplicate-pages-pdf
-- **OG image:** https://crisppdf.in/og/duplicate-pages-pdf.svg
-- **JSON-LD:** WebApplication · HowTo · FAQPage · BreadcrumbList · Speakable · Question×3
-
-### /extract-text-pdf — Extract Text
-- **Title:** Extract Text From PDF — Clean .TXT Export Free
-- **Description:** Pull clean plain text out of any PDF. Perfect for LLM input, indexing, or archiving. Free, no signup.
-- **Keywords:** extract text from pdf, pdf to txt, copy text from pdf, pdf text extractor
-- **Canonical:** https://crisppdf.in/extract-text-pdf
-- **OG image:** https://crisppdf.in/og/extract-text-pdf.svg
-- **JSON-LD:** WebApplication · HowTo · FAQPage · BreadcrumbList · Speakable · Question×3
-
-### /edit-metadata-pdf — Edit PDF Metadata
-- **Title:** Edit PDF Metadata Online — Title, Author, Keywords
-- **Description:** Edit PDF title, author, subject, and keywords without Acrobat. Works on locked files you own. Free, no signup, runs in your browser.
-- **Keywords:** edit pdf metadata, change pdf title author, edit pdf without acrobat, online pdf editor, free pdf editor, pdf properties editor
-- **Canonical:** https://crisppdf.in/edit-metadata-pdf
-- **OG image:** https://crisppdf.in/og/edit-metadata-pdf.svg
-- **JSON-LD:** WebApplication · HowTo · FAQPage · BreadcrumbList · Speakable · Question×3
-
-### /compare-pdf — Compare PDFs
-- **Title:** Compare PDF Files — Visual Diff Free | CrispPDF
-- **Description:** Compare two PDFs side by side and highlight differences. Free, no signup, runs in your browser.
-- **Keywords:** compare pdf, pdf diff online, pdf compare two files, find differences in pdfs
-- **Canonical:** https://crisppdf.in/compare-pdf
-- **OG image:** https://crisppdf.in/og/compare-pdf.svg
-- **JSON-LD:** WebApplication · HowTo · FAQPage · BreadcrumbList · Speakable · Question×3
-
-### /base64-pdf — PDF ↔ Base64
-- **Title:** PDF ↔ Base64 — Encode and Decode PDF Free
-- **Description:** Convert PDF files to Base64 strings or paste Base64 to download a PDF. Perfect for developers and email embeds.
-- **Keywords:** pdf to base64, base64 to pdf, encode pdf base64, decode base64 to pdf
-- **Canonical:** https://crisppdf.in/base64-pdf
-- **OG image:** https://crisppdf.in/og/base64-pdf.svg
-- **JSON-LD:** WebApplication · HowTo · FAQPage · BreadcrumbList · Speakable · Question×3
-
-### /reverse-pdf — Reverse PDF
-- **Title:** Reverse PDF Pages — Flip Order Free | CrispPDF
-- **Description:** Flip the order of every page in a PDF — fixes back-to-front scans in one click. Free, no signup, no watermark.
-- **Keywords:** reverse pdf pages, flip pdf page order, reverse pdf scan order, pdf back to front
-- **Canonical:** https://crisppdf.in/reverse-pdf
-- **OG image:** https://crisppdf.in/og/reverse-pdf.svg
-- **JSON-LD:** WebApplication · HowTo · FAQPage · BreadcrumbList · Speakable · Question×3
-
----
-
-## 4. Programmatic SEO pages
-
-### Size-target compression pages (9)
-- **/compress-pdf-to-100kb** — "Compress PDF to 100KB — Free Online | CrispPDF"
-- **/compress-pdf-to-200kb** — "Compress PDF to 200KB — Free Online | CrispPDF"
-- **/compress-pdf-to-300kb** — "Compress PDF to 300KB — Free Online | CrispPDF"
-- **/compress-pdf-to-500kb** — "Compress PDF to 500KB — Free Online | CrispPDF"
-- **/compress-pdf-to-1mb** — "Compress PDF to 1MB — Free Online | CrispPDF"
-- **/compress-pdf-to-2mb** — "Compress PDF to 2MB — Free Online | CrispPDF"
-- **/compress-pdf-to-5mb** — "Compress PDF to 5MB — Free Online | CrispPDF"
-- **/compress-pdf-to-10mb** — "Compress PDF to 10MB — Free Online | CrispPDF"
-- **/compress-pdf-for-email** — email-optimised compression
-- **/compress-pdf-for-whatsapp** — WhatsApp share limit
-- **/compress-pdf-for-passport-photo** — passport-photo preset
-
-### Format aliases (10)
-- **/png-to-pdf**
-- **/webp-to-pdf**
-- **/heic-to-pdf**
-- **/csv-to-pdf**
-- **/txt-to-pdf**
-- **/base64-pdf**
-- **/blank-page-pdf**
-- **/n-up-pdf**
-- **/invert-pdf**
-- **/reverse-pdf**
-- **/duplicate-pages-pdf**
-- **/extract-text-pdf**
-- **/edit-metadata-pdf**
-- **/compare-pdf**
-- **/resize-pdf**
-
-### Dynamic pSEO routes
-- **/use-cases/{tool}-for-{use-case}** — use-case × tool combinations (see `src/lib/pseo/use-cases.ts`)
-- **/vs/{tool}-vs-{competitor}** — comparison pages vs iLovePDF, Smallpdf, PDF24, Adobe, Sejda (see `src/lib/pseo/competitors.ts`)
-- **/convert/{format}-to-{format}** — format-conversion pairs (see `src/lib/pseo/formats.ts`)
-- **/blog/{slug}** — 12 planned posts (see `docs/seo/05-blog-plan.md`)
-- **/tools/{slug}** — alias route for legacy tool URLs
-
----
-
-## 5. Excluded from index (noindex)
-
-- `/auth`, `/auth/callback` — authentication pages
-- `/_authenticated/*` — admin panel (obfuscated path `/cp-crisp-7x92k`)
-- `/feedback` thank-you states
-
----
-
-## 6. Technical SEO files
-
-| File | Path | Purpose |
-|---|---|---|
-| Sitemap | `/sitemap.xml` | 196 URLs, weekly changefreq |
-| Robots | `/robots.txt` | Allow all; sitemap declared |
-| LLMs manifest | `/llms.txt` | AI-crawler summary |
-| LLMs full | `/llms-full.txt` | Full content for LLMs |
-| AI policy | `/ai.txt` | AI-training opt-in signals |
-| OG image | `/og/{slug}.svg` | Per-tool dynamic SVG |
-
----
-
-## 7. Structured data inventory
-
-| Schema type | Where |
+| Path | Head owner |
 |---|---|
-| Organization | Root (`__root.tsx`) |
-| WebSite + SearchAction | Root |
-| WebApplication | Every tool page |
-| HowTo | Every tool page |
-| FAQPage | Tool pages, /faq, /feedback, home |
-| BreadcrumbList | Tool, hub, pSEO, blog |
-| Article | Blog posts |
-| Speakable | Tool pages, pSEO |
-| Question | Top 3 FAQs per tool (for AI Overviews) |
+| `/` | `src/routes/index.tsx` |
+| `/about` | `src/routes/about.tsx` |
+| `/about-crisppdf` | `src/routes/about-crisppdf.tsx` |
+| `/why-crisppdf` | `src/routes/why-crisppdf.tsx` |
+| `/faq` | `src/routes/faq.tsx` |
+| `/contact` | `src/routes/contact.tsx` |
+| `/feedback` | `src/routes/feedback.tsx` |
+| `/privacy` | `src/routes/privacy.tsx` |
+| `/terms` | `src/routes/terms.tsx` |
+| `/blog` | `src/routes/blog.index.tsx` |
+| `/blog/:slug` | `src/routes/blog.$slug.tsx` |
+| `/use-cases/:slug` | `src/routes/use-cases.$slug.tsx` |
+| `/vs/:slug` | `src/routes/vs.$slug.tsx` |
+| `/convert/:slug` | `src/routes/convert.$slug.tsx` |
+| `/compress-pdf-to-{100kb,200kb,300kb,500kb,1mb,2mb,5mb,10mb}` | `src/routes/compress-pdf-to-*.tsx` |
+| `/compress-pdf-for-{email,whatsapp,passport-photo}` | `src/routes/compress-pdf-for-*.tsx` |
 
----
+## Tool routes (40)
 
-## 8. Analytics & tracking events
+Each row → route file `src/routes/{slug}.tsx`, which renders `<ToolPageView slug="{slug}">` and uses `buildToolHead("{slug}")` for its `<head>`.
 
-GA4 (`G-0YDJKTV4F2`) + PostHog capture:
+### `/merge-pdf` — Merge PDF
+- **Category:** organize
+- **Title:** Merge PDF Files Online | Combine PDFs Securely - CrispPDF
+- **Description:** Quickly stitch multiple PDF documents into one organized file. Drag, drop, and reorder pages instantly without downloading any software.
+- **Keywords:** merge pdf, combine pdf files mac, free pdf merger tool, stitch pdf pages together, combine multiple documents into one pdf, reorder and merge pdf pages, merge aadhaar and pan pdf, multiple pdf to single pdf kaise kare, join marksheet pdf free, combine bank statements into one pdf, merge 2 pdf files online
+- **OG image:** `/og/merge-pdf.svg`
+- **JSON-LD:** WebApplication, HowTo (4 steps in `tool-howto.ts`), FAQPage (6 Qs in `tool-content.ts`), BreadcrumbList, Speakable
 
-- `page_view` — every SPA navigation
-- `tool_view` — tool page load
-- `file_upload` — user drops a file
-- `tool_complete` — successful download (with bytes in/out, duration)
-- `tool_error` — failures
-- `share_click` — social share buttons
-- `outbound_click` — external-domain links
-- `scroll_depth` — 90% scroll milestone
-- `web_vitals` — LCP, FID, CLS, INP, TTFB
+### `/split-pdf` — Split PDF
+- **Category:** organize
+- **Title:** Split PDF Files Online | Free PDF Page Extractor - CrispPDF
+- **Description:** Extract specific pages or break a large PDF into multiple smaller documents easily. A fast, secure, and free online PDF splitter.
+- **Keywords:** split pdf, separate pdf pages into individual files, extract one page from pdf mac, free pdf page cutter, save specific pages of a pdf, split pdf by file size, split pdf pages free online, pdf split kaise kare mobile me, extract page from ssc marksheet pdf, separate blank pages from pdf, cut pdf into two parts
+- **OG image:** `/og/split-pdf.svg`
+- **JSON-LD:** WebApplication, HowTo (4 steps in `tool-howto.ts`), FAQPage (6 Qs in `tool-content.ts`), BreadcrumbList, Speakable
 
-All tool completions also logged to Supabase `operations` table for admin analytics.
+### `/compress-pdf` — Compress PDF
+- **Category:** organize
+- **Title:** Compress PDF Online Free | Reduce File Size - CrispPDF
+- **Description:** Shrink large PDF files for email attachments and fast web uploads without losing visual quality. Process documents securely in your browser.
+- **Keywords:** compress pdf, reduce pdf file size mac, compress pdf for email attachment, shrink pdf without losing quality, best free pdf compressor, optimize pdf for web, compress pdf to 100kb, pdf size reducer 200kb for ssc, compress aadhaar pdf to 50kb, reduce pdf size for government exam form, pdf compress kaise kare
+- **OG image:** `/og/compress-pdf.svg`
+- **JSON-LD:** WebApplication, HowTo (4 steps in `tool-howto.ts`), FAQPage (6 Qs in `tool-content.ts`), BreadcrumbList, Speakable
 
----
+### `/pdf-to-word` — PDF to Word
+- **Category:** convert-from
+- **Title:** Convert PDF to Word Online | Free DOCX Converter - CrispPDF
+- **Description:** Turn PDF documents into editable Word files while keeping your original text, tables, and formatting intact. No email signup required.
+- **Keywords:** pdf to word, pdf to docx converter mac, convert pdf to editable word free, pdf to word keep formatting, best pdf to word without adobe, turn pdf into word document, pdf to word converter free online, convert marksheet pdf to word, editable word file from pdf, pdf se word kaise banaye, convert hindi pdf to word
+- **OG image:** `/og/pdf-to-word.svg`
+- **JSON-LD:** WebApplication, HowTo (4 steps in `tool-howto.ts`), FAQPage (6 Qs in `tool-content.ts`), BreadcrumbList, Speakable
 
-## 9. Source-of-truth files
+### `/pdf-to-excel` — PDF to Excel
+- **Category:** convert-from
+- **Title:** Convert PDF to Excel | Extract Tables to XLSX - CrispPDF
+- **Description:** Pull data tables out of invoices and reports directly into an editable Excel spreadsheet. Keeps your rows and columns perfectly intact.
+- **Keywords:** pdf to excel, convert pdf to excel keeping columns, extract tables from pdf to spreadsheet, best pdf to xlsx converter, turn pdf invoice into excel data, pdf to csv free, pdf bank statement to excel, convert pdf table to excel, sbi statement pdf to excel free, extract data from pdf to xls, pdf to excel kaise kare
+- **OG image:** `/og/pdf-to-excel.svg`
+- **JSON-LD:** WebApplication, HowTo (4 steps in `tool-howto.ts`), FAQPage (6 Qs in `tool-content.ts`), BreadcrumbList, Speakable
 
-- `src/lib/tools.ts` — 40-tool registry
-- `src/lib/tool-content.ts` — per-tool SEO copy, HowTo, FAQ
-- `src/lib/tool-head.ts` — head() builder for tool routes
-- `src/lib/site-url.ts` — absolute-URL helper
-- `src/lib/seo/jsonld.ts` — JSON-LD generators
-- `src/lib/seo/faq-jsonld.ts` — FAQ JSON-LD helper
-- `src/lib/hreflang.ts` — hreflang link generator
-- `src/lib/pseo/*.ts` — pSEO data (use-cases, competitors, formats, size-targets)
-- `docs/seo/*.md` — 9-file keyword research pack
+### `/pdf-to-ppt` — PDF to PowerPoint
+- **Category:** convert-from
+- **Title:** Convert PDF to PowerPoint | Free PPTX Slides - CrispPDF
+- **Description:** Turn any PDF report into an editable PowerPoint deck. Preserves your layout, fonts, and images perfectly for your next presentation.
+- **Keywords:** pdf to ppt, turn pdf into presentation slides, pdf to pptx converter mac, best pdf to powerpoint tool, editable ppt from pdf, convert pdf to google slides, pdf to powerpoint converter free, convert study notes pdf to ppt, pdf se ppt kaise banaye, presentation from pdf file, free pdf to pptx online
+- **OG image:** `/og/pdf-to-ppt.svg`
+- **JSON-LD:** WebApplication, HowTo (4 steps in `tool-howto.ts`), FAQPage (6 Qs in `tool-content.ts`), BreadcrumbList, Speakable
+
+### `/pdf-to-jpg` — PDF to JPG
+- **Category:** convert-from
+- **Title:** Convert PDF to JPG Online | High Quality Image Export
+- **Description:** Convert every page of your PDF into high-quality JPG images at up to 300 DPI. Download individually or as a single ZIP file instantly.
+- **Keywords:** pdf to jpg, convert pdf to high resolution image, turn pdf pages into jpg mac, extract pictures from pdf file, pdf to jpeg 300 dpi, best free pdf to image converter, pdf to jpg converter 50kb, extract photo from exam pdf, convert aadhaar pdf to image, pdf ko photo kaise banaye, multi page pdf to jpg
+- **OG image:** `/og/pdf-to-jpg.svg`
+- **JSON-LD:** WebApplication, HowTo (4 steps in `tool-howto.ts`), FAQPage (6 Qs in `tool-content.ts`), BreadcrumbList, Speakable
+
+### `/pdf-to-png` — PDF to PNG
+- **Category:** convert-from
+- **Title:** Convert PDF to PNG Online | High Resolution Images
+- **Description:** Convert your PDF pages into sharp, high-resolution PNG images. Perfect for maintaining graphic quality and handling transparent backgrounds.
+- **Keywords:** pdf to png, convert pdf to transparent png, high res pdf to png mac, save pdf as png file, turn vector pdf to png, batch convert pdf to png, pdf to png converter high quality, transparent logo pdf to png, extract sign from pdf, pdf se png kaise banaye, clear image from pdf free
+- **OG image:** `/og/pdf-to-png.svg`
+- **JSON-LD:** WebApplication, HowTo (4 steps in `tool-howto.ts`), FAQPage (6 Qs in `tool-content.ts`), BreadcrumbList, Speakable
+
+### `/word-to-pdf` — Word to PDF
+- **Category:** convert-to
+- **Title:** Convert Word to PDF | DOCX to PDF Free - CrispPDF
+- **Description:** Lock in your document formatting by converting DOCX or DOC files to PDF. Preserves fonts, tables, and images perfectly for sharing.
+- **Keywords:** word to pdf, convert docx to pdf mac, save word document as pdf, best word to pdf keeping formatting, word to pdf high quality print, doc to pdf online converter, word to pdf converter free, docx to pdf mobile me kaise kare, save resume as pdf online, convert ms word to pdf format, word to pdf without software
+- **OG image:** `/og/word-to-pdf.svg`
+- **JSON-LD:** WebApplication, HowTo (4 steps in `tool-howto.ts`), FAQPage (6 Qs in `tool-content.ts`), BreadcrumbList, Speakable
+
+### `/excel-to-pdf` — Excel to PDF
+- **Category:** convert-to
+- **Title:** Convert Excel to PDF | Fit Spreadsheets to PDF Page
+- **Description:** Convert XLSX spreadsheets into professional PDF reports. Automatically adjusts formatting so all your columns fit neatly on the page.
+- **Keywords:** excel to pdf, convert xlsx to pdf mac, save excel spreadsheet as pdf, fit excel columns to pdf page, best excel to pdf converter free, export xls to pdf, excel sheet to pdf converter, convert salary slip xls to pdf, excel to pdf print preview, fit excel to one page pdf, excel ko pdf kaise banaye
+- **OG image:** `/og/excel-to-pdf.svg`
+- **JSON-LD:** WebApplication, HowTo (4 steps in `tool-howto.ts`), FAQPage (6 Qs in `tool-content.ts`), BreadcrumbList, Speakable
+
+### `/jpg-to-pdf` — JPG to PDF
+- **Category:** convert-to
+- **Title:** Convert JPG to PDF | Image to PDF Maker - CrispPDF
+- **Description:** Transform JPG, PNG, and HEIC images into a single, high-quality PDF document. Quickly combine receipts or portfolio photos into one file.
+- **Keywords:** jpg to pdf, convert jpeg to pdf mac, turn photos into pdf file, combine jpg files into one pdf, high resolution image to pdf, free picture to pdf converter, photo to pdf maker 50kb, mobile se photo ko pdf kaise banaye, combine front back aadhaar to pdf, multiple images to single pdf, picture to pdf online
+- **OG image:** `/og/jpg-to-pdf.svg`
+- **JSON-LD:** WebApplication, HowTo (4 steps in `tool-howto.ts`), FAQPage (6 Qs in `tool-content.ts`), BreadcrumbList, Speakable
+
+### `/html-to-pdf` — HTML to PDF
+- **Category:** convert-to
+- **Title:** Convert HTML to PDF | Webpage to PDF Free - CrispPDF
+- **Description:** Convert live URLs or raw HTML files directly into formatted PDF documents. Perfect for archiving webpages and creating offline backups.
+- **Keywords:** html to pdf, convert url to pdf mac, save website as pdf document, capture webpage to pdf high quality, best html to pdf tool free, web to pdf converter, save webpage as pdf mobile, html code to pdf converter online, convert website page to pdf, webpage ko pdf kaise banaye, download article as pdf
+- **OG image:** `/og/html-to-pdf.svg`
+- **JSON-LD:** WebApplication, HowTo (4 steps in `tool-howto.ts`), FAQPage (6 Qs in `tool-content.ts`), BreadcrumbList, Speakable
+
+### `/rotate-pdf` — Rotate PDF
+- **Category:** organize
+- **Title:** Rotate PDF Pages | Fix Sideways Documents - CrispPDF
+- **Description:** Easily rotate one page or all pages in your PDF by 90 or 180 degrees. Fix sideways scans and save your document permanently in seconds.
+- **Keywords:** rotate pdf, rotate pdf 90 degrees, fix upside down pdf pages mac, rotate specific pages in pdf file, save rotated pdf document, best free pdf rotator, rotate sideways pdf page, pdf ko seedha kaise kare, correct upside down pdf scan, rotate and save pdf permanently, rotate single page in pdf
+- **OG image:** `/og/rotate-pdf.svg`
+- **JSON-LD:** WebApplication, HowTo (4 steps in `tool-howto.ts`), FAQPage (6 Qs in `tool-content.ts`), BreadcrumbList, Speakable
+
+### `/reorder-pdf-pages` — Reorder Pages
+- **Category:** organize
+- **Title:** Reorder PDF Pages | Drag & Drop Organizer - CrispPDF
+- **Description:** Organize your documents visually. Drag and drop PDF pages to reorder them exactly how you need before finalizing and downloading.
+- **Keywords:** reorder pdf pages, drag and drop pdf page reorder, change order of pages in pdf mac, rearrange pdf pages free tool, swap pdf pages, organize pdf document layout, rearrange pdf pages online, pdf ka page order kaise change kare, move last page to first in pdf, sort pdf pages for print, sequence pdf pages free
+- **OG image:** `/og/reorder-pdf-pages.svg`
+- **JSON-LD:** WebApplication, HowTo (4 steps in `tool-howto.ts`), FAQPage (6 Qs in `tool-content.ts`), BreadcrumbList, Speakable
+
+### `/delete-pdf-pages` — Delete Pages
+- **Category:** organize
+- **Title:** Remove PDF Pages | Delete Unwanted Pages - CrispPDF
+- **Description:** Quickly delete unwanted pages, blank sheets, or confidential sections from your PDF file. Visually select and remove pages in seconds.
+- **Keywords:** delete pdf pages, delete specific pages from pdf mac, remove unwanted pages from pdf, cut page out of pdf file, free pdf page remover, batch delete pdf pages, remove blank page from pdf, delete wrong page from ssc form pdf, extract and delete pdf page, pdf se page kaise hataye, remove signature page pdf
+- **OG image:** `/og/delete-pdf-pages.svg`
+- **JSON-LD:** WebApplication, HowTo (4 steps in `tool-howto.ts`), FAQPage (6 Qs in `tool-content.ts`), BreadcrumbList, Speakable
+
+### `/extract-pdf-pages` — Extract Pages
+- **Category:** organize
+- **Title:** Extract PDF Pages | Save Specific Pages - CrispPDF
+- **Description:** Pull specific pages, chapters, or forms out of a bulky PDF and save them instantly as a clean, independent PDF document.
+- **Keywords:** extract pdf pages, save one page of a pdf mac, extract specific pages from pdf free, pull pages out of pdf document, extract chapter from pdf, pdf page extractor, extract one page from marksheet pdf, pull chapter from book pdf, save specific page as pdf, pdf se ek page kaise nikale, separate front page pdf
+- **OG image:** `/og/extract-pdf-pages.svg`
+- **JSON-LD:** WebApplication, HowTo (4 steps in `tool-howto.ts`), FAQPage (6 Qs in `tool-content.ts`), BreadcrumbList, Speakable
+
+### `/crop-pdf` — Crop PDF
+- **Category:** edit
+- **Title:** Crop PDF Pages | Trim Margins Visually - CrispPDF
+- **Description:** Visually crop your PDF pages to remove messy scan borders, trim wide margins, or focus on specific document content. Free and fast.
+- **Keywords:** crop pdf, crop pdf pages mac, trim margins from pdf document, free visual pdf cropper, reduce page size pdf, remove blank edges from pdf, crop extra white space from pdf, crop aadhaar card photo from pdf, trim pdf margins online, pdf ko crop kaise kare, resize pdf page area
+- **OG image:** `/og/crop-pdf.svg`
+- **JSON-LD:** WebApplication, HowTo (4 steps in `tool-howto.ts`), FAQPage (6 Qs in `tool-content.ts`), BreadcrumbList, Speakable
+
+### `/repair-pdf` — Repair PDF
+- **Category:** edit
+- **Title:** Repair PDF Files | Recover Damaged Documents - CrispPDF
+- **Description:** Attempt to recover and repair corrupted or damaged PDF files. Fix documents that throw errors when opening in standard PDF readers.
+- **Keywords:** repair pdf, recover corrupted pdf mac, fix damaged pdf file online free, pdf repair tool, repair pdf cannot be opened error, restore broken pdf data, fix corrupted pdf file online, recover damaged ssc admit card pdf, repair invalid format pdf, open broken pdf file, corrupted pdf repair free
+- **OG image:** `/og/repair-pdf.svg`
+- **JSON-LD:** WebApplication, HowTo (4 steps in `tool-howto.ts`), FAQPage (6 Qs in `tool-content.ts`), BreadcrumbList, Speakable
+
+### `/flatten-pdf` — Flatten PDF
+- **Category:** secure
+- **Title:** Flatten PDF Files | Lock Forms & Annotations - CrispPDF
+- **Description:** Merge interactive form fields, annotations, and e-signatures into a final, flat PDF layer to ensure your document cannot be altered.
+- **Keywords:** flatten pdf, flatten pdf mac, make pdf read only, flatten annotations and signatures, remove interactive fields from pdf, best free pdf flattener, flatten pdf to remove editable fields, lock signature in pdf, merge layers in pdf file, read only pdf kaise banaye, flatten form fields
+- **OG image:** `/og/flatten-pdf.svg`
+- **JSON-LD:** WebApplication, HowTo (4 steps in `tool-howto.ts`), FAQPage (6 Qs in `tool-content.ts`), BreadcrumbList, Speakable
+
+### `/pdf-to-pdfa` — PDF to PDF/A
+- **Category:** secure
+- **Title:** Convert PDF to PDF/A | Archival Format - CrispPDF
+- **Description:** Ensure your documents stand the test of time. Convert any PDF to the ISO-standard PDF/A format for secure, long-term digital archiving.
+- **Keywords:** pdf to pdfa, convert pdf to pdf/a-1b mac, create archival pdf document, free pdf/a converter online, validate pdf/a compliance, iso 19005 pdf format, convert pdf to pdf/a online, iso standard pdf for government upload, pdf a format converter, long term archive pdf, pdfa kaise banaye
+- **OG image:** `/og/pdf-to-pdfa.svg`
+- **JSON-LD:** WebApplication, HowTo (4 steps in `tool-howto.ts`), FAQPage (6 Qs in `tool-content.ts`), BreadcrumbList, Speakable
+
+### `/grayscale-pdf` — Grayscale PDF
+- **Category:** edit
+- **Title:** Convert PDF to Grayscale | Black & White - CrispPDF
+- **Description:** Strip heavy colors from your PDF documents before printing. Convert to grayscale instantly to save on expensive printer ink.
+- **Keywords:** grayscale pdf, convert pdf to grayscale mac, change pdf to black and white for printing, free grayscale pdf converter, strip color from pdf, save ink print pdf, convert pdf to black and white online, remove color from pdf to save ink, b/w pdf print preview, pdf ko black and white kaise kare, grayscale notes
+- **OG image:** `/og/grayscale-pdf.svg`
+- **JSON-LD:** WebApplication, HowTo (4 steps in `tool-howto.ts`), FAQPage (6 Qs in `tool-content.ts`), BreadcrumbList, Speakable
+
+### `/protect-pdf` — Protect PDF
+- **Category:** secure
+- **Title:** Protect PDF Online | Add Password Encryption - CrispPDF
+- **Description:** Apply strong AES-256 encryption to your sensitive files. Lock your PDF with a password to prevent unauthorized viewing, printing, or editing.
+- **Keywords:** protect pdf, add password to pdf mac, encrypt pdf file online free, lock pdf from being printed or edited, best free pdf password protector, secure pdf, password protect pdf online, lock pdf with password free, encrypt sbi bank statement, pdf me password kaise lagaye, secure pdf document
+- **OG image:** `/og/protect-pdf.svg`
+- **JSON-LD:** WebApplication, HowTo (4 steps in `tool-howto.ts`), FAQPage (6 Qs in `tool-content.ts`), BreadcrumbList, Speakable
+
+### `/unlock-pdf` — Unlock PDF
+- **Category:** secure
+- **Title:** Unlock PDF Online | Free Password Remover - CrispPDF
+- **Description:** Remove frustrating password protection and print restrictions from your PDF files instantly. Regain full access to your own documents.
+- **Keywords:** unlock pdf, remove password from pdf mac, free pdf password remover, unlock secured pdf for printing, bypass pdf owner password, decrypt pdf file, remove password from aadhaar pdf, unlock sbi bank statement online, pdf ka password kaise tode, open protected pdf without password, decrypt pdf free
+- **OG image:** `/og/unlock-pdf.svg`
+- **JSON-LD:** WebApplication, HowTo (4 steps in `tool-howto.ts`), FAQPage (6 Qs in `tool-content.ts`), BreadcrumbList, Speakable
+
+### `/redact-pdf` — Redact PDF
+- **Category:** secure
+- **Title:** Redact PDF Files | Black Out Text Free - CrispPDF
+- **Description:** Securely hide sensitive information before sharing a document. Permanently black out text, names, and account numbers from any PDF.
+- **Keywords:** redact pdf, redact text in pdf mac, permanently black out text in pdf, censor sensitive information pdf free, hide personal data in pdf document, redact pdf, hide bank account number in pdf, black out text in pdf online free, censor pan card details pdf, hide sensitive info pdf, redact document
+- **OG image:** `/og/redact-pdf.svg`
+- **JSON-LD:** WebApplication, HowTo (4 steps in `tool-howto.ts`), FAQPage (6 Qs in `tool-content.ts`), BreadcrumbList, Speakable
+
+### `/esign-pdf` — eSign PDF
+- **Category:** edit
+- **Title:** Sign PDF Online | Free e-Signature Tool - CrispPDF
+- **Description:** Skip the expensive software. Draw, type, or upload your electronic signature to any PDF contract or form directly in your browser.
+- **Keywords:** esign pdf, sign pdf online free without adobe, draw signature on document mac, legally binding e-signature free, best docusign alternative, sign pdf, draw signature on pdf online, add digital signature to form free, sign on pdf mobile, pdf par sign kaise kare, insert transparent signature pdf
+- **OG image:** `/og/esign-pdf.svg`
+- **JSON-LD:** WebApplication, HowTo (4 steps in `tool-howto.ts`), FAQPage (6 Qs in `tool-content.ts`), BreadcrumbList, Speakable
+
+### `/watermark-pdf` — Watermark PDF
+- **Category:** edit
+- **Title:** Watermark PDF Online | Add Text or Logo - CrispPDF
+- **Description:** Brand and protect your documents by stamping a text or image watermark across your PDF pages. Fully customize font, opacity, and angle.
+- **Keywords:** watermark pdf, add watermark to pdf mac, insert transparent logo watermark, stamp confidential on pdf, best free pdf watermarker, add text watermark pdf, add logo watermark to pdf, insert draft watermark pdf, write name on pdf background, watermark kaise lagaye pdf me, stamp pdf pages free
+- **OG image:** `/og/watermark-pdf.svg`
+- **JSON-LD:** WebApplication, HowTo (4 steps in `tool-howto.ts`), FAQPage (6 Qs in `tool-content.ts`), BreadcrumbList, Speakable
+
+### `/ocr-pdf` — OCR PDF
+- **Category:** edit
+- **Title:** OCR PDF Free | Make Scanned PDFs Searchable
+- **Description:** Transform uneditable scanned documents into fully searchable and selectable text. A highly accurate, browser-based OCR tool for PDFs.
+- **Keywords:** ocr pdf, convert scanned pdf to text mac, make pdf searchable free, best free ocr software online, extract text from image pdf, turn scan to text, make scanned pdf searchable, extract hindi text from image pdf, image to text converter online, pdf ko text me kaise convert kare, ocr free
+- **OG image:** `/og/ocr-pdf.svg`
+- **JSON-LD:** WebApplication, HowTo (4 steps in `tool-howto.ts`), FAQPage (6 Qs in `tool-content.ts`), BreadcrumbList, Speakable
+
+### `/add-page-numbers-pdf` — Add Page Numbers
+- **Category:** edit
+- **Title:** Add Page Numbers to PDF | Format & Position - CrispPDF
+- **Description:** Organize large reports by instantly adding page numbers to your PDF. Fully customize the numbering position, starting page, and font style.
+- **Keywords:** add page numbers pdf, add page numbers to pdf mac, best tool to number pdf pages, insert pagination in pdf document, format pdf page numbers, bates numbering pdf, insert page numbers in pdf, add serial number to pdf pages, number pdf files for print, pdf me page number kaise dale, paginate pdf free
+- **OG image:** `/og/add-page-numbers-pdf.svg`
+- **JSON-LD:** WebApplication, HowTo (4 steps in `tool-howto.ts`), FAQPage (6 Qs in `tool-content.ts`), BreadcrumbList, Speakable
+
+### `/add-watermark-text-pdf` — Add Watermark Text
+- **Category:** edit
+- **Title:** Add Text Watermark to PDF | Custom Stamps - CrispPDF
+- **Description:** Protect your intellectual property or mark document status by adding customizable text watermarks like 'DRAFT' to your PDFs instantly.
+- **Keywords:** add watermark text pdf, add draft watermark to pdf mac, stamp confidential text on pdf, best free text watermarker for pdf, text overlay pdf, insert watermark, add confidential text watermark, draft stamp on pdf, insert text background pdf, text watermark on pdf free, pdf watermark text editor
+- **OG image:** `/og/add-watermark-text-pdf.svg`
+- **JSON-LD:** WebApplication, HowTo (4 steps in `tool-howto.ts`), FAQPage (6 Qs in `tool-content.ts`), BreadcrumbList, Speakable
+
+### `/extract-images-pdf` — Extract Images
+- **Category:** edit
+- **Title:** Extract Images from PDF | Save Pictures - CrispPDF
+- **Description:** Strip a PDF of all its embedded images. Extract every picture in its original high resolution and download them in a convenient ZIP file.
+- **Keywords:** extract images pdf, extract images from pdf mac, pull pictures out of pdf document, get all images from pdf high quality, free pdf image extractor tool, extract photos from pdf, save all pictures from pdf file, download images from pdf online, pdf se photo kaise nikale, rip images from pdf
+- **OG image:** `/og/extract-images-pdf.svg`
+- **JSON-LD:** WebApplication, HowTo (4 steps in `tool-howto.ts`), FAQPage (6 Qs in `tool-content.ts`), BreadcrumbList, Speakable
+
+### `/invert-pdf` — Invert Colors PDF
+- **Category:** edit
+- **Title:** Invert PDF Colors | Dark Mode for Any Document
+- **Description:** Instantly flip your PDF's color scheme. Create a dark mode reading experience or invert dark backgrounds to white for cheaper printing.
+- **Keywords:** invert pdf, invert pdf colors mac, read pdf in dark mode, change pdf from black background to white for printing, reverse pdf colors free, invert pdf, invert pdf colors for printing, dark mode pdf reader online, reverse white text on black pdf, pdf ka color invert kaise kare, negative pdf
+- **OG image:** `/og/invert-pdf.svg`
+- **JSON-LD:** WebApplication, HowTo (4 steps in `tool-howto.ts`), FAQPage (6 Qs in `tool-content.ts`), BreadcrumbList, Speakable
+
+### `/resize-pdf` — Resize PDF
+- **Category:** organize
+- **Title:** Resize PDF | Change Page Size to A4 or Letter - CrispPDF
+- **Description:** Scale and resize your PDF document pages to exact standard dimensions like A4 or US Letter, ensuring perfect formatting for printing.
+- **Keywords:** resize pdf, resize pdf pages mac, change pdf from letter to a4, custom pdf page dimensions, scale pdf size for printing, best free pdf resizer, resize pdf to a4 size, change pdf dimension to letter, resize for print online, pdf ka size a4 kaise kare, change pdf page size free
+- **OG image:** `/og/resize-pdf.svg`
+- **JSON-LD:** WebApplication, HowTo (4 steps in `tool-howto.ts`), FAQPage (6 Qs in `tool-content.ts`), BreadcrumbList, Speakable
+
+### `/n-up-pdf` — N-up PDF
+- **Category:** organize
+- **Title:** N-up PDF | Print Multiple Pages Per Sheet - CrispPDF
+- **Description:** Shrink and arrange multiple PDF pages onto a single sheet (N-up format). Save paper and create perfect handouts from your documents.
+- **Keywords:** n-up pdf, multiple pages per sheet pdf mac, 2 up pdf printing, combine pages to save paper, create handout layout pdf, n-up pdf converter free, print multiple pages on one sheet pdf, 4 slides per page pdf, combine pdf pages for printing, ek page par 2 page kaise print kare, n up pdf
+- **OG image:** `/og/n-up-pdf.svg`
+- **JSON-LD:** WebApplication, HowTo (4 steps in `tool-howto.ts`), FAQPage (6 Qs in `tool-content.ts`), BreadcrumbList, Speakable
+
+### `/blank-page-pdf` — Insert Blank Pages
+- **Category:** organize
+- **Title:** Insert Blank Page into PDF | Add Empty Pages - CrispPDF
+- **Description:** Insert completely blank pages at the beginning, end, or between any existing pages in your PDF document. Free and instant in your browser.
+- **Keywords:** blank page pdf, add blank page to pdf mac, insert empty page into pdf document, put blank page at end of pdf, free pdf blank page inserter, add blank page, insert blank page in pdf file, add empty page to pdf online, put blank sheet between pdf pages, pdf me khali page kaise jode, add blank page
+- **OG image:** `/og/blank-page-pdf.svg`
+- **JSON-LD:** WebApplication, HowTo (4 steps in `tool-howto.ts`), FAQPage (6 Qs in `tool-content.ts`), BreadcrumbList, Speakable
+
+### `/duplicate-pages-pdf` — Duplicate Pages
+- **Category:** organize
+- **Title:** Duplicate PDF Pages | Clone Pages Within Document
+- **Description:** Easily clone any page within your PDF. The duplicated page is inserted instantly next to the original without needing complex software.
+- **Keywords:** duplicate pages pdf, duplicate pdf page mac, clone page within pdf document, repeat specific page in pdf file, free pdf page duplicator, copy pdf page, duplicate specific page in pdf, copy and paste page in same pdf, clone pdf page online, pdf ka page copy kaise kare, repeat page in pdf
+- **OG image:** `/og/duplicate-pages-pdf.svg`
+- **JSON-LD:** WebApplication, HowTo (4 steps in `tool-howto.ts`), FAQPage (6 Qs in `tool-content.ts`), BreadcrumbList, Speakable
+
+### `/extract-text-pdf` — Extract Text
+- **Category:** convert-from
+- **Title:** Extract Text from PDF | Copy Plain Text - CrispPDF
+- **Description:** Pull raw, plain text out of complex PDF layouts instantly. Perfect for feeding text to AI tools, data analysis, or simple copying.
+- **Keywords:** extract text pdf, extract text from pdf mac, pdf to plain text converter, copy unformattable text from pdf document, free pdf text extractor, pdf to txt, extract plain text from pdf online, copy all text from pdf file, pdf to txt converter free, pdf se text kaise copy kare, rip text from pdf
+- **OG image:** `/og/extract-text-pdf.svg`
+- **JSON-LD:** WebApplication, HowTo (4 steps in `tool-howto.ts`), FAQPage (6 Qs in `tool-content.ts`), BreadcrumbList, Speakable
+
+### `/edit-metadata-pdf` — Edit PDF Metadata
+- **Category:** edit
+- **Title:** Edit PDF Metadata | Change Author & Title - CrispPDF
+- **Description:** Modify the hidden properties of your PDF files. Easily change the title, author, and subject, or strip metadata for privacy before sending.
+- **Keywords:** edit metadata pdf, edit pdf metadata mac, change pdf author name, modify pdf properties without acrobat, remove metadata tags from pdf, free metadata editor, change pdf title and author, edit pdf properties online free, remove metadata from pdf, pdf ka naam kaise change kare, edit pdf info
+- **OG image:** `/og/edit-metadata-pdf.svg`
+- **JSON-LD:** WebApplication, HowTo (4 steps in `tool-howto.ts`), FAQPage (6 Qs in `tool-content.ts`), BreadcrumbList, Speakable
+
+### `/compare-pdf` — Compare PDFs
+- **Category:** edit
+- **Title:** Compare PDFs | Visual Diff Checker Online - CrispPDF
+- **Description:** Compare two versions of a PDF document side-by-side. Our visual diff tool highlights text changes, additions, and deletions instantly.
+- **Keywords:** compare pdf, compare pdf files mac, spot differences between two pdfs, visual pdf diff checker, highlight text changes in pdf, best free pdf compare tool, compare two pdf files for differences, highlight changes in pdf online, pdf diff tool free, do pdf compare kaise kare, find changed text pdf
+- **OG image:** `/og/compare-pdf.svg`
+- **JSON-LD:** WebApplication, HowTo (4 steps in `tool-howto.ts`), FAQPage (6 Qs in `tool-content.ts`), BreadcrumbList, Speakable
+
+### `/base64-pdf` — PDF ↔ Base64
+- **Category:** convert-from
+- **Title:** Base64 to PDF | Encode & Decode Strings - CrispPDF
+- **Description:** Perfect for developers. Convert PDF files into Base64 strings for embedding, or decode Base64 text back into a viewable PDF document.
+- **Keywords:** base64 pdf, pdf to base64 mac, encode pdf document to base64 string, base64 to pdf decoder online, free base64 pdf tool, convert pdf for api upload, convert pdf to base64 string online, decode base64 to pdf file, pdf to text code, pdf base64 encoder free, base64 decoder to pdf
+- **OG image:** `/og/base64-pdf.svg`
+- **JSON-LD:** WebApplication, HowTo (4 steps in `tool-howto.ts`), FAQPage (6 Qs in `tool-content.ts`), BreadcrumbList, Speakable
+
+### `/reverse-pdf` — Reverse PDF
+- **Category:** organize
+- **Title:** Reverse PDF Pages | Flip Document Order - CrispPDF
+- **Description:** Instantly flip the page order of your entire PDF document. Fix reverse-scanned books and backwards files in one click for free.
+- **Keywords:** reverse pdf, reverse pdf pages mac, flip order of pdf document, change pdf order from end to beginning, free pdf reverser, fix backward scanned pdf, reverse pdf page order online, flip pdf pages from last to first, correct reverse scanned pdf, pdf page order ulta kaise kare, backwards pdf
+- **OG image:** `/og/reverse-pdf.svg`
+- **JSON-LD:** WebApplication, HowTo (4 steps in `tool-howto.ts`), FAQPage (6 Qs in `tool-content.ts`), BreadcrumbList, Speakable
+
+## Robots & discoverability
+
+- `public/robots.txt` — allows all crawlers, points to `/sitemap.xml`.
+- `src/routes/sitemap[.]xml.ts` — dynamic sitemap covering every static + tool + pSEO route.
+- `src/routes/ai[.]txt.ts` — AI-agent policy (attribution, no-scrape hints).
+- `src/routes/llms[.]txt.ts` + `llms-full[.]txt.ts` — LLM-friendly site summary for AEO/GEO.
+- `src/lib/hreflang.ts` — emits alternate-language links per page.
+- `src/lib/seo/jsonld.ts` — Organization, WebSite, Breadcrumb, Question, Speakable builders.
+
+## Meta length guidelines followed
+
+- Titles: 55–65 chars (India-first wording collapsed into Global titles).
+- Descriptions: 145–160 chars.
+- One H1 per page (the tool name inside `ToolPageView`).
+- Every FAQ appears both as visible `<details>` **and** inside FAQPage JSON-LD.
