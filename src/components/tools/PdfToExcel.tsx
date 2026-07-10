@@ -17,7 +17,7 @@ export function PdfToExcel() {
       const file = files[0];
       const buf = await file.arrayBuffer();
       const pdfjs = await loadPdfjs();
-      const XLSX = await import("xlsx");
+      const XLSX = await import("@e965/xlsx");
       const src = await pdfjs.getDocument({ data: buf.slice(0) }).promise;
       const wb = XLSX.utils.book_new();
 
