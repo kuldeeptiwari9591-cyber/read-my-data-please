@@ -18,6 +18,25 @@ async function getServerEntry(): Promise<ServerEntry> {
   return serverEntryPromise;
 }
 
+// Canonical host + scheme. Prevents duplicate content between www/apex and
+// http/https. Apex (crisppdf.in) is canonical.
+const CANONICAL_HOST = "crisppdf.in";
+
+function canonicalRedirect(request: Request): Response | null {
+  const url = new URL(request.url);
+  // Only enforce for the production host family; leave preview / localhost alone.
+  if (!/(?:^|\.)crisppdf\.in$/i.test(url.hostname)) return null;
+
+  const needsHostRewrite = url.hostname.toLowerCase() !== CANONICAL_HOST;
+  const needsSchemeRewrite = url.protocol !== "https:";
+  if (!needsHostRewrite && !needsSchemeRewrite) return null;
+
+  url.protocol = "https:";
+  url.hostname = CANONICAL_HOST;
+  url.port = "";
+  return Response.redirect(url.toString(), 301);
+}
+
 // h3 swallows in-handler throws into a normal 500 Response with body
 // {"unhandled":true,"message":"HTTPError"} — try/catch alone never fires for those.
 async function normalizeCatastrophicSsrResponse(response: Response): Promise<Response> {
@@ -40,6 +59,9 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
+      const redirect = canonicalRedirect(request);
+      if (redirect) return redirect;
+
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
       return await normalizeCatastrophicSsrResponse(response);
