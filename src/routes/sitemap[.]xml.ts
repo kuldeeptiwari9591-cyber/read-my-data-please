@@ -11,7 +11,6 @@ import { listPublishedPosts } from "@/lib/blog.functions";
 const COMPRESS_USES = ["whatsapp", "email", "passport-photo"];
 const ROOT_FORMAT_ALIASES = ["png-to-pdf", "heic-to-pdf", "webp-to-pdf", "csv-to-pdf", "txt-to-pdf"];
 
-// Always emit absolute URLs. Falls back to crisppdf.in when VITE_SITE_URL is unset.
 const BASE_URL = ((import.meta.env.VITE_SITE_URL as string | undefined) ?? "https://crisppdf.in").replace(/\/$/, "");
 
 interface SitemapEntry {
@@ -32,7 +31,7 @@ export const Route = createFileRoute("/sitemap.xml")({
           /* sitemap should still render without blog */
         }
 
-        const entries: SitemapEntry[] = [
+        const rawEntries: SitemapEntry[] = [
           { path: "/", changefreq: "weekly", priority: "1.0" },
           { path: "/about", changefreq: "monthly", priority: "0.5" },
           { path: "/why-crisppdf", changefreq: "monthly", priority: "0.7" },
@@ -42,7 +41,7 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/privacy", changefreq: "monthly", priority: "0.3" },
           { path: "/terms", changefreq: "monthly", priority: "0.3" },
           { path: "/blog", changefreq: "weekly", priority: "0.7" },
-          
+
           ...posts.map((p) => ({
             path: `/blog/${p.slug}`,
             changefreq: "monthly" as const,
@@ -89,6 +88,16 @@ export const Route = createFileRoute("/sitemap.xml")({
             priority: "0.7",
           })),
         ];
+
+        // Dedupe by path — first occurrence wins, so higher-priority hand-written
+        // entries above take precedence over generated duplicates.
+        const seen = new Set<string>();
+        const entries: SitemapEntry[] = [];
+        for (const e of rawEntries) {
+          if (seen.has(e.path)) continue;
+          seen.add(e.path);
+          entries.push(e);
+        }
 
         const urls = entries.map((e) =>
           [
