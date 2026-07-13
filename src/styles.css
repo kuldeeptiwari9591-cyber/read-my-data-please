@@ -1,4 +1,7 @@
 @import "tailwindcss" source(none);
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/space-grotesk";
+@import "@fontsource-variable/jetbrains-mono";
 @source "../src";
 @import "tw-animate-css";
 

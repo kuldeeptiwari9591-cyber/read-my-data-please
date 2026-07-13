@@ -15,7 +15,7 @@ export function ExcelToPdf() {
     try {
       const file = files[0];
       const buf = await file.arrayBuffer();
-      const XLSX = await import("xlsx");
+      const XLSX = await import("@e965/xlsx");
       const jsPDFMod = await import("jspdf");
       const jsPDF = jsPDFMod.default || jsPDFMod.jsPDF;
       const autoTable = (await import("jspdf-autotable")).default;
