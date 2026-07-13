@@ -11,7 +11,8 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "lhci": "lhci autorun --config=./lighthouserc.json"
+    "lhci": "lhci autorun --config=./lighthouserc.json",
+    "audit": "bun audit --audit-level high"
   },
   "dependencies": {
     "@hcaptcha/react-hcaptcha": "^2.0.2",
