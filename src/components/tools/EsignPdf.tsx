@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { PDFDocument } from "pdf-lib";
-import { PenLine, Loader2, RotateCcw, Plus, Trash2 } from "lucide-react";
+import { PenLine, Loader2, RotateCcw, Plus, Trash2, Type, Upload } from "lucide-react";
 import { FileDrop, ToolShell, downloadBlob } from "./ToolShell";
 import { loadPdfjs } from "@/lib/pdfjs";
 import { toast } from "sonner";
@@ -18,6 +18,8 @@ export function EsignPdf() {
   const [previews, setPreviews] = useState<string[]>([]);
   const [pageSizes, setPageSizes] = useState<{ w: number; h: number }[]>([]);
   const [signature, setSignature] = useState<string | null>(null);
+  const [mode, setMode] = useState<"draw" | "type" | "upload">("draw");
+  const [typedName, setTypedName] = useState("");
   const [placements, setPlacements] = useState<Placement[]>([]);
   const [busy, setBusy] = useState(false);
   const padRef = useRef<HTMLCanvasElement>(null);
@@ -95,6 +97,31 @@ export function EsignPdf() {
       cancel = true;
     };
   }, [files]);
+
+  const captureTyped = () => {
+    if (!typedName.trim()) return toast.error("Type your name first");
+    const c = document.createElement("canvas");
+    c.width = 600; c.height = 180;
+    const ctx = c.getContext("2d")!;
+    ctx.clearRect(0, 0, c.width, c.height);
+    const isDark = document.documentElement.classList.contains("dark");
+    ctx.fillStyle = isDark ? "#f1f5f9" : "#0f172a";
+    ctx.font = "italic 84px 'Great Vibes', 'Segoe Script', cursive";
+    ctx.textBaseline = "middle";
+    ctx.fillText(typedName.trim(), 20, c.height / 2);
+    setSignature(c.toDataURL("image/png"));
+    toast.success("Signature ready — click a page to place it");
+  };
+
+  const captureUploaded = (file: File) => {
+    if (!file.type.startsWith("image/")) return toast.error("Upload an image file");
+    const reader = new FileReader();
+    reader.onload = () => {
+      setSignature(reader.result as string);
+      toast.success("Signature loaded — click a page to place it");
+    };
+    reader.readAsDataURL(file);
+  };
 
   const captureSignature = () => {
     if (!padInstance.current || padInstance.current.isEmpty()) {
@@ -217,24 +244,86 @@ export function EsignPdf() {
         <aside className="space-y-3 lg:sticky lg:top-24 lg:self-start">
           <div className="rounded-2xl border border-border bg-surface/40 p-4">
             <div className="mb-2 text-sm font-semibold">Your signature</div>
-            <canvas
-              ref={padRef}
-              className="h-40 w-full rounded-md border border-border bg-background"
-            />
-            <div className="mt-3 flex gap-2">
-              <button
-                onClick={clearPad}
-                className="inline-flex flex-1 items-center justify-center gap-1 rounded-md border border-border bg-background px-3 py-2 text-xs font-medium hover:bg-surface"
-              >
-                <RotateCcw className="h-3 w-3" /> Clear
-              </button>
-              <button
-                onClick={captureSignature}
-                className="inline-flex flex-1 items-center justify-center gap-1 rounded-md bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground hover:opacity-90"
-              >
-                <Plus className="h-3 w-3" /> Use this
-              </button>
+            <div className="mb-3 grid grid-cols-3 gap-1 rounded-md border border-border bg-background p-1 text-xs">
+              {(["draw", "type", "upload"] as const).map((m) => (
+                <button
+                  key={m}
+                  type="button"
+                  onClick={() => setMode(m)}
+                  className={`inline-flex items-center justify-center gap-1 rounded px-2 py-1.5 font-medium capitalize ${
+                    mode === m ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {m === "draw" && <PenLine className="h-3 w-3" />}
+                  {m === "type" && <Type className="h-3 w-3" />}
+                  {m === "upload" && <Upload className="h-3 w-3" />}
+                  {m}
+                </button>
+              ))}
             </div>
+
+            <div className={mode === "draw" ? "" : "hidden"}>
+              <canvas
+                ref={padRef}
+                className="h-40 w-full rounded-md border border-border bg-background"
+              />
+              <div className="mt-3 flex gap-2">
+                <button
+                  onClick={clearPad}
+                  className="inline-flex flex-1 items-center justify-center gap-1 rounded-md border border-border bg-background px-3 py-2 text-xs font-medium hover:bg-surface"
+                >
+                  <RotateCcw className="h-3 w-3" /> Clear
+                </button>
+                <button
+                  onClick={captureSignature}
+                  className="inline-flex flex-1 items-center justify-center gap-1 rounded-md bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground hover:opacity-90"
+                >
+                  <Plus className="h-3 w-3" /> Use this
+                </button>
+              </div>
+            </div>
+
+            {mode === "type" && (
+              <div>
+                <input
+                  type="text"
+                  value={typedName}
+                  onChange={(e) => setTypedName(e.target.value)}
+                  placeholder="Type your full name"
+                  className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary"
+                />
+                <div
+                  className="mt-3 flex h-24 items-center justify-center rounded-md border border-dashed border-border bg-background px-3"
+                  style={{ fontFamily: "'Great Vibes', 'Segoe Script', cursive", fontStyle: "italic", fontSize: "34px" }}
+                >
+                  {typedName || <span className="text-xs not-italic text-muted-foreground" style={{ fontFamily: "inherit" }}>Preview</span>}
+                </div>
+                <button
+                  onClick={captureTyped}
+                  className="mt-3 inline-flex w-full items-center justify-center gap-1 rounded-md bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground hover:opacity-90"
+                >
+                  <Plus className="h-3 w-3" /> Use this
+                </button>
+              </div>
+            )}
+
+            {mode === "upload" && (
+              <div>
+                <label className="flex h-40 cursor-pointer flex-col items-center justify-center gap-2 rounded-md border border-dashed border-border bg-background text-xs text-muted-foreground hover:border-primary">
+                  <Upload className="h-5 w-5" />
+                  <span>Upload PNG / JPG of your signature</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => e.target.files?.[0] && captureUploaded(e.target.files[0])}
+                  />
+                </label>
+                <p className="mt-2 text-[11px] text-muted-foreground">
+                  Tip: a PNG with transparent background looks best.
+                </p>
+              </div>
+            )}
             {signature && (
               <div className="mt-3 rounded-md border border-border bg-background p-2">
                 <img src={signature} alt="signature preview" className="block h-12 w-full object-contain" />
