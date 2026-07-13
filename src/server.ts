@@ -56,6 +56,55 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
   });
 }
 
+// Baseline HTTP security headers applied to every response. We keep CSP
+// permissive-but-scoped (allow the app's own origin, Supabase, and inline
+// styles used by shadcn/tailwind); nonce-based tightening lands in a
+// follow-up PR that threads the nonce through <Scripts nonce=...>.
+const SECURITY_HEADERS: Record<string, string> = {
+  "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
+  "X-Content-Type-Options": "nosniff",
+  "Referrer-Policy": "strict-origin-when-cross-origin",
+  "Permissions-Policy":
+    "camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()",
+  "Cross-Origin-Opener-Policy": "same-origin",
+  "X-Frame-Options": "DENY",
+  "Content-Security-Policy": [
+    "default-src 'self'",
+    // Inline styles are needed for shadcn / tailwind runtime injection.
+    "style-src 'self' 'unsafe-inline'",
+    // 'unsafe-inline' remains until the nonce PR lands; keeps hydration working.
+    "script-src 'self' 'unsafe-inline'",
+    "img-src 'self' data: blob: https:",
+    "font-src 'self' data:",
+    // Supabase (auth, storage, realtime) + own origin.
+    "connect-src 'self' https://*.supabase.co wss://*.supabase.co",
+    "worker-src 'self' blob:",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "frame-ancestors 'none'",
+    "form-action 'self'",
+    "upgrade-insecure-requests",
+  ].join("; "),
+};
+
+function withSecurityHeaders(response: Response): Response {
+  // Skip for opaque/redirect responses that don't own their headers.
+  if (response.status === 301 || response.status === 302 || response.status === 304) {
+    return response;
+  }
+  const headers = new Headers(response.headers);
+  // Remove deprecated header if any upstream layer set it.
+  headers.delete("X-XSS-Protection");
+  for (const [k, v] of Object.entries(SECURITY_HEADERS)) {
+    if (!headers.has(k)) headers.set(k, v);
+  }
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
+}
+
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
@@ -64,13 +113,16 @@ export default {
 
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
-      return await normalizeCatastrophicSsrResponse(response);
+      const normalized = await normalizeCatastrophicSsrResponse(response);
+      return withSecurityHeaders(normalized);
     } catch (error) {
       console.error(error);
-      return new Response(renderErrorPage(), {
-        status: 500,
-        headers: { "content-type": "text/html; charset=utf-8" },
-      });
+      return withSecurityHeaders(
+        new Response(renderErrorPage(), {
+          status: 500,
+          headers: { "content-type": "text/html; charset=utf-8" },
+        }),
+      );
     }
   },
 };
