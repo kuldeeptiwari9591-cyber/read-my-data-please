@@ -4,6 +4,7 @@
 import { PseoPageShell } from "@/components/seo/PseoPageShell";
 import { SIZE_TARGETS_BY_SLUG } from "@/lib/pseo/size-targets";
 import { TOOLS_BY_SLUG, TOOLS } from "@/lib/tools";
+import { CompressPdf } from "@/components/tools/CompressPdf";
 import { abs, OG_DEFAULT } from "@/lib/site-url";
 import { hreflangLinks } from "@/lib/hreflang";
 
@@ -81,6 +82,10 @@ export function SizeTargetView({ slug }: { slug: string }) {
       ctaLabel={`Compress to ${target.label} now`}
       faqs={target.faq}
       related={related}
-    />
+    >
+      <div className="mt-8">
+        <CompressPdf targetKB={Math.round(target.bytes / 1024)} targetLabel={target.label} />
+      </div>
+    </PseoPageShell>
   );
 }
