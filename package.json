@@ -13,7 +13,6 @@
     "format": "prettier --write .",
     "lhci": "lhci autorun --config=./lighthouserc.json",
     "audit": "bun audit --audit-level high"
-    "audit": "bun audit"
   },
   "dependencies": {
     "@hcaptcha/react-hcaptcha": "^2.0.2",
