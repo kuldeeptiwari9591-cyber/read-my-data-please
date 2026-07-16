@@ -21,6 +21,7 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SecurePdfRouteImport } from './routes/secure-pdf'
 import { Route as RotatePdfRouteImport } from './routes/rotate-pdf'
 import { Route as ReversePdfRouteImport } from './routes/reverse-pdf'
+import { Route as ResizeSignatureImageRouteImport } from './routes/resize-signature-image'
 import { Route as ResizePdfRouteImport } from './routes/resize-pdf'
 import { Route as RepairPdfRouteImport } from './routes/repair-pdf'
 import { Route as ReorderPdfPagesRouteImport } from './routes/reorder-pdf-pages'
@@ -34,6 +35,7 @@ import { Route as PdfToPngRouteImport } from './routes/pdf-to-png'
 import { Route as PdfToPdfaRouteImport } from './routes/pdf-to-pdfa'
 import { Route as PdfToJpgRouteImport } from './routes/pdf-to-jpg'
 import { Route as PdfToExcelRouteImport } from './routes/pdf-to-excel'
+import { Route as PanCardPdfRouteImport } from './routes/pan-card-pdf'
 import { Route as OrganizePdfRouteImport } from './routes/organize-pdf'
 import { Route as OcrPdfRouteImport } from './routes/ocr-pdf'
 import { Route as NUpPdfRouteImport } from './routes/n-up-pdf'
@@ -82,6 +84,7 @@ import { Route as AddWatermarkTextPdfRouteImport } from './routes/add-watermark-
 import { Route as AddPageNumbersPdfRouteImport } from './routes/add-page-numbers-pdf'
 import { Route as AboutCrisppdfRouteImport } from './routes/about-crisppdf'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as AadhaarPdfPasswordRemoveRouteImport } from './routes/aadhaar-pdf-password-remove'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
@@ -155,6 +158,11 @@ const ReversePdfRoute = ReversePdfRouteImport.update({
   path: '/reverse-pdf',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResizeSignatureImageRoute = ResizeSignatureImageRouteImport.update({
+  id: '/resize-signature-image',
+  path: '/resize-signature-image',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ResizePdfRoute = ResizePdfRouteImport.update({
   id: '/resize-pdf',
   path: '/resize-pdf',
@@ -218,6 +226,11 @@ const PdfToJpgRoute = PdfToJpgRouteImport.update({
 const PdfToExcelRoute = PdfToExcelRouteImport.update({
   id: '/pdf-to-excel',
   path: '/pdf-to-excel',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PanCardPdfRoute = PanCardPdfRouteImport.update({
+  id: '/pan-card-pdf',
+  path: '/pan-card-pdf',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OrganizePdfRoute = OrganizePdfRouteImport.update({
@@ -461,6 +474,12 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AadhaarPdfPasswordRemoveRoute =
+  AadhaarPdfPasswordRemoveRouteImport.update({
+    id: '/aadhaar-pdf-password-remove',
+    path: '/aadhaar-pdf-password-remove',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
@@ -525,6 +544,7 @@ const ApiPublicHooksSecurityScanRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/aadhaar-pdf-password-remove': typeof AadhaarPdfPasswordRemoveRoute
   '/about': typeof AboutRoute
   '/about-crisppdf': typeof AboutCrisppdfRoute
   '/add-page-numbers-pdf': typeof AddPageNumbersPdfRoute
@@ -573,6 +593,7 @@ export interface FileRoutesByFullPath {
   '/n-up-pdf': typeof NUpPdfRoute
   '/ocr-pdf': typeof OcrPdfRoute
   '/organize-pdf': typeof OrganizePdfRoute
+  '/pan-card-pdf': typeof PanCardPdfRoute
   '/pdf-to-excel': typeof PdfToExcelRoute
   '/pdf-to-jpg': typeof PdfToJpgRoute
   '/pdf-to-pdfa': typeof PdfToPdfaRoute
@@ -586,6 +607,7 @@ export interface FileRoutesByFullPath {
   '/reorder-pdf-pages': typeof ReorderPdfPagesRoute
   '/repair-pdf': typeof RepairPdfRoute
   '/resize-pdf': typeof ResizePdfRoute
+  '/resize-signature-image': typeof ResizeSignatureImageRoute
   '/reverse-pdf': typeof ReversePdfRoute
   '/rotate-pdf': typeof RotatePdfRoute
   '/secure-pdf': typeof SecurePdfRoute
@@ -611,6 +633,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/aadhaar-pdf-password-remove': typeof AadhaarPdfPasswordRemoveRoute
   '/about': typeof AboutRoute
   '/about-crisppdf': typeof AboutCrisppdfRoute
   '/add-page-numbers-pdf': typeof AddPageNumbersPdfRoute
@@ -659,6 +682,7 @@ export interface FileRoutesByTo {
   '/n-up-pdf': typeof NUpPdfRoute
   '/ocr-pdf': typeof OcrPdfRoute
   '/organize-pdf': typeof OrganizePdfRoute
+  '/pan-card-pdf': typeof PanCardPdfRoute
   '/pdf-to-excel': typeof PdfToExcelRoute
   '/pdf-to-jpg': typeof PdfToJpgRoute
   '/pdf-to-pdfa': typeof PdfToPdfaRoute
@@ -672,6 +696,7 @@ export interface FileRoutesByTo {
   '/reorder-pdf-pages': typeof ReorderPdfPagesRoute
   '/repair-pdf': typeof RepairPdfRoute
   '/resize-pdf': typeof ResizePdfRoute
+  '/resize-signature-image': typeof ResizeSignatureImageRoute
   '/reverse-pdf': typeof ReversePdfRoute
   '/rotate-pdf': typeof RotatePdfRoute
   '/secure-pdf': typeof SecurePdfRoute
@@ -699,6 +724,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/aadhaar-pdf-password-remove': typeof AadhaarPdfPasswordRemoveRoute
   '/about': typeof AboutRoute
   '/about-crisppdf': typeof AboutCrisppdfRoute
   '/add-page-numbers-pdf': typeof AddPageNumbersPdfRoute
@@ -747,6 +773,7 @@ export interface FileRoutesById {
   '/n-up-pdf': typeof NUpPdfRoute
   '/ocr-pdf': typeof OcrPdfRoute
   '/organize-pdf': typeof OrganizePdfRoute
+  '/pan-card-pdf': typeof PanCardPdfRoute
   '/pdf-to-excel': typeof PdfToExcelRoute
   '/pdf-to-jpg': typeof PdfToJpgRoute
   '/pdf-to-pdfa': typeof PdfToPdfaRoute
@@ -760,6 +787,7 @@ export interface FileRoutesById {
   '/reorder-pdf-pages': typeof ReorderPdfPagesRoute
   '/repair-pdf': typeof RepairPdfRoute
   '/resize-pdf': typeof ResizePdfRoute
+  '/resize-signature-image': typeof ResizeSignatureImageRoute
   '/reverse-pdf': typeof ReversePdfRoute
   '/rotate-pdf': typeof RotatePdfRoute
   '/secure-pdf': typeof SecurePdfRoute
@@ -787,6 +815,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/aadhaar-pdf-password-remove'
     | '/about'
     | '/about-crisppdf'
     | '/add-page-numbers-pdf'
@@ -835,6 +864,7 @@ export interface FileRouteTypes {
     | '/n-up-pdf'
     | '/ocr-pdf'
     | '/organize-pdf'
+    | '/pan-card-pdf'
     | '/pdf-to-excel'
     | '/pdf-to-jpg'
     | '/pdf-to-pdfa'
@@ -848,6 +878,7 @@ export interface FileRouteTypes {
     | '/reorder-pdf-pages'
     | '/repair-pdf'
     | '/resize-pdf'
+    | '/resize-signature-image'
     | '/reverse-pdf'
     | '/rotate-pdf'
     | '/secure-pdf'
@@ -873,6 +904,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/aadhaar-pdf-password-remove'
     | '/about'
     | '/about-crisppdf'
     | '/add-page-numbers-pdf'
@@ -921,6 +953,7 @@ export interface FileRouteTypes {
     | '/n-up-pdf'
     | '/ocr-pdf'
     | '/organize-pdf'
+    | '/pan-card-pdf'
     | '/pdf-to-excel'
     | '/pdf-to-jpg'
     | '/pdf-to-pdfa'
@@ -934,6 +967,7 @@ export interface FileRouteTypes {
     | '/reorder-pdf-pages'
     | '/repair-pdf'
     | '/resize-pdf'
+    | '/resize-signature-image'
     | '/reverse-pdf'
     | '/rotate-pdf'
     | '/secure-pdf'
@@ -960,6 +994,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/aadhaar-pdf-password-remove'
     | '/about'
     | '/about-crisppdf'
     | '/add-page-numbers-pdf'
@@ -1008,6 +1043,7 @@ export interface FileRouteTypes {
     | '/n-up-pdf'
     | '/ocr-pdf'
     | '/organize-pdf'
+    | '/pan-card-pdf'
     | '/pdf-to-excel'
     | '/pdf-to-jpg'
     | '/pdf-to-pdfa'
@@ -1021,6 +1057,7 @@ export interface FileRouteTypes {
     | '/reorder-pdf-pages'
     | '/repair-pdf'
     | '/resize-pdf'
+    | '/resize-signature-image'
     | '/reverse-pdf'
     | '/rotate-pdf'
     | '/secure-pdf'
@@ -1048,6 +1085,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AadhaarPdfPasswordRemoveRoute: typeof AadhaarPdfPasswordRemoveRoute
   AboutRoute: typeof AboutRoute
   AboutCrisppdfRoute: typeof AboutCrisppdfRoute
   AddPageNumbersPdfRoute: typeof AddPageNumbersPdfRoute
@@ -1096,6 +1134,7 @@ export interface RootRouteChildren {
   NUpPdfRoute: typeof NUpPdfRoute
   OcrPdfRoute: typeof OcrPdfRoute
   OrganizePdfRoute: typeof OrganizePdfRoute
+  PanCardPdfRoute: typeof PanCardPdfRoute
   PdfToExcelRoute: typeof PdfToExcelRoute
   PdfToJpgRoute: typeof PdfToJpgRoute
   PdfToPdfaRoute: typeof PdfToPdfaRoute
@@ -1109,6 +1148,7 @@ export interface RootRouteChildren {
   ReorderPdfPagesRoute: typeof ReorderPdfPagesRoute
   RepairPdfRoute: typeof RepairPdfRoute
   ResizePdfRoute: typeof ResizePdfRoute
+  ResizeSignatureImageRoute: typeof ResizeSignatureImageRoute
   ReversePdfRoute: typeof ReversePdfRoute
   RotatePdfRoute: typeof RotatePdfRoute
   SecurePdfRoute: typeof SecurePdfRoute
@@ -1217,6 +1257,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReversePdfRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/resize-signature-image': {
+      id: '/resize-signature-image'
+      path: '/resize-signature-image'
+      fullPath: '/resize-signature-image'
+      preLoaderRoute: typeof ResizeSignatureImageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/resize-pdf': {
       id: '/resize-pdf'
       path: '/resize-pdf'
@@ -1306,6 +1353,13 @@ declare module '@tanstack/react-router' {
       path: '/pdf-to-excel'
       fullPath: '/pdf-to-excel'
       preLoaderRoute: typeof PdfToExcelRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pan-card-pdf': {
+      id: '/pan-card-pdf'
+      path: '/pan-card-pdf'
+      fullPath: '/pan-card-pdf'
+      preLoaderRoute: typeof PanCardPdfRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/organize-pdf': {
@@ -1644,6 +1698,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/aadhaar-pdf-password-remove': {
+      id: '/aadhaar-pdf-password-remove'
+      path: '/aadhaar-pdf-password-remove'
+      fullPath: '/aadhaar-pdf-password-remove'
+      preLoaderRoute: typeof AadhaarPdfPasswordRemoveRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated': {
       id: '/_authenticated'
       path: ''
@@ -1755,6 +1816,7 @@ const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AadhaarPdfPasswordRemoveRoute: AadhaarPdfPasswordRemoveRoute,
   AboutRoute: AboutRoute,
   AboutCrisppdfRoute: AboutCrisppdfRoute,
   AddPageNumbersPdfRoute: AddPageNumbersPdfRoute,
@@ -1803,6 +1865,7 @@ const rootRouteChildren: RootRouteChildren = {
   NUpPdfRoute: NUpPdfRoute,
   OcrPdfRoute: OcrPdfRoute,
   OrganizePdfRoute: OrganizePdfRoute,
+  PanCardPdfRoute: PanCardPdfRoute,
   PdfToExcelRoute: PdfToExcelRoute,
   PdfToJpgRoute: PdfToJpgRoute,
   PdfToPdfaRoute: PdfToPdfaRoute,
@@ -1816,6 +1879,7 @@ const rootRouteChildren: RootRouteChildren = {
   ReorderPdfPagesRoute: ReorderPdfPagesRoute,
   RepairPdfRoute: RepairPdfRoute,
   ResizePdfRoute: ResizePdfRoute,
+  ResizeSignatureImageRoute: ResizeSignatureImageRoute,
   ReversePdfRoute: ReversePdfRoute,
   RotatePdfRoute: RotatePdfRoute,
   SecurePdfRoute: SecurePdfRoute,
