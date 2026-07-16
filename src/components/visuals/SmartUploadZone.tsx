@@ -1,6 +1,6 @@
 import { Suspense, lazy, useCallback, useEffect, useState } from "react";
 import { HoloUploadZone } from "./HoloUploadZone";
-import { assertValidUpload } from "@/lib/file-validation";
+import { assertValidUpload, type SupportedKind } from "@/lib/file-validation";
 import { toast } from "sonner";
 
 interface Props {
@@ -34,12 +34,26 @@ export function SmartUploadZone(props: Props) {
   }, []);
 
   const parentOnFiles = props.onFiles;
+  const accept = props.accept ?? "";
+  const acceptedKinds: SupportedKind[] = (() => {
+    const a = accept.toLowerCase();
+    const kinds: SupportedKind[] = [];
+    if (!a || a.includes("pdf")) kinds.push("pdf");
+    if (!a || a.includes("image") || a.includes("jpg") || a.includes("jpeg")) kinds.push("jpg");
+    if (!a || a.includes("image") || a.includes("png")) kinds.push("png");
+    if (!a || a.includes("image") || a.includes("webp")) kinds.push("webp");
+    if (!a || a.includes("image") || a.includes("gif")) kinds.push("gif");
+    if (!a || a.includes("doc")) kinds.push("docx", "zip");
+    if (!a || a.includes("xls")) kinds.push("xlsx", "zip");
+    if (!a || a.includes("ppt")) kinds.push("pptx", "zip");
+    return Array.from(new Set(kinds));
+  })();
   const onFiles = useCallback(
     async (incoming: File[]) => {
       const validated: File[] = [];
       for (const f of incoming) {
         try {
-          await assertValidUpload(f);
+          await assertValidUpload(f, acceptedKinds);
           validated.push(f);
         } catch (err) {
           const msg = err instanceof Error ? err.message : "File rejected";
@@ -49,7 +63,7 @@ export function SmartUploadZone(props: Props) {
       if (validated.length === 0) return;
       parentOnFiles(validated);
     },
-    [parentOnFiles],
+    [parentOnFiles, acceptedKinds],
   );
 
   const wrapped = { ...props, onFiles };
