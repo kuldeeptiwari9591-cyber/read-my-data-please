@@ -71,13 +71,15 @@ const SECURITY_HEADERS: Record<string, string> = {
   "Content-Security-Policy": [
     "default-src 'self'",
     // Inline styles are needed for shadcn / tailwind runtime injection.
-    "style-src 'self' 'unsafe-inline'",
-    // 'unsafe-inline' remains until the nonce PR lands; keeps hydration working.
-    "script-src 'self' 'unsafe-inline'",
+    "style-src 'self' 'unsafe-inline' https://hcaptcha.com https://*.hcaptcha.com",
+    // Third-party scripts: GA/GTM, PostHog, Sentry, hCaptcha, Vercel Analytics/Speed Insights.
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://*.posthog.com https://*.i.posthog.com https://*.sentry.io https://browser.sentry-cdn.com https://js.sentry-cdn.com https://hcaptcha.com https://*.hcaptcha.com https://va.vercel-scripts.com https://vercel.live",
     "img-src 'self' data: blob: https:",
-    "font-src 'self' data:",
-    // Supabase (auth, storage, realtime) + own origin.
-    "connect-src 'self' https://*.supabase.co wss://*.supabase.co",
+    "font-src 'self' data: https://hcaptcha.com https://*.hcaptcha.com",
+    // XHR/fetch/beacon endpoints for the same set of vendors + Supabase.
+    "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://www.google-analytics.com https://*.analytics.google.com https://*.google-analytics.com https://*.posthog.com https://*.i.posthog.com https://*.ingest.sentry.io https://*.sentry.io https://hcaptcha.com https://*.hcaptcha.com https://vitals.vercel-insights.com https://vercel.live",
+    // hCaptcha challenge iframe + Vercel live preview toolbar.
+    "frame-src 'self' https://hcaptcha.com https://*.hcaptcha.com https://vercel.live",
     "worker-src 'self' blob:",
     "object-src 'none'",
     "base-uri 'self'",
